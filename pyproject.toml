@@ -5,11 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "EzQt_App"
 version = "2.0.1"
-description = "A module for compiling projects and managing versioning and packaging"
+description = "Lightweight framework based on PySide6 to quickly build modern desktop applications, with integrated resource, theme, and reusable component management."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
 license = { text = "MIT" }
-authors = [{ name = "Florian Salort", email = "test@gmail.com" }]
+authors = [{ name = "Florian Salort", email = "floriansalort@gmail.com" }]
 keywords = ["application", "framework"]
 classifiers = [
     "Programming Language :: Python :: 3",
