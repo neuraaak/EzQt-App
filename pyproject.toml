@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "EzQt_App"
+version = "2.0.1"
+description = "A module for compiling projects and managing versioning and packaging"
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+license = { text = "MIT" }
+authors = [{ name = "Florian Salort", email = "test@gmail.com" }]
+keywords = ["application", "framework"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Office/Business",
+]
+
+dependencies = [
+    "PySide6==6.7.3",
+    "PyYaml==6.0.2",
+    "ruamel.yaml==0.18.6",
+    "colorama==0.4.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=6.2.5", "pytest-cov>=3.0.0", "flake8>=4.0.1"]
+
+[project.scripts]
+ezqt_init = "ezqt_app.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ezqt_app", "ezqt_app.*"]
+
+[tool.setuptools.package-data]
+ezqt_app = [
+    "resources/*",
+    "resources/fonts/*",
+    "resources/themes/*",
+    "resources/images/*",
+    "resources/icons/*",
+    "app.yaml",
+]
