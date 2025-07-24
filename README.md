@@ -1,8 +1,8 @@
-# EzQt_App
+# EzQt-App
 
 ## Description
 
-EzQt_App is a Python framework designed to make it easy to create modern Qt applications, based on a template by Wanderson M. Pimenta. It automates resource management, generates all required files, and offers a fast project bootstrap experience with a CLI command.
+EzQt-App is a Python framework designed to make it easy to create modern Qt applications, based on a template by Wanderson M. Pimenta. It automates resource management, generates all required files, and offers a fast project bootstrap experience with a CLI command.
 
 ## Features
 
