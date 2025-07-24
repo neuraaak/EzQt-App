@@ -7,3 +7,4 @@ dist
 *.spec
 *.egg-info/
 requirements.txt
+build_upload.bat

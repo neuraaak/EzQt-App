@@ -74,16 +74,21 @@ my_project/
 ```
 
 ## Customization
+
 - Edit the theme in `bin/themes/main_theme.qss` or use the toggle in the UI.
 - Add your own icons/images in the corresponding folders.
 
 ## FAQ
+
 - **main.py already exists?**: The CLI will ask for confirmation before overwriting.
 - **pyside6-rcc error?**: Make sure PySide6 is installed and available in your PATH.
 
 ## Contribution
+
 Contributions are welcome! Submit your ideas, fixes, or extensions via issues or pull requests.
 
 ## License & Credits
+
+MIT License
+
 This project is inspired by the template of Wanderson M. Pimenta. See the LICENSE file for details.
-"# ezqt_app" 

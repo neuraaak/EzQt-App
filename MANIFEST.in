@@ -12,6 +12,7 @@ recursive-include ezqt_app/kernel *
 include ezqt_app/app.yaml
 
 # Exclure les fichiers inutiles
+exclude build_upload.bat
 prune build
 prune dist
 prune EzQt-App.egg-info

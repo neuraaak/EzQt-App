@@ -2,9 +2,9 @@
 # ///////////////////////////////////////////////////////////////
 
 """
-EzQt package initialization.
+EzQt_App package initialization.
 """
-__version__ = "2.0.2"
+__version__ = "2.0.3"
 
 # CLI
 from .cli import *
