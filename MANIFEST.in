@@ -15,5 +15,5 @@ include ezqt_app/app.yaml
 exclude build_upload.bat
 prune build
 prune dist
-prune EzQt-App.egg-info
+prune EzQt_App.egg-info
 prune __pycache__
