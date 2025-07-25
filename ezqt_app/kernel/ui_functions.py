@@ -116,11 +116,11 @@ class UIFunctions:
         if enable:
             # GET WIDTH
             width = self.ui.menuContainer.width()
-            maxExtend = Settings.Gui.MENU_PANEL_WIDTH
-            standard = 60
+            maxExtend = self.ui.menuContainer.get_extended_width()
+            standard = self.ui.menuContainer.get_shrink_width()
 
             # SET MAX WIDTH
-            if width == 60:
+            if width == self.ui.menuContainer.get_shrink_width():
                 widthExtended = maxExtend
             else:
                 widthExtended = standard
@@ -163,7 +163,7 @@ class UIFunctions:
             # Synchronisation du toggle avec le thème courant
             current_theme = Settings.Gui.THEME
             self.ui.themeToggleButton.initialize_selector(current_theme)
-            
+
     # SELECT/DESELECT MENU
     # ///////////////////////////////////////////////////////////////
     # START SELECTION

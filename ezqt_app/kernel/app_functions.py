@@ -184,7 +184,8 @@ class Kernel:
 
         # //////
         Settings.Gui.THEME = app_data["theme"]
-        Settings.Gui.MENU_PANEL_WIDTH = app_data["menu_panel_width"]
+        Settings.Gui.MENU_PANEL_EXTENDED_WIDTH = app_data["menu_panel_extended_width"]
+        Settings.Gui.MENU_PANEL_SHRINKED_WIDTH = app_data["menu_panel_shrinked_width"]
         Settings.Gui.SETTINGS_PANEL_WIDTH = app_data["settings_panel_width"]
         Settings.Gui.TIME_ANIMATION = app_data["time_animation"]
 

@@ -29,6 +29,3 @@ from .page_container import PageContainer
 
 # PAGE CONTAINER - KERNEL WIDGET
 from .theme_icon import ThemeIcon
-
-# PAGE CONTAINER - KERNEL WIDGET
-from .theme_icon import ThemeIcon

@@ -354,88 +354,130 @@ QCommandLinkButton:pressed {
 
 
 /** ///////////////////////////////////////////////////////////////////////////////////////////////// */
-/** EXTENDED CLASSES */
+/** EzQtWidgets */
 /** ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
+
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
-ToggleLabel */
-ToggleLabel[class="drop_up"] {
-	background-image: url(:/icons/icons/triangle_up.svg);
-	background-repeat: no-repeat;
-	background-position: left center;
-	border-left: 15px solid transparent;
-}
-ToggleLabel[class="drop_down"] {
-	background-image: url(:/icons/icons/triangle_down.svg);
-	background-repeat: no-repeat;
-	background-position: left center;
-	border-left: 15px solid transparent;
+ToggleIcon */
+ToggleIcon {
+	background-color: transparent;
+	border: none;
+	border-radius: 4px 4px 4px 4px;
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 IndicatorLabel */
-IndicatorLabel[class="none"] #status_led {
+IndicatorLabel {
 	background-color: rgb(86, 86, 86);
 	border: 2px solid rgb(66, 66, 66);
 	border-radius: 6px 6px 6px 6px;
-	margin-top: 3px;
 }
-IndicatorLabel[class="ok"] #status_led {
-	background-color: rgb(219, 65, 22);
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+HoverLabel */
+HoverLabel {
+	background-color: rgb(86, 86, 86);
 	border: 2px solid rgb(66, 66, 66);
 	border-radius: 6px 6px 6px 6px;
-	margin-top: 3px;
-}
-IndicatorLabel[class="partiel"] #status_led {
-	background-color: rgb(245, 139, 17);
-	border: 2px solid rgb(66, 66, 66);
-	border-radius: 6px 6px 6px 6px;
-	margin-top: 3px;
-}
-IndicatorLabel[class="ko"] #status_led {
-	background-color: rgb(150, 205, 50);
-	border: 2px solid rgb(66, 66, 66);
-	border-radius: 6px 6px 6px 6px;
-	margin-top: 3px;
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 ClickableTagLabel */
-ClickableTagLabel[class="enabled"] {
+ClickableTagLabel[status="unselected"] {
 	background-color: rgb(72, 72, 72);
 	border: 1px solid rgb(112, 112, 112);
 	border-radius: 4px 4px 4px 4px;
 }
-ClickableTagLabel[class="disabled"] #tag {
+ClickableTagLabel[status="selected"] {
 	border: none;
 	color: rgb(255, 255, 255);
 }
 
-ClickableTagLabel #status_led {
+ClickableTagLabel QLabel {
 	background-color: rgb(50, 50, 50);
 	border: 1px solid rgb(50, 50, 50);
 	border-radius: 4px 4px 4px 4px;
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
-UntabTextEdit */
-UntabTextEdit {
+SearchInput */
+SearchInput {
+	background-color: rgb(27, 29, 35);
+	border: 2px solid $_accent_color1;
+	border-radius: 5px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+SearchInput:hover {
+	border: 2px solid $_accent_color4;
+}
+SearchInput:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+AutoCompleteInput */
+AutoCompleteInput {
+	background-color: rgb(27, 29, 35);
+	border: 2px solid $_accent_color1;
+	border-radius: 5px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+AutoCompleteInput:hover {
+	border: 2px solid $_accent_color4;
+}
+AutoCompleteInput:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+PasswordInput */
+PasswordInput QWidget {
+	background-color: rgb(27, 29, 35);
+	border: 2px solid $_accent_color4;
+	border-radius: 4px 4px 4px 4px;
+}
+
+PasswordInput QLineEdit {
+	background-color: transparent;
+	border: none;
+	border-radius: 4px 4px 4px 4px;
+	padding: 0px 4px 4px 4px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+PasswordInput QLineEdit:hover {
+	background-color: transparent;
+	border: none;
+	border-radius: 4px 4px 4px 4px;
+}
+PasswordInput QLineEdit:focus {
+	background-color: transparent;
+	border: none;
+	border-radius: 4px 4px 4px 4px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+TabReplaceTextEdit */
+TabReplaceTextEdit {
 	background-color: rgb(27, 29, 35);
 	border-radius: 5px;
 	padding: 10px;
 	selection-color: $_select_text_color;
 	selection-background-color: $_main_accent_color;
 }
-UntabTextEdit QScrollBar:vertical {
+TabReplaceTextEdit QScrollBar:vertical {
     width: 8px;
 }
-UntabTextEdit QScrollBar:horizontal {
+TabReplaceTextEdit QScrollBar:horizontal {
     height: 8px;
 }
-UntabTextEdit:hover {
+TabReplaceTextEdit:hover {
 	border: 2px solid $_accent_color4;
 }
-UntabTextEdit:focus {
+TabReplaceTextEdit:focus {
 	border: 2px solid $_accent_color4;
 }
 
@@ -448,12 +490,55 @@ IconButton {
 }
 IconButton:hover {
 	background-color: $_main_border;
-	background-color: red;
 	border: 2px solid rgb(61, 70, 86);
 }
 IconButton:pressed {	
 	background-color: $_accent_color3;
 	border: 2px solid rgb(43, 50, 61);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+LoaderButton */
+LoaderButton {
+	background-color: $_accent_color1;
+	border-radius: 5px;	
+	border: 2px solid $_accent_color1;
+}
+LoaderButton:hover {
+	background-color: $_main_border;
+	border: 2px solid rgb(61, 70, 86);
+}
+LoaderButton:pressed {	
+	background-color: $_accent_color3;
+	border: 2px solid rgb(43, 50, 61);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+DateButton */
+DateButton {
+	background-color: $_accent_color1;
+	border-radius: 5px;	
+	border: 2px solid $_accent_color1;
+}
+DateButton:hover {
+	background-color: $_main_border;
+	border: 2px solid rgb(61, 70, 86);
+}
+DateButton:pressed {	
+	background-color: $_accent_color3;
+	border: 2px solid rgb(43, 50, 61);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+OptionSelector */
+OptionSelector {
+	background-color: $_main_border;
+	border-radius: 4px;
+}
+OptionSelector [type="OptionSelector_Selector"] {
+	background-color: $_main_border;
+	border: 2px solid $_main_accent_color;
+	border-radius: 4px;	
 }
 
 
@@ -521,14 +606,10 @@ LEFT MENU */
 
 /* ==> Toggle Button */
 #toggleButton {
-	background-position: left center;
-	background-repeat: no-repeat;
+	background-color: $_accent_color3;
 	border: none;
 	border-radius: 0;	
-	border-left: 20px solid transparent;
-	background-color: $_accent_color3;
 	text-align: left;
-	padding-left: 44px;
 }
 #toggleButton .QLabel{
 	color: $_accent_color4;
@@ -544,25 +625,35 @@ LEFT MENU */
 }
 /* ==> Menu Items */
 #topMenu QToolButton {	
-	background-position: left center;
-    background-repeat: no-repeat;
 	border: none;
 	border-radius: 0;	
-	text-align: left;
-	padding-left: 44px;
+	background-color: transparent;
 }
 #topMenu QToolButton[class="inactive"] {	
-	border-left: 22px solid transparent;
 	background-color: transparent;
 }
 #topMenu QToolButton[class="active"] {	
-	border-left: 22px solid qlineargradient(spread:pad, x1:0.034, y1:0, x2:0.216, y2:0, stop:0.499 $_main_accent_color, stop:0.5 $_transparent);
-	background-color: transparent;
+	background-color: $_main_accent_color;
 }
 #topMenu QToolButton:hover {
 	background-color: $_main_border;
 }
 #topMenu QToolButton:pressed {	
+	background-color: $_main_accent_color;
+	color: $_select_text_color;
+}
+
+/* ==> MenuButton Widget */
+QToolButton[type="MenuButton"] {
+	border: none;
+	border-radius: 0;
+	background-color: transparent;
+	/* text-align removed - MenuButton handles its own alignment */
+}
+QToolButton[type="MenuButton"]:hover {
+	background-color: $_main_border;
+}
+QToolButton[type="MenuButton"]:pressed {
 	background-color: $_main_accent_color;
 	color: $_select_text_color;
 }
@@ -599,13 +690,13 @@ CONTENT */
 }
 
 #themeToggleButton {
-	border-radius: 5px;	
 	background-color: $_main_border;
+	border-radius: 4px;
 }
 #themeToggleButton #selector {
-	border: 2px solid $_main_accent_color;
-	border-radius: 5px;	
 	background-color: $_main_border;
+	border: 2px solid $_main_accent_color;
+	border-radius: 4px;	
 }
 
 /* ==> pagesContainer */

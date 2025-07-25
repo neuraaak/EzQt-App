@@ -47,7 +47,10 @@ class Settings:
     # ///////////////////////////////////////////////////////////////
     class Gui:
         THEME: str = "dark"
-        MENU_PANEL_WIDTH: int = 240
+        # //////
+        MENU_PANEL_SHRINKED_WIDTH: int = 60
+        MENU_PANEL_EXTENDED_WIDTH: int = 240
+        # //////
         SETTINGS_PANEL_WIDTH: int = 240
         TIME_ANIMATION: int = 400
 

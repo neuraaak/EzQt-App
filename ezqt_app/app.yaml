@@ -16,7 +16,8 @@ app:
   # GUI
   # //////
   theme: dark
-  menu_panel_width: 240
+  menu_panel_shrinked_width: 60
+  menu_panel_extended_width: 240
   settings_panel_width: 240
   time_animation: 400
 

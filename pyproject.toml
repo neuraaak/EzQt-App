@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "EzQt_App"
-version = "2.0.4"
+version = "2.0.5"
 description = "Lightweight framework based on PySide6 to quickly build modern desktop applications, with integrated resource, theme, and reusable component management."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
@@ -26,6 +26,8 @@ dependencies = [
     "PyYaml==6.0.2",
     "ruamel.yaml==0.18.6",
     "colorama==0.4.6",
+    "requests==2.32.4",
+    "ezqt-widgets",
 ]
 
 [project.optional-dependencies]

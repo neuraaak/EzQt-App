@@ -39,7 +39,8 @@ from PySide6.QtWidgets import (
 from .app_components import *
 from .app_resources import *
 from ..widgets.core import *
-from ..widgets.extended import ToggleRadio
+from ..kernel.app_settings import Settings
+from ezqt_widgets import OptionSelector
 
 ## ==> GLOBALS
 # /////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +118,11 @@ class Ui_MainWindow(object):
         # BALISE MENU
         # ///////////////////////////////////////////////////////////////
 
-        self.menuContainer = Menu(parent=self.contentBox)
+        self.menuContainer = Menu(
+            parent=self.contentBox,
+            shrink_width=Settings.Gui.MENU_PANEL_SHRINKED_WIDTH,
+            extended_width=Settings.Gui.MENU_PANEL_EXTENDED_WIDTH,
+        )
         #
         self.HL_contentBox.addWidget(self.menuContainer)
 
@@ -224,8 +229,10 @@ class Ui_MainWindow(object):
         self.VL_themeSettingsContainer.addWidget(self.themeLabel)
 
         # //////
-        self.themeToggleButton = ToggleRadio(
-            items=["Light", "Dark"], parent=self.themeSettingsContainer
+        self.themeToggleButton = OptionSelector(
+            items=["Light", "Dark"],
+            parent=self.themeSettingsContainer,
+            animation_duration=Settings.Gui.TIME_ANIMATION,
         )
         self.themeToggleButton.setObjectName("themeToggleButton")
         self.themeToggleButton.setSizePolicy(SizePolicy.H_EXPANDING_V_FIXED)
