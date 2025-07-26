@@ -37,7 +37,7 @@ settings_panel:
   language:
     type: "select"
     label: "Language"
-    options: ["English", "Français", "Español"]
+    options: ["English", "Français", "Español", "Deutsch"]
     default: "English"
     description: "Interface language"
     enabled: true
@@ -54,7 +54,7 @@ settings_panel:
     label: "Auto Save"
     default: false
     description: "Automatically save modifications"
-    enabled: true
+    enabled: false
   
   save_interval:
     type: "slider"
@@ -64,7 +64,7 @@ settings_panel:
     default: 5
     unit: "minutes"
     description: "Interval between automatic saves"
-    enabled: true
+    enabled: false
 
 # ///////////////////////////////////////////////////////////////
 # THEME PALETTE

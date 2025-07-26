@@ -64,15 +64,20 @@ class Kernel:
     def makeRequiredFiles(mkTheme: bool = True) -> None:
         # //////
         yaml_package = Kernel.getPackageResource("app.yaml")
-        yaml_application = Helper.Maker().make_yaml(yaml_package)
+        yaml_application = Helper.Maker(Path.cwd()).make_yaml(yaml_package)
         Kernel.yamlFile(yaml_application)
         # //////
         if mkTheme:
             theme_package = Kernel.getPackageResource("resources/themes/main_theme.qss")
-            res = Helper.Maker().make_qss(theme_package)
+            res = Helper.Maker(Path.cwd()).make_qss(theme_package)
 
         # //////
-        if yaml_application or res is True:
+        # Copier les fichiers de traduction
+        translations_package = Kernel.getPackageResource("resources/translations")
+        translations_res = Helper.Maker(Path.cwd()).make_translations(translations_package)
+
+        # //////
+        if yaml_application or res is True or translations_res is True:
             print(Fore.LIGHTBLACK_EX + "..." + Style.RESET_ALL)
 
     # ///////////////////////////////////////////////////////////////
@@ -100,23 +105,35 @@ class Kernel:
 
     @classmethod
     def writeYamlConfig(cls, keys: List[str], val: str | int | Dict[str, str]) -> None:
-        yaml = ruamel.yaml.YAML()
+        # Protection contre la récursion
+        if not hasattr(cls, '_writing_yaml'):
+            cls._writing_yaml = False
+        
+        if cls._writing_yaml:
+            return  # Éviter la récursion
+        
+        cls._writing_yaml = True
+        
+        try:
+            yaml = ruamel.yaml.YAML()
 
-        # //////
-        with open(cls._yamlFile, "r", encoding='utf-8') as file:
-            data = yaml.load(file)
+            # //////
+            with open(cls._yamlFile, "r", encoding='utf-8') as file:
+                data = yaml.load(file)
 
-        # //////
-        d = data
-        for key in keys[:-1]:
-            d = d.setdefault(
-                key, ruamel.yaml.comments.CommentedMap()
-            )  # Aller au niveau de la clé ou créer un nouveau dict
-        d[keys[-1]] = val  # Mettre à jour la valeur de la dernière clé
+            # //////
+            d = data
+            for key in keys[:-1]:
+                d = d.setdefault(
+                    key, ruamel.yaml.comments.CommentedMap()
+                )  # Aller au niveau de la clé ou créer un nouveau dict
+            d[keys[-1]] = val  # Mettre à jour la valeur de la dernière clé
 
-        # //////
-        with open(cls._yamlFile, "w", encoding='utf-8') as file:
-            yaml.dump(data, file)
+            # //////
+            with open(cls._yamlFile, "w", encoding='utf-8') as file:
+                yaml.dump(data, file)
+        finally:
+            cls._writing_yaml = False
 
     # ///////////////////////////////////////////////////////////////
 

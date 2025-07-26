@@ -102,7 +102,7 @@ class Header(QFrame):
         # //////
         self.headerAppDescription = QLabel(description, self.headerMetaInfo)
         self.headerAppDescription.setObjectName("headerAppDescription")
-        self.headerAppDescription.setGeometry(QRect(65, 26, 160, 16))
+        self.headerAppDescription.setGeometry(QRect(65, 26, 240, 16))
         self.headerAppDescription.setMaximumSize(QSize(16777215, 16))
         self.headerAppDescription.setFont(Fonts.SEGOE_UI_8_REG)
         self.headerAppDescription.setAlignment(

@@ -47,6 +47,8 @@ class BaseSettingWidget(QWidget):
     def set_key(self, key: str):
         """Définit la clé du paramètre."""
         self._key = key
+    
+
 
 
 class SettingToggle(BaseSettingWidget):
@@ -91,7 +93,7 @@ class SettingToggle(BaseSettingWidget):
 
         # Description (si présente)
         if self._description:
-            self.description_label = QLabel(self._description)
+            self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
             self.description_label.setWordWrap(True)
             layout.addWidget(self.description_label)
@@ -165,7 +167,7 @@ class SettingSelect(BaseSettingWidget):
 
         # Description (si présente)
         if self._description:
-            self.description_label = QLabel(self._description)
+            self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
             self.description_label.setWordWrap(True)
             layout.addWidget(self.description_label)
@@ -257,7 +259,7 @@ class SettingSlider(BaseSettingWidget):
 
         # Description (si présente)
         if self._description:
-            self.description_label = QLabel(self._description)
+            self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
             self.description_label.setWordWrap(True)
             layout.addWidget(self.description_label)
@@ -325,7 +327,7 @@ class SettingText(BaseSettingWidget):
 
         # Description (si présente)
         if self._description:
-            self.description_label = QLabel(self._description)
+            self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
             self.description_label.setWordWrap(True)
             layout.addWidget(self.description_label)
@@ -400,7 +402,7 @@ class SettingCheckbox(BaseSettingWidget):
 
         # Description (si présente)
         if self._description:
-            self.description_label = QLabel(self._description)
+            self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
             self.description_label.setWordWrap(True)
             layout.addWidget(self.description_label)

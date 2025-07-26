@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "EzQt_App"
-version = "2.1.0"
+version = "2.2.1"
 description = "Lightweight framework based on PySide6 to quickly build modern desktop applications, with integrated resource, theme, and reusable component management."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
@@ -34,7 +34,8 @@ dependencies = [
 dev = ["pytest>=6.2.5", "pytest-cov>=3.0.0", "flake8>=4.0.1"]
 
 [project.scripts]
-ezqt_init = "ezqt_app.cli:main"
+ezqt_init = "ezqt_app.utils.cli:main"
+ezqt_qm_convert = "ezqt_app.utils.create_qm_files:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -47,5 +48,6 @@ ezqt_app = [
     "resources/themes/*",
     "resources/images/*",
     "resources/icons/*",
+    "resources/translations/*",
     "app.yaml",
 ]

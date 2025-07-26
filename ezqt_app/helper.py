@@ -51,6 +51,7 @@ class Helper:
                 self._bin / "icons",
                 self._bin / "themes",
                 self._bin / "config",
+                self._bin / "translations",
                 self._modules,
             ]
             for path in paths_to_make:
@@ -89,6 +90,41 @@ class Helper:
                     + Style.RESET_ALL
                 )
                 return True
+            return False
+
+        # ///////////////////////////////////////////////////////////////
+
+        def make_translations(self, translations_package: Path) -> bool:
+            """Copie les fichiers de traduction du package vers le projet utilisateur"""
+            translations_application = self.base_path / r"bin\translations"
+            if not translations_application.exists():
+                translations_application.mkdir(parents=True, exist_ok=True)
+            
+            # Copier tous les fichiers .qm et .ts du package
+            copied_files = []
+            if translations_package.exists():
+                # Copier les fichiers .qm
+                for qm_file in translations_package.glob("*.qm"):
+                    dest_file = translations_application / qm_file.name
+                    if not dest_file.exists():
+                        shutil.copy(qm_file, dest_file)
+                        copied_files.append(qm_file.name)
+                
+                # Copier les fichiers .ts
+                for ts_file in translations_package.glob("*.ts"):
+                    dest_file = translations_application / ts_file.name
+                    if not dest_file.exists():
+                        shutil.copy(ts_file, dest_file)
+                        copied_files.append(ts_file.name)
+                
+                if copied_files:
+                    print(
+                        Fore.LIGHTBLACK_EX
+                        + f"~ [Helper] | Generated translation files: {', '.join(copied_files)}"
+                        + Style.RESET_ALL
+                    )
+                    return True
+            
             return False
 
         # ///////////////////////////////////////////////////////////////

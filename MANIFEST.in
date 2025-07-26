@@ -1,5 +1,6 @@
 # Inclure la doc principale
 include README.md
+include TRANSLATION_SYSTEM.md
 include LICENSE
 include MANIFEST.in
 

@@ -16,3 +16,5 @@ from .app_settings import Settings
 # APP RESOURCES
 from .app_components import Fonts, SizePolicy
 from .app_resources import *
+from .translation_manager import get_translation_manager, translation_manager
+from .translation_helpers import tr, set_tr, register_tr, unregister_tr, change_language, get_available_languages, get_current_language

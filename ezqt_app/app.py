@@ -20,6 +20,7 @@
 import sys
 import platform
 from pathlib import Path
+from colorama import Fore, Style
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
@@ -30,6 +31,7 @@ from PySide6.QtWidgets import *
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 from .kernel import *
+
 # Import specific widgets to avoid circular imports
 from .widgets.core.ez_app import EzApplication
 
@@ -59,6 +61,19 @@ class EzQt_App(QMainWindow):
         # ///////////////////////////////////////////////////////////////.
         Kernel.loadFontsResources()
         Kernel.loadAppSettings()
+        # ==> LOAD TRANSLATIONS
+        # ///////////////////////////////////////////////////////////////.
+        from .kernel.translation_manager import get_translation_manager
+
+        # Charger la langue depuis les paramètres
+        try:
+            settings_panel = Kernel.loadKernelConfig("settings_panel")
+            language = settings_panel.get("language", {}).get("default", "English")
+            translation_manager = get_translation_manager()
+            translation_manager.load_language(language)
+        except KeyError:
+            translation_manager = get_translation_manager()
+            translation_manager.load_language("English")
 
         # ==> INITIALIZE COMPONENTS
         # ///////////////////////////////////////////////////////////////.
@@ -109,38 +124,65 @@ class EzQt_App(QMainWindow):
         # Charger le thème depuis settings_panel s'il existe, sinon depuis app
         try:
             settings_panel = Kernel.loadKernelConfig("settings_panel")
-            _theme = settings_panel.get("theme", {}).get("default", Kernel.loadKernelConfig("app")["theme"])
+            _theme = settings_panel.get("theme", {}).get(
+                "default", Kernel.loadKernelConfig("app")["theme"]
+            )
+            # Forcer la conversion en minuscules
+            _theme = _theme.lower()
         except KeyError:
             _theme = Kernel.loadKernelConfig("app")["theme"]
-            
+            # Forcer la conversion en minuscules
+            _theme = _theme.lower()
+
+        # Mettre à jour Settings.Gui.THEME avec la valeur en minuscules
+        Settings.Gui.THEME = _theme
+
         theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
-        if theme_toggle and hasattr(theme_toggle, 'initialize_selector'):
-            theme_toggle.initialize_selector(_theme)
+        if theme_toggle and hasattr(theme_toggle, "initialize_selector"):
+            # Convertir la valeur de thème en ID
+            theme_id = 0 if _theme == "light" else 1  # 0 = Light, 1 = Dark
+            theme_toggle.initialize_selector(theme_id)
         self.ui.headerContainer.update_all_theme_icons()
         self.ui.menuContainer.update_all_theme_icons()
         # //////
         if theme_toggle:
-            theme_toggle.clicked.connect(self.setAppTheme)
+            # Connecter le signal valueChanged au lieu de clicked pour la nouvelle version
+            if hasattr(theme_toggle, "valueChanged"):
+                theme_toggle.valueChanged.connect(self.setAppTheme)
+            elif hasattr(theme_toggle, "clicked"):
+                theme_toggle.clicked.connect(self.setAppTheme)
+
+        # ==> REGISTER ALL WIDGETS FOR TRANSLATION
+        # ///////////////////////////////////////////////////////////////
+        self._register_all_widgets_for_translation()
 
     # SET APP THEME
     # ///////////////////////////////////////////////////////////////
     def setAppTheme(self) -> None:
         theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
-        if theme_toggle and hasattr(theme_toggle, '_value'):
-            theme = theme_toggle._value
-            Settings.Gui.THEME = theme.lower()
-            # Sauvegarder directement dans settings_panel.theme.default
-            Kernel.writeYamlConfig(keys=["settings_panel", "theme", "default"], val=theme.lower())
-            # //////
-            QTimer.singleShot(100, self.updateUI)
+        if theme_toggle:
+            # Gérer les deux cas : valueChanged (chaîne) et clicked (pas de paramètre)
+            if hasattr(theme_toggle, "value_id"):
+                # Utiliser value_id pour obtenir l'ID actuel
+                theme_id = theme_toggle.value_id
+                # Convertir l'ID en valeur de thème
+                theme = "light" if theme_id == 0 else "dark"
+                Settings.Gui.THEME = theme
+                # Sauvegarder directement dans settings_panel.theme.default
+                Kernel.writeYamlConfig(
+                    keys=["settings_panel", "theme", "default"], val=theme
+                )
+                # //////
+                QTimer.singleShot(100, self.updateUI)
 
     # UPDATE UI
     # ///////////////////////////////////////////////////////////////
     def updateUI(self) -> None:
         theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
-        if theme_toggle and hasattr(theme_toggle, 'get_value_option'):
-            new_pos = theme_toggle.get_value_option()
-            theme_toggle.move_selector(new_pos)
+        if theme_toggle and hasattr(theme_toggle, "get_value_option"):
+            # La nouvelle version d'OptionSelector gère automatiquement le positionnement
+            # Pas besoin de move_selector manuel
+            pass
 
         # //////
         UIFunctions.theme(self, self._themeFileName)
@@ -198,6 +240,204 @@ class EzQt_App(QMainWindow):
     def resizeEvent(self, event) -> None:
         # Update Size Grips
         UIFunctions.resize_grips(self)
+
+    # REGISTER ALL WIDGETS FOR TRANSLATION
+    # ///////////////////////////////////////////////////////////////
+    def _register_all_widgets_for_translation(self) -> None:
+        """Enregistre automatiquement tous les widgets avec du texte pour la traduction."""
+        try:
+            # Import sécurisé des fonctions de traduction
+            try:
+                from .kernel.translation_helpers import set_tr, tr as translate_text
+            except ImportError as import_error:
+                print(f"Warning: Could not import translation helpers: {import_error}")
+                return
+
+            registered_count = 0
+            registered_widgets = set()  # Pour éviter les doublons
+
+            def register_widget_recursive(widget):
+                """Fonction récursive pour enregistrer tous les widgets."""
+                nonlocal registered_count
+
+                try:
+                    # Éviter les widgets déjà enregistrés
+                    if widget in registered_widgets:
+                        return
+
+                    # Vérifier si le widget a du texte
+                    if hasattr(widget, "text") and callable(
+                        getattr(widget, "text", None)
+                    ):
+                        try:
+                            text = widget.text().strip()
+                            # Éviter les widgets avec du texte technique, valeurs numériques, ou trop courts
+                            if (
+                                text
+                                and not text.isdigit()
+                                and len(text) > 1
+                                and not text.startswith("_")
+                                and not text.startswith("menu_")
+                                and not text.startswith("btn_")
+                                and not text.startswith("setting")
+                            ):
+
+                                # Enregistrer le widget pour la traduction
+                                set_tr(widget, text)
+                                registered_widgets.add(widget)
+                                registered_count += 1
+                        except Exception as text_error:
+                            # Ignorer les erreurs de lecture de texte
+                            pass
+
+                    # Vérifier les tooltips
+                    if hasattr(widget, "toolTip") and callable(
+                        getattr(widget, "toolTip", None)
+                    ):
+                        try:
+                            tooltip = widget.toolTip().strip()
+                            if (
+                                tooltip
+                                and not tooltip.isdigit()
+                                and len(tooltip) > 1
+                                and not tooltip.startswith("_")
+                            ):
+                                # Pour les tooltips, on peut utiliser setToolTip avec tr()
+                                widget.setToolTip(translate_text(tooltip))
+                        except Exception as tooltip_error:
+                            # Ignorer les erreurs de tooltip
+                            pass
+
+                    # Vérifier les placeholders
+                    if hasattr(widget, "placeholderText") and callable(
+                        getattr(widget, "placeholderText", None)
+                    ):
+                        try:
+                            placeholder = widget.placeholderText().strip()
+                            if (
+                                placeholder
+                                and not placeholder.isdigit()
+                                and len(placeholder) > 1
+                                and not placeholder.startswith("_")
+                            ):
+                                widget.setPlaceholderText(translate_text(placeholder))
+                        except Exception as placeholder_error:
+                            # Ignorer les erreurs de placeholder
+                            pass
+
+                    # Parcourir tous les enfants
+                    try:
+                        for child in widget.findChildren(QWidget):
+                            register_widget_recursive(child)
+                    except Exception as children_error:
+                        # Ignorer les erreurs de recherche d'enfants
+                        pass
+
+                except Exception as widget_error:
+                    # Ignorer les erreurs individuelles de widgets
+                    pass
+
+            # Commencer par la fenêtre principale
+            register_widget_recursive(self)
+
+            # Enregistrer manuellement les widgets spécifiques avec du texte fixe
+            self._register_specific_widgets_for_translation()
+
+            print(
+                Fore.LIGHTBLUE_EX
+                + f"+ [AppKernel] | {registered_count} widgets registered for translation."
+                + Style.RESET_ALL
+            )
+
+        except Exception as e:
+            print(f"Warning: Could not register widgets for translation: {e}")
+
+    def _register_specific_widgets_for_translation(self) -> None:
+        """Enregistre manuellement les widgets spécifiques avec du texte fixe."""
+        try:
+            from .kernel.translation_helpers import set_tr
+
+            # Widgets dans ui_main.py avec du texte fixe
+            if hasattr(self.ui, "creditsLabel"):
+                set_tr(self.ui.creditsLabel, "Made with ❤️ by EzQt_App")
+
+            if hasattr(self.ui, "version"):
+                set_tr(self.ui.version, "v1.0.0")
+
+            # Widgets dans settings_panel avec du texte fixe
+            if hasattr(self.ui, "settingsPanel"):
+                settings_panel = self.ui.settingsPanel
+
+                # Enregistrer les widgets de paramètres créés dynamiquement
+                for widget in getattr(settings_panel, "_widgets", []):
+                    if hasattr(widget, "label") and widget.label:
+                        try:
+                            text = widget.label.text()
+                            if text and len(text) > 1:
+                                set_tr(widget.label, text)
+                        except:
+                            pass
+
+                # Enregistrer le label de thème
+                if hasattr(settings_panel, "themeLabel"):
+                    set_tr(settings_panel.themeLabel, "Theme")
+
+                # Enregistrer les options du sélecteur de thème
+                if hasattr(settings_panel, "themeToggleButton"):
+                    theme_button = settings_panel.themeToggleButton
+                    try:
+                        # La nouvelle version d'OptionSelector gère automatiquement les traductions
+                        # Pas besoin d'enregistrer manuellement les items
+                        pass
+                    except:
+                        pass
+
+            # Widgets dans menu avec du texte fixe
+            if hasattr(self.ui, "menuContainer"):
+                menu_container = self.ui.menuContainer
+
+                # Enregistrer les boutons de menu créés dynamiquement
+                for button in getattr(menu_container, "_buttons", []):
+                    if hasattr(button, "text_label") and button.text_label:
+                        try:
+                            text = button.text_label.text()
+                            if text and len(text) > 1:
+                                set_tr(button.text_label, text)
+                        except:
+                            pass
+
+            # Widgets dans header avec du texte fixe
+            if hasattr(self.ui, "headerContainer"):
+                header_container = self.ui.headerContainer
+
+                # Enregistrer les labels du header
+                if hasattr(header_container, "headerAppName"):
+                    try:
+                        text = header_container.headerAppName.text()
+                        if text and len(text) > 1:
+                            set_tr(header_container.headerAppName, text)
+                    except:
+                        pass
+
+                if hasattr(header_container, "headerAppDescription"):
+                    try:
+                        text = header_container.headerAppDescription.text()
+                        if text and len(text) > 1:
+                            set_tr(header_container.headerAppDescription, text)
+                    except:
+                        pass
+
+            # Widgets de ezqt_widgets avec du texte
+            # Note: Ces widgets gèrent généralement leurs propres traductions
+            # mais on peut enregistrer leurs textes pour la retraduction automatique
+
+            # ToggleSwitch widgets (dans setting_widgets)
+            # OptionSelector widgets (dans settings_panel)
+            # Ces widgets sont déjà gérés par l'enregistrement automatique
+
+        except Exception as e:
+            # Ignorer les erreurs pour cette fonction
+            pass
 
     # MOUSE CLICK EVENTS
     # ///////////////////////////////////////////////////////////////
