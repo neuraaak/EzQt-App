@@ -18,7 +18,6 @@ from PySide6.QtGui import (
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # /////////////////////////////////////////////////////////////////////////////////////////////
-from .ez_app import EzApplication
 from ...kernel.app_settings import Settings
 from ...kernel.app_resources import *
 
@@ -40,7 +39,19 @@ class ThemeIcon(QIcon):
         )
         self.updateIcon()
         # //////
-        EzApplication.instance().themeChanged.connect(self.updateIcon)
+        self._connect_theme_changed()
+
+    # ///////////////////////////////////////////////////////////////
+
+    def _connect_theme_changed(self):
+        """Connect to theme changed signal using lazy import to avoid circular imports."""
+        try:
+            # Import lazy pour éviter l'import circulaire
+            from ...widgets.core.ez_app import EzApplication
+            EzApplication.instance().themeChanged.connect(self.updateIcon)
+        except ImportError:
+            # Fallback si l'import échoue
+            print("Warning: Could not connect to EzApplication theme signal")
 
     # ///////////////////////////////////////////////////////////////
 
@@ -55,7 +66,7 @@ class ThemeIcon(QIcon):
 
         # Determine the new color
         new_color = QColor(
-            Qt.GlobalColor.white if icon_color == "light" else Qt.GlobalColor.black
+            Qt.white if icon_color == "light" else Qt.black
         )
 
         # Create a new QPixmap to draw the colored icon

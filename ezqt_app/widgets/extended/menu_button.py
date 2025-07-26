@@ -263,12 +263,12 @@ class MenuButton(QToolButton):
         self.text_label = QLabel()
 
         # ////// CONFIGURE ICON LABEL
-        self.icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.icon_label.setAlignment(Qt.AlignCenter)
         self.icon_label.setStyleSheet("background-color: transparent;")
 
         # ////// CONFIGURE TEXT LABEL
         self.text_label.setAlignment(
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
+            Qt.AlignLeft | Qt.AlignVCenter
         )
         self.text_label.setWordWrap(True)
         self.text_label.setStyleSheet("background-color: transparent;")
@@ -277,7 +277,7 @@ class MenuButton(QToolButton):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)  # No margins, we'll handle positioning manually
         layout.setSpacing(0)  # No spacing, we'll handle it manually
-        layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)  # Always center vertically
+        layout.setAlignment(Qt.AlignVCenter)  # Always center vertically
         layout.addWidget(self.icon_label)
         layout.addWidget(self.text_label)
 
@@ -451,7 +451,7 @@ class MenuButton(QToolButton):
             # Set layout alignment to left (icon stays in position, text appears to the right)
             if layout:
                 layout.setAlignment(
-                    Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
+                    Qt.AlignLeft | Qt.AlignVCenter
                 )
                 # Extended mode: position icon at calculated position, text to the right
                 # CORRECTION: Use exact icon position without extra padding
@@ -466,7 +466,7 @@ class MenuButton(QToolButton):
             # Set layout alignment to center for shrink state
             if layout:
                 layout.setAlignment(
-                    Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignVCenter
+                    Qt.AlignCenter | Qt.AlignVCenter
                 )
                 # Perfect centering: calculate exact margins
                 icon_center = self._shrink_size // 2

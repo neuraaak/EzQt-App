@@ -91,7 +91,7 @@ class Kernel:
             cls._yamlFile = Kernel.getPackageResource("app.yaml")
 
         # //////
-        with open(cls._yamlFile, "r") as file:
+        with open(cls._yamlFile, "r", encoding='utf-8') as file:
             data = yaml.safe_load(file)
             # //////
             return data[key]
@@ -103,7 +103,7 @@ class Kernel:
         yaml = ruamel.yaml.YAML()
 
         # //////
-        with open(cls._yamlFile, "r") as file:
+        with open(cls._yamlFile, "r", encoding='utf-8') as file:
             data = yaml.load(file)
 
         # //////
@@ -115,7 +115,7 @@ class Kernel:
         d[keys[-1]] = val  # Mettre à jour la valeur de la dernière clé
 
         # //////
-        with open(cls._yamlFile, "w") as file:
+        with open(cls._yamlFile, "w", encoding='utf-8') as file:
             yaml.dump(data, file)
 
     # ///////////////////////////////////////////////////////////////
@@ -183,7 +183,13 @@ class Kernel:
         Settings.App.APP_HEIGHT = app_data["app_height"]
 
         # //////
-        Settings.Gui.THEME = app_data["theme"]
+        # Charger le thème depuis settings_panel s'il existe, sinon depuis app
+        try:
+            settings_panel = Kernel.loadKernelConfig("settings_panel")
+            Settings.Gui.THEME = settings_panel.get("theme", {}).get("default", app_data["theme"])
+        except KeyError:
+            Settings.Gui.THEME = app_data["theme"]
+            
         Settings.Gui.MENU_PANEL_EXTENDED_WIDTH = app_data["menu_panel_extended_width"]
         Settings.Gui.MENU_PANEL_SHRINKED_WIDTH = app_data["menu_panel_shrinked_width"]
         Settings.Gui.SETTINGS_PANEL_WIDTH = app_data["settings_panel_width"]

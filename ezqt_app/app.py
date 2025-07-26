@@ -30,7 +30,8 @@ from PySide6.QtWidgets import *
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 from .kernel import *
-from .widgets import *
+# Import specific widgets to avoid circular imports
+from .widgets.core.ez_app import EzApplication
 
 ## ==> GLOBALS
 # ///////////////////////////////////////////////////////////////
@@ -105,27 +106,41 @@ class EzQt_App(QMainWindow):
         self._themeFileName = themeFileName
         UIFunctions.theme(self, self._themeFileName)
         # //////
-        _theme = Kernel.loadKernelConfig("app")["theme"]
-        self.ui.themeToggleButton.initialize_selector(_theme)
+        # Charger le thème depuis settings_panel s'il existe, sinon depuis app
+        try:
+            settings_panel = Kernel.loadKernelConfig("settings_panel")
+            _theme = settings_panel.get("theme", {}).get("default", Kernel.loadKernelConfig("app")["theme"])
+        except KeyError:
+            _theme = Kernel.loadKernelConfig("app")["theme"]
+            
+        theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
+        if theme_toggle and hasattr(theme_toggle, 'initialize_selector'):
+            theme_toggle.initialize_selector(_theme)
         self.ui.headerContainer.update_all_theme_icons()
         self.ui.menuContainer.update_all_theme_icons()
         # //////
-        self.ui.themeToggleButton.clicked.connect(self.setAppTheme)
+        if theme_toggle:
+            theme_toggle.clicked.connect(self.setAppTheme)
 
     # SET APP THEME
     # ///////////////////////////////////////////////////////////////
     def setAppTheme(self) -> None:
-        theme = self.ui.themeToggleButton._value
-        Settings.Gui.THEME = theme.lower()
-        Kernel.writeYamlConfig(keys=["app", "theme"], val=theme.lower())
-        # //////
-        QTimer.singleShot(100, self.updateUI)
+        theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
+        if theme_toggle and hasattr(theme_toggle, '_value'):
+            theme = theme_toggle._value
+            Settings.Gui.THEME = theme.lower()
+            # Sauvegarder directement dans settings_panel.theme.default
+            Kernel.writeYamlConfig(keys=["settings_panel", "theme", "default"], val=theme.lower())
+            # //////
+            QTimer.singleShot(100, self.updateUI)
 
     # UPDATE UI
     # ///////////////////////////////////////////////////////////////
     def updateUI(self) -> None:
-        new_pos = self.ui.themeToggleButton.get_value_option()
-        self.ui.themeToggleButton.move_selector(new_pos)
+        theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
+        if theme_toggle and hasattr(theme_toggle, 'get_value_option'):
+            new_pos = theme_toggle.get_value_option()
+            theme_toggle.move_selector(new_pos)
 
         # //////
         UIFunctions.theme(self, self._themeFileName)
@@ -133,6 +148,7 @@ class EzQt_App(QMainWindow):
         EzApplication.instance().themeChanged.emit()
         self.ui.headerContainer.update_all_theme_icons()
         self.ui.menuContainer.update_all_theme_icons()
+        self.ui.settingsPanel.update_all_theme_icons()
 
         # //////
         QApplication.processEvents()

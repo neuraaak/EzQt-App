@@ -162,7 +162,9 @@ class UIFunctions:
 
             # Synchronisation du toggle avec le thème courant
             current_theme = Settings.Gui.THEME
-            self.ui.themeToggleButton.initialize_selector(current_theme)
+            theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
+            if theme_toggle and hasattr(theme_toggle, 'initialize_selector'):
+                theme_toggle.initialize_selector(current_theme)
 
     # SELECT/DESELECT MENU
     # ///////////////////////////////////////////////////////////////
@@ -190,7 +192,8 @@ class UIFunctions:
     # ///////////////////////////////////////////////////////////////
     def theme(self, customThemeFile: str = None) -> None:
         _style = ""
-        _theme = Kernel.loadKernelConfig("app")["theme"]
+        # Utiliser Settings.Gui.THEME qui a été mis à jour par loadAppSettings
+        _theme = Settings.Gui.THEME
         _colors = Kernel.loadKernelConfig("theme_palette")[_theme]
 
         # Main Theme

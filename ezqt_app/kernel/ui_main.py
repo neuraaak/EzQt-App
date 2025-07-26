@@ -40,7 +40,6 @@ from .app_components import *
 from .app_resources import *
 from ..widgets.core import *
 from ..kernel.app_settings import Settings
-from ezqt_widgets import OptionSelector
 
 ## ==> GLOBALS
 # /////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,75 +169,12 @@ class Ui_MainWindow(object):
         # BALISE SETTINGS PANEL
         # ///////////////////////////////////////////////////////////////
 
-        self.settingsPanel = QFrame(self.content)
-        self.settingsPanel.setObjectName("settingsPanel")
-        self.settingsPanel.setMinimumSize(QSize(0, 0))
-        self.settingsPanel.setMaximumSize(QSize(0, 16777215))
-        self.settingsPanel.setFrameShape(QFrame.NoFrame)
-        self.settingsPanel.setFrameShadow(QFrame.Raised)
+        self.settingsPanel = SettingsPanel(
+            parent=self.content,
+            width=Settings.Gui.SETTINGS_PANEL_WIDTH,
+        )
         #
         self.HL_content.addWidget(self.settingsPanel)
-        # //////
-        self.VL_settingsPanel = QVBoxLayout(self.settingsPanel)
-        self.VL_settingsPanel.setSpacing(0)
-        self.VL_settingsPanel.setObjectName("VL_settingsPanel")
-        self.VL_settingsPanel.setContentsMargins(0, 0, 0, 0)
-
-        # //////
-        self.settingsTopBorder = QFrame(self.settingsPanel)
-        self.settingsTopBorder.setObjectName("settingsTopBorder")
-        self.settingsTopBorder.setMaximumSize(QSize(16777215, 3))
-        self.settingsTopBorder.setFrameShape(QFrame.NoFrame)
-        self.settingsTopBorder.setFrameShadow(QFrame.Raised)
-        #
-        self.VL_settingsPanel.addWidget(self.settingsTopBorder)
-
-        # //////
-        self.contentSettings = QFrame(self.settingsPanel)
-        self.contentSettings.setObjectName("contentSettings")
-        self.contentSettings.setFrameShape(QFrame.NoFrame)
-        self.contentSettings.setFrameShadow(QFrame.Raised)
-        #
-        self.VL_settingsPanel.addWidget(self.contentSettings)
-        # //////
-        self.VL_contentSettings = QVBoxLayout(self.contentSettings)
-        self.VL_contentSettings.setObjectName("VL_contentSettings")
-        self.VL_contentSettings.setSpacing(0)
-        self.VL_contentSettings.setContentsMargins(0, 0, 0, 0)
-        self.VL_contentSettings.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-        # //////
-        self.themeSettingsContainer = QFrame(self.contentSettings)
-        self.themeSettingsContainer.setObjectName("themeSettingsContainer")
-        self.themeSettingsContainer.setFrameShape(QFrame.NoFrame)
-        self.themeSettingsContainer.setFrameShadow(QFrame.Raised)
-        #
-        self.VL_contentSettings.addWidget(self.themeSettingsContainer, 0, Qt.AlignTop)
-        # //////
-        self.VL_themeSettingsContainer = QVBoxLayout(self.themeSettingsContainer)
-        self.VL_themeSettingsContainer.setSpacing(8)
-        self.VL_themeSettingsContainer.setObjectName("VL_themeSettingsContainer")
-        self.VL_themeSettingsContainer.setContentsMargins(10, 10, 10, 10)
-
-        # //////
-        self.themeLabel = QLabel("Theme actif", self.themeSettingsContainer)
-        self.themeLabel.setObjectName("themeLabel")
-        self.themeLabel.setFont(Fonts.SEGOE_UI_10_REG)
-        self.themeLabel.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
-        #
-        self.VL_themeSettingsContainer.addWidget(self.themeLabel)
-
-        # //////
-        self.themeToggleButton = OptionSelector(
-            items=["Light", "Dark"],
-            parent=self.themeSettingsContainer,
-            animation_duration=Settings.Gui.TIME_ANIMATION,
-        )
-        self.themeToggleButton.setObjectName("themeToggleButton")
-        self.themeToggleButton.setSizePolicy(SizePolicy.H_EXPANDING_V_FIXED)
-        self.themeToggleButton.setFixedHeight(40)
-
-        self.VL_themeSettingsContainer.addWidget(self.themeToggleButton)
 
         # ///////////////////////////////////////////////////////////////
         # END SETTINGS PANEL

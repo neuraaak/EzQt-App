@@ -16,16 +16,16 @@
 # ///////////////////////////////////////////////////////////////
 
 # EZ APP
-from .ez_app import EzApplication
+from .ez_app import *
 
 # HEADER - KERNEL WIDGET
-from .header import Header
+from .header import *
 
 # MENU - KERNEL WIDGET
-from .menu import Menu
+from .menu import *
 
 # PAGE CONTAINER - KERNEL WIDGET
-from .page_container import PageContainer
+from .page_container import *
 
-# PAGE CONTAINER - KERNEL WIDGET
-from .theme_icon import ThemeIcon
+# SETTINGS PANEL - KERNEL WIDGET
+from .settings_panel import *

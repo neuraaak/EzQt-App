@@ -4,19 +4,22 @@
 """
 EzQt_App package initialization.
 """
-__version__ = "2.0.5"
+__version__ = "2.1.0"
 
 # CLI
-from .cli import *
+from .cli import main
 
 # MAIN
-from .main import *
+from .main import init
 
 # APP
-from .app import *
+from .app import EzQt_App, EzApplication
 
 # KERNEL
-from .kernel import *
+from .kernel import Kernel, Settings, UIFunctions, Ui_MainWindow
 
-# WIDGETS
-from .widgets import *
+# WIDGETS - Import specific classes to avoid circular imports
+from .widgets.core.header import Header
+from .widgets.core.menu import Menu
+from .widgets.core.page_container import PageContainer
+from .widgets.core.settings_panel import SettingsPanel

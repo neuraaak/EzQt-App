@@ -23,8 +23,6 @@ from PySide6.QtWidgets import (
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # /////////////////////////////////////////////////////////////////////////////////////////////
-from ...widgets.core.theme_icon import ThemeIcon
-from ...widgets.extended import MenuButton
 from ...kernel.app_components import *
 from ...kernel.app_resources import *
 from ...kernel.app_settings import Settings
@@ -40,10 +38,17 @@ from ...kernel.app_settings import Settings
 
 
 class Menu(QFrame):
-    # //////
+    """
+    This class is used to create a menu container.
+    It contains a main menu frame and a toggle box.
+    The main menu frame contains a top menu and a bottom menu.
+    The toggle box contains a toggle button.
+    The menu container is used to display the menu.
+    """
+
     menus: Dict[str, QPushButton] = {}
-    _buttons: List[MenuButton] = []
-    _icons: List[ThemeIcon] = []
+    _buttons: List = []  # Type hint removed to avoid circular import
+    _icons: List = []  # Type hint removed to avoid circular import
 
     # ///////////////////////////////////////////////////////////////
 
@@ -99,6 +104,10 @@ class Menu(QFrame):
         self.VL_toggleBox.setContentsMargins(0, 0, 0, 0)
 
         # ///////////////////////////////////////////////////////////////
+
+        # Lazy import to avoid circular imports
+        from ...widgets.extended.menu_button import MenuButton
+        from ...widgets.extended.theme_icon import ThemeIcon
 
         self.toggleButton = MenuButton(
             parent=self.toggleBox,
@@ -161,7 +170,11 @@ class Menu(QFrame):
 
     # ///////////////////////////////////////////////////////////////
 
-    def add_menu(self, name: str, icon: str | Icons = None) -> MenuButton:
+    def add_menu(self, name: str, icon: str | Icons = None):
+        # Lazy import to avoid circular imports
+        from ...widgets.extended.menu_button import MenuButton
+        from ...widgets.extended.theme_icon import ThemeIcon
+
         menu = MenuButton(
             parent=self.topMenu,
             icon=icon,

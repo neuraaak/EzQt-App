@@ -29,7 +29,6 @@ from PySide6.QtWidgets import (
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # /////////////////////////////////////////////////////////////////////////////////////////////
-from ...widgets.core.theme_icon import ThemeIcon
 from ...kernel.app_components import *
 from ...kernel.app_resources import *
 
@@ -45,7 +44,7 @@ from ...kernel.app_resources import *
 
 class Header(QFrame):
     _buttons: List[QPushButton] = []
-    _icons: List[ThemeIcon] = []
+    _icons: List = []  # Type hint removed to avoid circular import
 
     # ///////////////////////////////////////////////////////////////
 
@@ -133,6 +132,9 @@ class Header(QFrame):
         self.HL_headerButtons.setContentsMargins(0, 0, 0, 0)
 
         # /////////////////////////////////////////////////////////////////////
+
+        # Lazy import to avoid circular imports
+        from ...widgets.extended.theme_icon import ThemeIcon
 
         self.settingsTopBtn = QPushButton(self.headerButtons)
         self._buttons.append(self.settingsTopBtn)

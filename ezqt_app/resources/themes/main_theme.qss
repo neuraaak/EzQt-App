@@ -283,7 +283,7 @@ QComboBox QAbstractItemView {
 	color: $_main_accent_color;	
 	background-color: $_main_surface;
 	padding: 10px;
-	selection-background-color: rgb(39, 44, 54);
+	selection-background-color: $_accent_color1;
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,17 +354,30 @@ QCommandLinkButton:pressed {
 
 
 /** ///////////////////////////////////////////////////////////////////////////////////////////////// */
-/** EzQtWidgets */
+/** EXTENDED WIDGETS */
 /** ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////
-ToggleIcon */
-ToggleIcon {
-	background-color: transparent;
+/* ==> MenuButton Widget */
+QToolButton[type="MenuButton"] {
 	border: none;
-	border-radius: 4px 4px 4px 4px;
+	border-radius: 0;
+	background-color: transparent;
+	/* text-align removed - MenuButton handles its own alignment */
 }
+QToolButton[type="MenuButton"]:hover {
+	background-color: $_main_border;
+}
+QToolButton[type="MenuButton"]:pressed {
+	background-color: $_main_accent_color;
+	color: $_select_text_color;
+}
+
+
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+/** EZQT WIDGETS */
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 IndicatorLabel */
@@ -541,10 +554,210 @@ OptionSelector [type="OptionSelector_Selector"] {
 	border-radius: 4px;	
 }
 
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ToggleIcon */
+ToggleIcon {
+	background-color: transparent;
+	border: none;
+	border-radius: 4px 4px 4px 4px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ToggleSwitch */
+ToggleSwitch {
+	background-color: $_main_border;
+	border: 2px solid $_accent_color1;
+	border-radius: 12px;
+}
+
+ToggleSwitch:hover {
+	border: 2px solid $_accent_color4;
+}
+
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+/** SETTING WIDGETS */
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+BaseSettingWidget */
+BaseSettingWidget {
+	background-color: transparent;
+	border: none;
+}
+
+BaseSettingWidget QLabel {
+	color: $_base_text_color;
+	font: 10pt "Segoe UI";
+	font-weight: bold;
+}
+
+BaseSettingWidget QLabel[objectName="settingDescription"] {
+	color: $_accent_color4;
+	font: 8pt "Segoe UI";
+	margin-top: 2px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingToggle */
+SettingToggle {
+	background-color: transparent;
+	border: none;
+}
+
+SettingToggle ToggleSwitch {
+	background-color: transparent;
+	border: none;
+}
+
+SettingCheckbox ToggleSwitch {
+	background-color: transparent;
+	border: none;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingSelect */
+SettingSelect {
+	background-color: transparent;
+	border: none;
+}
+
+SettingSelect QComboBox {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 4px;
+	padding: 4px 8px;
+	color: $_base_text_color;
+	font: 9pt "Segoe UI";
+}
+
+SettingSelect QComboBox:hover {
+	border: 2px solid $_accent_color4;
+}
+
+SettingSelect QComboBox:focus {
+	border: 2px solid $_main_accent_color;
+}
+
+SettingSelect QComboBox::drop-down {
+	border: none;
+	width: 20px;
+}
+
+SettingSelect QComboBox::down-arrow {
+	image: url(:/icons/icons/cil-arrow-bottom.png);
+	width: 12px;
+	height: 12px;
+	background: none;
+}
+
+SettingSelect QComboBox QAbstractItemView {
+	color: $_main_accent_color;	
+	background-color: $_main_surface;
+	padding: 8px;
+	selection-background-color: $_accent_color1;
+	border: 1px solid $_main_border;
+	border-radius: 4px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingSlider */
+SettingSlider {
+	background-color: transparent;
+	border: none;
+}
+
+SettingSlider QSlider {
+	background-color: transparent;
+	border: none;
+}
+
+SettingSlider QSlider::groove:horizontal {
+	background-color: $_accent_color1;
+	border-radius: 2px;
+	height: 4px;
+}
+
+SettingSlider QSlider::handle:horizontal {
+	background-color: $_main_accent_color;
+	border: none;
+	border-radius: 6px;
+	width: 12px;
+	height: 12px;
+	margin: -4px 0;
+}
+
+SettingSlider QSlider::handle:horizontal:hover {
+	background-color: $_main_accent_color;
+}
+
+SettingSlider QLabel[objectName="settingValueLabel"] {
+	color: $_main_accent_color;
+	font: 9pt "Segoe UI";
+	font-weight: bold;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingText */
+SettingText {
+	background-color: transparent;
+	border: none;
+}
+
+SettingText QLineEdit {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 4px;
+	padding: 6px 8px;
+	color: $_base_text_color;
+	font: 9pt "Segoe UI";
+}
+
+SettingText QLineEdit:hover {
+	border: 2px solid $_accent_color4;
+}
+
+SettingText QLineEdit:focus {
+	border: 2px solid $_main_accent_color;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingCheckbox */
+SettingCheckbox {
+	background-color: transparent;
+	border: none;
+}
+
+SettingCheckbox QCheckBox {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 3px;
+	width: 16px;
+	height: 16px;
+}
+
+SettingCheckbox QCheckBox:checked {
+	background-color: $_main_accent_color;
+	border: 2px solid $_main_accent_color;
+	image: url(:/icons/icons/cil-check-alt.png);
+}
+
+SettingCheckbox QCheckBox:hover {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Setting Containers */
+QFrame[objectName^="settingContainer_"] {
+	background-color: transparent;
+	border: none;
+}
+
 
 /** ///////////////////////////////////////////////////////////////////////////////////////////////// */
 /** APPLICATION RELATED */
 /** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 Bg App */
@@ -633,7 +846,8 @@ LEFT MENU */
 	background-color: transparent;
 }
 #topMenu QToolButton[class="active"] {	
-	background-color: $_main_accent_color;
+	background-color: transparent;
+	border-left: 3px solid $_main_accent_color;
 }
 #topMenu QToolButton:hover {
 	background-color: $_main_border;
@@ -643,20 +857,6 @@ LEFT MENU */
 	color: $_select_text_color;
 }
 
-/* ==> MenuButton Widget */
-QToolButton[type="MenuButton"] {
-	border: none;
-	border-radius: 0;
-	background-color: transparent;
-	/* text-align removed - MenuButton handles its own alignment */
-}
-QToolButton[type="MenuButton"]:hover {
-	background-color: $_main_border;
-}
-QToolButton[type="MenuButton"]:pressed {
-	background-color: $_main_accent_color;
-	color: $_select_text_color;
-}
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 CONTENT */
@@ -697,6 +897,14 @@ CONTENT */
 	background-color: $_main_border;
 	border: 2px solid $_main_accent_color;
 	border-radius: 4px;	
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Theme Label */
+#themeLabel {
+	color: $_base_text_color;
+	font: 10pt "Segoe UI";
+	font-weight: bold;
 }
 
 /* ==> pagesContainer */
