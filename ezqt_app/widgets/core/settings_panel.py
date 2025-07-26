@@ -139,12 +139,20 @@ class SettingsPanel(QFrame):
                 # Fallback si la traduction n'est pas disponible
                 translated_items = ["Light", "Dark"]
 
-            # S'assurer que les items sont cohérents avec le mapping
-            self._init_theme_mapping()
+            # Charger la valeur par défaut depuis le YAML
+            try:
+                from ...kernel.app_functions import Kernel
+
+                settings_panel = Kernel.loadKernelConfig("settings_panel")
+                default_theme = settings_panel.get("theme", {}).get("default", "dark")
+                # Convertir en ID : 0 = Light, 1 = Dark
+                default_id = 0 if default_theme.lower() == "light" else 1
+            except Exception:
+                default_id = 1  # Dark par défaut si erreur
 
             self.themeToggleButton = OptionSelector(
                 items=translated_items,
-                default_id=0,  # Utiliser default_id au lieu de default
+                default_id=default_id,  # ID basé sur le thème par défaut du YAML
                 parent=self.themeSettingsContainer,
                 animation_duration=Settings.Gui.TIME_ANIMATION,
             )
@@ -153,14 +161,8 @@ class SettingsPanel(QFrame):
             self.themeToggleButton.setFixedHeight(40)
             self._widgets.append(self.themeToggleButton)
 
-            # Initialiser le mapping de thème AVANT de connecter les signaux
-            self._init_theme_mapping()
-
             # Connecter le signal de changement du sélecteur de thème
             self._connect_theme_selector_signals()
-
-            # Initialiser le sélecteur avec la valeur par défaut depuis le YAML
-            self._initialize_theme_selector_default()
 
             #
             self.VL_themeSettingsContainer.addWidget(self.themeToggleButton)
@@ -522,14 +524,6 @@ class SettingsPanel(QFrame):
             if hasattr(widget, "update_theme_icon"):
                 widget.update_theme_icon()
 
-    def _init_theme_mapping(self) -> None:
-        """Initialise le mapping entre les IDs et les valeurs anglaises."""
-        # Mapping simple : 0 = Light, 1 = Dark
-        self._theme_mapping = {0: "Light", 1: "Dark"}
-
-        # Mapping inverse pour la compatibilité
-        self._theme_mapping_reverse = {"Light": 0, "Dark": 1, "light": 0, "dark": 1}
-
     def _connect_theme_selector_signals(self) -> None:
         """Connecte les signaux du sélecteur de thème."""
         try:
@@ -547,20 +541,18 @@ class SettingsPanel(QFrame):
     def _on_theme_selector_changed(self, value):
         """Appelé quand le sélecteur de thème change."""
         try:
-            # La nouvelle version d'OptionSelector émet directement la valeur textuelle
-            # Convertir la valeur en ID puis en valeur anglaise
-            theme_id = self._get_theme_id_from_value(value)
-            english_value = self._theme_mapping.get(theme_id, "light")
+            # OptionSelector.value retourne déjà "Light" ou "Dark"
+            english_value = value.lower()
 
             # Sauvegarder la valeur anglaise dans le YAML
             from ...kernel.app_functions import Kernel
 
             Kernel.writeYamlConfig(
-                ["settings_panel", "theme", "default"], english_value.lower()
+                ["settings_panel", "theme", "default"], english_value
             )
 
             # Émettre le signal avec la valeur anglaise
-            self.settingChanged.emit("theme", english_value.lower())
+            self.settingChanged.emit("theme", english_value)
 
         except Exception as e:
             print(f"Warning: Could not handle theme selector change: {e}")
@@ -569,66 +561,27 @@ class SettingsPanel(QFrame):
         """Appelé quand le sélecteur de thème est cliqué."""
         try:
             if hasattr(self, "themeToggleButton"):
-                # Récupérer la valeur actuelle (ID)
-                current_id = self.themeToggleButton.value_id
-                english_value = self._theme_mapping.get(current_id, "light")
+                # Récupérer directement la valeur textuelle
+                current_value = self.themeToggleButton.value.lower()
 
                 # Sauvegarder la valeur anglaise dans le YAML
                 from ...kernel.app_functions import Kernel
 
                 Kernel.writeYamlConfig(
-                    ["settings_panel", "theme", "default"], english_value.lower()
+                    ["settings_panel", "theme", "default"], current_value
                 )
 
                 # Émettre le signal avec la valeur anglaise
-                self.settingChanged.emit("theme", english_value.lower())
+                self.settingChanged.emit("theme", current_value)
 
         except Exception as e:
             print(f"Warning: Could not handle theme selector click: {e}")
-
-    def _get_theme_id_from_value(self, value: str) -> int:
-        """Convertit une valeur textuelle en ID de thème."""
-        # S'assurer que le mapping existe
-        if (
-            not hasattr(self, "_theme_mapping_reverse")
-            or self._theme_mapping_reverse is None
-        ):
-            self._init_theme_mapping()
-
-        # Chercher dans le mapping inverse
-        return self._theme_mapping_reverse.get(value, 0)  # 0 = Light par défaut
-
-    def _initialize_theme_selector_default(self) -> None:
-        """Initialise le sélecteur de thème avec la valeur par défaut depuis le YAML."""
-        try:
-            if hasattr(self, "themeToggleButton"):
-                # Charger la valeur par défaut depuis le YAML
-                from ...kernel.app_functions import Kernel
-
-                settings_panel = Kernel.loadKernelConfig("settings_panel")
-                default_theme = settings_panel.get("theme", {}).get("default", "dark")
-
-                # Convertir en ID
-                theme_id = 0 if default_theme.lower() == "light" else 1
-
-                # Initialiser le sélecteur
-                if hasattr(self.themeToggleButton, "initialize_selector"):
-                    self.themeToggleButton.initialize_selector(theme_id)
-                elif hasattr(self.themeToggleButton, "value_id"):
-                    self.themeToggleButton.value_id = theme_id
-
-        except Exception as e:
-            # Ignorer les erreurs
-            pass
 
     def update_theme_selector_items(self) -> None:
         """Met à jour les items du sélecteur de thème avec les traductions."""
         try:
             if hasattr(self, "themeToggleButton"):
                 from ...kernel.translation_helpers import tr
-
-                # Mettre à jour le mapping avec les nouvelles traductions
-                self._init_theme_mapping()
 
                 # Traduire les items pour l'affichage
                 translated_items = [tr("Light"), tr("Dark")]
@@ -639,12 +592,29 @@ class SettingsPanel(QFrame):
                     theme_button.value_id if hasattr(theme_button, "value_id") else 0
                 )
 
-                # La nouvelle version d'OptionSelector gère automatiquement les traductions
-                # Il suffit de mettre à jour les items et de restaurer l'ID
-                if hasattr(theme_button, "items"):
-                    theme_button.items = translated_items
-                    # Restaurer l'ID actuel
-                    theme_button.value_id = current_id
+                # Mettre à jour directement les textes des widgets
+                if hasattr(theme_button, "_options"):
+                    for i, (option_id, option_widget) in enumerate(
+                        theme_button._options.items()
+                    ):
+                        if i < len(translated_items):
+                            if hasattr(option_widget, "label"):
+                                option_widget.label.setText(
+                                    translated_items[i].capitalize()
+                                )
+                            elif hasattr(option_widget, "setText"):
+                                option_widget.setText(translated_items[i].capitalize())
+
+                # Réappliquer l'ID courant pour maintenir la sélection
+                if hasattr(theme_button, "value_id"):
+                    # Forcer la mise à jour du sélecteur sans passer par le setter
+                    if hasattr(theme_button, "_value_id"):
+                        theme_button._value_id = current_id
+                        # Forcer le déplacement du sélecteur
+                        if current_id in theme_button._options:
+                            theme_button.move_selector(
+                                theme_button._options[current_id]
+                            )
 
         except Exception as e:
             # Ignorer les erreurs

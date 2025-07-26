@@ -180,47 +180,16 @@ class Ui_MainWindow(object):
         # END SETTINGS PANEL
         # ///////////////////////////////////////////////////////////////
 
-        self.bottomBar = QFrame(self.contentBottom)
-        self.bottomBar.setObjectName("bottomBar")
-        self.bottomBar.setMinimumSize(QSize(0, 22))
-        self.bottomBar.setMaximumSize(QSize(16777215, 22))
-        self.bottomBar.setFrameShape(QFrame.NoFrame)
-        self.bottomBar.setFrameShadow(QFrame.Raised)
+        # ///////////////////////////////////////////////////////////////
+        # BALISE BOTTOM BAR
+        # ///////////////////////////////////////////////////////////////
+
+        self.bottomBar = BottomBar(parent=self.contentBottom)
         #
         self.VL_contentBottom.addWidget(self.bottomBar)
-        # //////
-        self.HL_bottomBar = QHBoxLayout(self.bottomBar)
-        self.HL_bottomBar.setSpacing(0)
-        self.HL_bottomBar.setObjectName("HL_bottomBar")
-        self.HL_bottomBar.setContentsMargins(0, 0, 0, 0)
-
-        # //////
-        self.creditsLabel = QLabel(self.bottomBar)
-        self.creditsLabel.setObjectName("creditsLabel")
-        self.creditsLabel.setMaximumSize(QSize(16777215, 16))
-        self.creditsLabel.setFont(Fonts.SEGOE_UI_10_REG)
-        self.creditsLabel.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
-        #
-        self.HL_bottomBar.addWidget(self.creditsLabel)
-
-        # //////
-        self.version = QLabel(self.bottomBar)
-        self.version.setObjectName("version")
-        self.version.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        #
-        self.HL_bottomBar.addWidget(self.version)
-
-        # //////
-        self.appSizeGrip = QFrame(self.bottomBar)
-        self.appSizeGrip.setObjectName("appSizeGrip")
-        self.appSizeGrip.setMinimumSize(QSize(20, 0))
-        self.appSizeGrip.setMaximumSize(QSize(20, 16777215))
-        self.appSizeGrip.setFrameShape(QFrame.NoFrame)
-        self.appSizeGrip.setFrameShadow(QFrame.Raised)
-        #
-        self.HL_bottomBar.addWidget(self.appSizeGrip)
 
         # ///////////////////////////////////////////////////////////////
+        # END BOTTOM BAR
         # ///////////////////////////////////////////////////////////////
 
         MainWindow.setCentralWidget(self.styleSheet)

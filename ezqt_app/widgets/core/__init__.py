@@ -29,3 +29,6 @@ from .page_container import *
 
 # SETTINGS PANEL - KERNEL WIDGET
 from .settings_panel import *
+
+# BOTTOM BAR - KERNEL WIDGET
+from .bottom_bar import *

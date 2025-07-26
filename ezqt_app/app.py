@@ -61,6 +61,7 @@ class EzQt_App(QMainWindow):
         # ///////////////////////////////////////////////////////////////.
         Kernel.loadFontsResources()
         Kernel.loadAppSettings()
+
         # ==> LOAD TRANSLATIONS
         # ///////////////////////////////////////////////////////////////.
         from .kernel.translation_manager import get_translation_manager
@@ -139,9 +140,13 @@ class EzQt_App(QMainWindow):
 
         theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
         if theme_toggle and hasattr(theme_toggle, "initialize_selector"):
-            # Convertir la valeur de thème en ID
-            theme_id = 0 if _theme == "light" else 1  # 0 = Light, 1 = Dark
-            theme_toggle.initialize_selector(theme_id)
+            try:
+                # Convertir la valeur de thème en ID
+                theme_id = 0 if _theme == "light" else 1  # 0 = Light, 1 = Dark
+                theme_toggle.initialize_selector(theme_id)
+            except Exception as e:
+                # Ignorer les erreurs d'initialisation
+                pass
         self.ui.headerContainer.update_all_theme_icons()
         self.ui.menuContainer.update_all_theme_icons()
         # //////
@@ -358,11 +363,6 @@ class EzQt_App(QMainWindow):
             from .kernel.translation_helpers import set_tr
 
             # Widgets dans ui_main.py avec du texte fixe
-            if hasattr(self.ui, "creditsLabel"):
-                set_tr(self.ui.creditsLabel, "Made with ❤️ by EzQt_App")
-
-            if hasattr(self.ui, "version"):
-                set_tr(self.ui.version, "v1.0.0")
 
             # Widgets dans settings_panel avec du texte fixe
             if hasattr(self.ui, "settingsPanel"):
@@ -460,3 +460,19 @@ class EzQt_App(QMainWindow):
                 print(f"Mouse click: LEFT CLICK")
             elif event.buttons() == Qt.RightButton:
                 print("Mouse click: RIGHT CLICK")
+
+    def set_credits(self, credits):
+        """
+        Définit le texte des crédits dans la barre du bas.
+        Peut être une chaîne simple, un dict {"name": ..., "email": ...}, ou une chaîne JSON.
+        """
+        if hasattr(self.ui, "bottomBar") and self.ui.bottomBar:
+            self.ui.bottomBar.set_credits(credits)
+
+    def set_version(self, version):
+        """
+        Définit le texte de version dans la barre du bas.
+        Peut être une chaîne ("1.0.0", "v1.0.0", etc).
+        """
+        if hasattr(self.ui, "bottomBar") and self.ui.bottomBar:
+            self.ui.bottomBar.set_version(version)

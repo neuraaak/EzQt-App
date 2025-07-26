@@ -79,7 +79,7 @@ class UIFunctions:
             self.ui.headerContainer.maximizeRestoreAppBtn.setIcon(
                 QIcon(":/icons/icons/icon_restore.png")
             )
-            self.ui.appSizeGrip.hide()
+            self.ui.bottomBar.appSizeGrip.hide()
             self.left_grip.hide()
             self.right_grip.hide()
             self.top_grip.hide()
@@ -93,7 +93,7 @@ class UIFunctions:
             self.ui.headerContainer.maximizeRestoreAppBtn.setIcon(
                 QIcon(":/icons/icons/icon_maximize.png")
             )
-            self.ui.appSizeGrip.show()
+            self.ui.bottomBar.appSizeGrip.show()
             self.left_grip.show()
             self.right_grip.show()
             self.top_grip.show()
@@ -163,8 +163,14 @@ class UIFunctions:
             # Synchronisation du toggle avec le thème courant
             current_theme = Settings.Gui.THEME
             theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
-            if theme_toggle and hasattr(theme_toggle, 'initialize_selector'):
-                theme_toggle.initialize_selector(current_theme)
+            if theme_toggle and hasattr(theme_toggle, "initialize_selector"):
+                try:
+                    # Convertir le thème en ID : 0 = Light, 1 = Dark
+                    theme_id = 0 if current_theme.lower() == "light" else 1
+                    theme_toggle.initialize_selector(theme_id)
+                except Exception as e:
+                    # Ignorer les erreurs d'initialisation
+                    pass
 
     # SELECT/DESELECT MENU
     # ///////////////////////////////////////////////////////////////
@@ -269,10 +275,10 @@ class UIFunctions:
 
         else:
             self.ui.appMargins.setContentsMargins(0, 0, 0, 0)
-            self.ui.minimizeAppBtn.hide()
-            self.ui.maximizeRestoreAppBtn.hide()
-            self.ui.closeAppBtn.hide()
-            self.ui.appSizeGrip.hide()
+            self.ui.headerContainer.minimizeAppBtn.hide()
+            self.ui.headerContainer.maximizeRestoreAppBtn.hide()
+            self.ui.headerContainer.closeAppBtn.hide()
+            self.ui.bottomBar.appSizeGrip.hide()
 
         # DROP SHADOW
         self.shadow = QGraphicsDropShadowEffect(self)
@@ -283,7 +289,7 @@ class UIFunctions:
         self.ui.bgApp.setGraphicsEffect(self.shadow)
 
         # RESIZE WINDOW
-        self.sizegrip = QSizeGrip(self.ui.appSizeGrip)
+        self.sizegrip = QSizeGrip(self.ui.bottomBar.appSizeGrip)
         self.sizegrip.setStyleSheet(
             "width: 20px; height: 20px; margin 0px; padding: 0px;"
         )
