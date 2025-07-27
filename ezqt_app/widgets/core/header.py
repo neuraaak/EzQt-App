@@ -85,9 +85,24 @@ class Header(QFrame):
         self.setFixedHeight(50)
         self.setFrameShape(QFrame.NoFrame)
         self.setFrameShadow(QFrame.Raised)
-        SizePolicy.H_EXPANDING_V_PREFERRED.setHeightForWidth(
-            self.sizePolicy().hasHeightForWidth()
-        )
+
+        # Vérifier si SizePolicy est initialisé, sinon utiliser une politique par défaut
+        if (
+            hasattr(SizePolicy, "H_EXPANDING_V_PREFERRED")
+            and SizePolicy.H_EXPANDING_V_PREFERRED is not None
+        ):
+            self.setSizePolicy(SizePolicy.H_EXPANDING_V_PREFERRED)
+            SizePolicy.H_EXPANDING_V_PREFERRED.setHeightForWidth(
+                self.sizePolicy().hasHeightForWidth()
+            )
+        else:
+            # Utiliser une politique de taille par défaut si SizePolicy n'est pas initialisé
+            default_policy = QSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+            )
+            default_policy.setHorizontalStretch(0)
+            default_policy.setVerticalStretch(0)
+            self.setSizePolicy(default_policy)
 
         # ////// SETUP MAIN LAYOUT
         self.HL_headerContainer = QHBoxLayout(self)
@@ -117,14 +132,44 @@ class Header(QFrame):
         self.headerAppName = QLabel(app_name, self.headerMetaInfo)
         self.headerAppName.setObjectName("headerAppName")
         self.headerAppName.setGeometry(QRect(65, 6, 160, 20))
-        self.headerAppName.setFont(Fonts.SEGOE_UI_12_SB)
+
+        # Vérifier si Fonts est initialisé, sinon utiliser une police par défaut
+        if hasattr(Fonts, "SEGOE_UI_12_SB") and Fonts.SEGOE_UI_12_SB is not None:
+            self.headerAppName.setFont(Fonts.SEGOE_UI_12_SB)
+        else:
+            try:
+                from PySide6.QtGui import QFont
+
+                default_font = QFont()
+                default_font.setFamily("Segoe UI")
+                default_font.setPointSize(12)
+                self.headerAppName.setFont(default_font)
+            except ImportError:
+                # Si QFont n'est pas disponible, ignorer la police
+                pass
+
         self.headerAppName.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignTop)
         # //////
         self.headerAppDescription = QLabel(description, self.headerMetaInfo)
         self.headerAppDescription.setObjectName("headerAppDescription")
         self.headerAppDescription.setGeometry(QRect(65, 26, 240, 16))
         self.headerAppDescription.setMaximumSize(QSize(16777215, 16))
-        self.headerAppDescription.setFont(Fonts.SEGOE_UI_8_REG)
+
+        # Vérifier si Fonts est initialisé, sinon utiliser une police par défaut
+        if hasattr(Fonts, "SEGOE_UI_8_REG") and Fonts.SEGOE_UI_8_REG is not None:
+            self.headerAppDescription.setFont(Fonts.SEGOE_UI_8_REG)
+        else:
+            try:
+                from PySide6.QtGui import QFont
+
+                default_font = QFont()
+                default_font.setFamily("Segoe UI")
+                default_font.setPointSize(8)
+                self.headerAppDescription.setFont(default_font)
+            except ImportError:
+                # Si QFont n'est pas disponible, ignorer la police
+                pass
+
         self.headerAppDescription.setAlignment(
             Qt.AlignLeading | Qt.AlignLeft | Qt.AlignTop
         )
@@ -189,7 +234,22 @@ class Header(QFrame):
         self.maximizeRestoreAppBtn.setObjectName("maximizeRestoreAppBtn")
         self.maximizeRestoreAppBtn.setMinimumSize(QSize(28, 28))
         self.maximizeRestoreAppBtn.setMaximumSize(QSize(28, 28))
-        self.maximizeRestoreAppBtn.setFont(Fonts.SEGOE_UI_10_REG)
+
+        # Vérifier si Fonts est initialisé, sinon utiliser une police par défaut
+        if hasattr(Fonts, "SEGOE_UI_10_REG") and Fonts.SEGOE_UI_10_REG is not None:
+            self.maximizeRestoreAppBtn.setFont(Fonts.SEGOE_UI_10_REG)
+        else:
+            try:
+                from PySide6.QtGui import QFont
+
+                default_font = QFont()
+                default_font.setFamily("Segoe UI")
+                default_font.setPointSize(10)
+                self.maximizeRestoreAppBtn.setFont(default_font)
+            except ImportError:
+                # Si QFont n'est pas disponible, ignorer la police
+                pass
+
         self.maximizeRestoreAppBtn.setCursor(QCursor(Qt.PointingHandCursor))
         #
         icon_maximize = ThemeIcon(Icons.icon_maximize)

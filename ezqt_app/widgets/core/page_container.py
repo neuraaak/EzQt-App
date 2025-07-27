@@ -13,10 +13,6 @@ from PySide6.QtWidgets import (
     QStackedWidget,
 )
 
-# IMPORT / GUI AND MODULES AND WIDGETS
-# ///////////////////////////////////////////////////////////////
-from ...kernel.app_resources import *
-
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 from typing import Dict, Optional
 

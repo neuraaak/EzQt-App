@@ -119,26 +119,78 @@ class Kernel:
         cls._yamlFile = yamlFile
 
     @classmethod
-    def loadKernelConfig(cls, key: str) -> Dict[str, Union[str, int]]:
+    def getConfigPath(cls, config_name: str) -> Path:
+        """
+        Obtient le chemin du fichier de configuration.
+
+        Parameters
+        ----------
+        config_name : str
+            Nom de la configuration.
+
+        Returns
+        -------
+        Path
+            Chemin vers le fichier de configuration.
+        """
+        return APP_PATH / f"{config_name}.yaml"
+
+    @classmethod
+    def loadKernelConfig(cls, config_name: str) -> Dict[str, Union[str, int]]:
         """
         Charge la configuration du noyau depuis le fichier YAML.
 
         Parameters
         ----------
-        key : str
-            Clé de configuration à charger.
+        config_name : str
+            Nom de la configuration à charger.
 
         Returns
         -------
         Dict[str, Union[str, int]]
             Configuration chargée.
-        """
-        if not cls._yamlFile:
-            cls._yamlFile = Kernel.getPackageResource("app.yaml")
 
-        with open(cls._yamlFile, "r", encoding="utf-8") as file:
-            data = yaml.safe_load(file)
-            return data.get(key, {})
+        Raises
+        ------
+        FileNotFoundError
+            Si le fichier de configuration n'existe pas.
+        yaml.YAMLError
+            Si le fichier YAML est invalide.
+        KeyError
+            Si la section demandée n'existe pas dans le fichier.
+        """
+        # Utiliser le fichier app.yaml unifié
+        if not cls._yamlFile:
+            cls._yamlFile = cls.getPackageResource("app.yaml")
+
+        try:
+            with open(cls._yamlFile, "r", encoding="utf-8") as file:
+                data = yaml.safe_load(file)
+                if data is None:
+                    return {}
+                return data.get(config_name, {})
+        except yaml.YAMLError as e:
+            raise yaml.YAMLError(f"Invalid YAML in {cls._yamlFile}: {e}")
+
+    @classmethod
+    def saveKernelConfig(cls, config_name: str, data: Dict[str, Any]) -> None:
+        """
+        Sauvegarde une configuration dans un fichier YAML.
+
+        Parameters
+        ----------
+        config_name : str
+            Nom de la configuration.
+        data : Dict[str, Any]
+            Données à sauvegarder.
+        """
+        config_file = cls.getConfigPath(config_name)
+
+        # Créer le répertoire parent s'il n'existe pas
+        config_file.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(config_file, "w", encoding="utf-8") as file:
+            yaml.dump(data, file, default_flow_style=False, allow_unicode=True)
 
     @classmethod
     def writeYamlConfig(
@@ -250,7 +302,12 @@ class Kernel:
             Paramètres chargés.
         """
         # LOAD APP DATA
-        app_data = Kernel.loadKernelConfig("app")
+        if not Kernel._yamlFile:
+            Kernel._yamlFile = Kernel.getPackageResource("app.yaml")
+
+        with open(Kernel._yamlFile, "r", encoding="utf-8") as file:
+            data = yaml.safe_load(file)
+            app_data = data.get("app", {})
 
         # SET APP SETTINGS
         Settings.App.NAME = app_data["name"]
@@ -267,7 +324,7 @@ class Kernel:
         # SET GUI SETTINGS
         # Charger le thème depuis settings_panel s'il existe, sinon depuis app
         try:
-            settings_panel = Kernel.loadKernelConfig("settings_panel")
+            settings_panel = data.get("settings_panel", {})
             Settings.Gui.THEME = settings_panel.get("theme", {}).get(
                 "default", app_data["theme"]
             )

@@ -130,27 +130,27 @@ class SizePolicy:
         pour configurer toutes les politiques de taille prédéfinies.
         """
         # ////// HORIZONTAL EXPANDING - VERTICAL FIXED
-        cls.H_EXPANDING_V_FIXED = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        cls.H_EXPANDING_V_FIXED = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         cls.H_EXPANDING_V_FIXED.setHorizontalStretch(0)
         cls.H_EXPANDING_V_FIXED.setVerticalStretch(0)
 
         # ////// HORIZONTAL EXPANDING - VERTICAL PREFERRED
         cls.H_EXPANDING_V_PREFERRED = QSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Preferred
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
         )
         cls.H_EXPANDING_V_PREFERRED.setHorizontalStretch(0)
         cls.H_EXPANDING_V_PREFERRED.setVerticalStretch(0)
 
         # ////// HORIZONTAL PREFERRED - VERTICAL EXPANDING
         cls.H_PREFERRED_V_EXPANDING = QSizePolicy(
-            QSizePolicy.Preferred, QSizePolicy.Expanding
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
         )
         cls.H_PREFERRED_V_EXPANDING.setHorizontalStretch(0)
         cls.H_PREFERRED_V_EXPANDING.setVerticalStretch(0)
 
         # ////// HORIZONTAL EXPANDING - VERTICAL EXPANDING
         cls.H_EXPANDING_V_EXPANDING = QSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Expanding
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
         cls.H_EXPANDING_V_EXPANDING.setHorizontalStretch(0)
         cls.H_EXPANDING_V_EXPANDING.setVerticalStretch(0)

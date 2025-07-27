@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "EzQt_App"
-version = "3.0.0"
+version = "3.1.0"
 description = "Lightweight framework based on PySide6 to quickly build modern desktop applications, with integrated resource, theme, and reusable component management."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
@@ -31,7 +31,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=6.2.5", "pytest-cov>=3.0.0", "flake8>=4.0.1"]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0", 
+    "pytest-qt>=4.0.0",      # Pour les tests Qt
+    "pytest-mock>=3.10.0",   # Pour le mocking
+    "pytest-xdist>=3.0.0",   # Pour les tests parallèles
+    "flake8>=5.0.0",
+    "black>=22.0.0",
+    "mypy>=1.0.0"
+]
 
 [project.scripts]
 ezqt_init = "ezqt_app.utils.cli:main"

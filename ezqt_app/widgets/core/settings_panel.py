@@ -110,7 +110,7 @@ class SettingsPanel(QFrame):
         self.contentSettings.setObjectName("contentSettings")
         self.contentSettings.setFrameShape(QFrame.NoFrame)
         self.contentSettings.setFrameShadow(QFrame.Raised)
-        self.contentSettings.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.contentSettings.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         #
         self.settingsScrollArea.setWidget(self.contentSettings)
         # //////

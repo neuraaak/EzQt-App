@@ -1,0 +1,6 @@
+# -*- coding: utf-8 -*-
+# ///////////////////////////////////////////////////////////////
+
+"""
+Tests unitaires pour les utilitaires d'EzQt_App.
+""" 
