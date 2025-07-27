@@ -31,39 +31,57 @@ from PySide6.QtWidgets import *
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 from .kernel import *
-
-# Import specific widgets to avoid circular imports
 from .widgets.core.ez_app import EzApplication
 
-## ==> GLOBALS
-# ///////////////////////////////////////////////////////////////
-os_name = platform.system()
-widgets = None
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import Optional, Any
 
-## ==> VARIABLES
+# ////// GLOBALS
 # ///////////////////////////////////////////////////////////////
-APP_PATH = Path(getattr(sys, "_MEIPASS", Path(sys.argv[0]).resolve().parent))
-# //////
-_dev = True if not hasattr(sys, "frozen") else False
+os_name: str = platform.system()
+widgets: Optional[Any] = None
 
-## ==> CLASSES
+# ////// VARIABLES
+# ///////////////////////////////////////////////////////////////
+APP_PATH: Path = Path(getattr(sys, "_MEIPASS", Path(sys.argv[0]).resolve().parent))
+_dev: bool = True if not hasattr(sys, "frozen") else False
+
+# ////// UTILITY FUNCTIONS
+# ///////////////////////////////////////////////////////////////
+
+# ////// CLASS
 # ///////////////////////////////////////////////////////////////
 
 
 class EzQt_App(QMainWindow):
+    """
+    Application principale EzQt_App.
+
+    Cette classe représente la fenêtre principale de l'application
+    avec tous ses composants (menu, pages, paramètres, etc.).
+    """
+
     def __init__(
         self,
-        themeFileName: str = None,
+        themeFileName: Optional[str] = None,
     ) -> None:
+        """
+        Initialise l'application EzQt_App.
+
+        Parameters
+        ----------
+        themeFileName : str, optional
+            Nom du fichier de thème à utiliser (défaut: None).
+        """
         QMainWindow.__init__(self)
 
-        # ==> KERNEL LOADER
-        # ///////////////////////////////////////////////////////////////.
+        # ////// KERNEL LOADER
+        # ///////////////////////////////////////////////////////////////
         Kernel.loadFontsResources()
         Kernel.loadAppSettings()
 
-        # ==> LOAD TRANSLATIONS
-        # ///////////////////////////////////////////////////////////////.
+        # ////// LOAD TRANSLATIONS
+        # ///////////////////////////////////////////////////////////////
         from .kernel.translation_manager import get_translation_manager
 
         # Charger la langue depuis les paramètres
@@ -76,23 +94,23 @@ class EzQt_App(QMainWindow):
             translation_manager = get_translation_manager()
             translation_manager.load_language("English")
 
-        # ==> INITIALIZE COMPONENTS
-        # ///////////////////////////////////////////////////////////////.
+        # ////// INITIALIZE COMPONENTS
+        # ///////////////////////////////////////////////////////////////
         Fonts.initFonts()
         SizePolicy.initSizePolicy()
 
-        # ==> SET AS GLOBAL WIDGETS
+        # ////// SET AS GLOBAL WIDGETS
         # ///////////////////////////////////////////////////////////////
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         global widgets
         widgets = self.ui
 
-        # ==> USE CUSTOM TITLE BAR | "True" for Windows
+        # ////// USE CUSTOM TITLE BAR
         # ///////////////////////////////////////////////////////////////
         Settings.App.ENABLE_CUSTOM_TITLE_BAR = True if os_name == "Windows" else False
 
-        # ==> APP DATA
+        # ////// APP DATA
         # ///////////////////////////////////////////////////////////////
         self.setWindowTitle(Settings.App.NAME)
         (
@@ -172,13 +190,23 @@ class EzQt_App(QMainWindow):
                 theme_id = theme_toggle.value_id
                 # Convertir l'ID en valeur de thème
                 theme = "light" if theme_id == 0 else "dark"
-                Settings.Gui.THEME = theme
-                # Sauvegarder directement dans settings_panel.theme.default
-                Kernel.writeYamlConfig(
-                    keys=["settings_panel", "theme", "default"], val=theme
-                )
-                # //////
-                QTimer.singleShot(100, self.updateUI)
+            elif hasattr(theme_toggle, "value"):
+                # Utiliser value pour obtenir la valeur textuelle
+                theme = theme_toggle.value.lower()
+            else:
+                # Fallback : utiliser la valeur actuelle de Settings
+                theme = Settings.Gui.THEME
+
+            # Mettre à jour Settings.Gui.THEME
+            Settings.Gui.THEME = theme
+
+            # Sauvegarder directement dans settings_panel.theme.default
+            Kernel.writeYamlConfig(
+                keys=["settings_panel", "theme", "default"], val=theme
+            )
+
+            # Forcer la mise à jour immédiate
+            self.updateUI()
 
     # UPDATE UI
     # ///////////////////////////////////////////////////////////////
@@ -199,6 +227,11 @@ class EzQt_App(QMainWindow):
 
         # //////
         QApplication.processEvents()
+
+        # Forcer le rafraîchissement de tous les widgets
+        for widget in QApplication.instance().allWidgets():
+            widget.style().unpolish(widget)
+            widget.style().polish(widget)
 
     # SET APP ICON
     # ///////////////////////////////////////////////////////////////

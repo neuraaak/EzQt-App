@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
+    QScrollArea,
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS
@@ -89,12 +90,27 @@ class SettingsPanel(QFrame):
 
         # ///////////////////////////////////////////////////////////////
 
-        self.contentSettings = QFrame(self)
+        # Créer le QScrollArea pour les paramètres
+        self.settingsScrollArea = QScrollArea(self)
+        self.settingsScrollArea.setObjectName("settingsScrollArea")
+        self.settingsScrollArea.setWidgetResizable(True)
+        self.settingsScrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.settingsScrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.settingsScrollArea.setFrameShape(QFrame.NoFrame)
+        self.settingsScrollArea.setFrameShadow(QFrame.Raised)
+        #
+        self.VL_settingsPanel.addWidget(self.settingsScrollArea)
+
+        # ///////////////////////////////////////////////////////////////
+
+        # Widget conteneur pour tous les paramètres
+        self.contentSettings = QFrame()
         self.contentSettings.setObjectName("contentSettings")
         self.contentSettings.setFrameShape(QFrame.NoFrame)
         self.contentSettings.setFrameShadow(QFrame.Raised)
+        self.contentSettings.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         #
-        self.VL_settingsPanel.addWidget(self.contentSettings)
+        self.settingsScrollArea.setWidget(self.contentSettings)
         # //////
         self.VL_contentSettings = QVBoxLayout(self.contentSettings)
         self.VL_contentSettings.setObjectName("VL_contentSettings")
@@ -524,6 +540,15 @@ class SettingsPanel(QFrame):
             if hasattr(widget, "update_theme_icon"):
                 widget.update_theme_icon()
 
+        # Forcer le rafraîchissement du style du panneau de paramètres
+        self.style().unpolish(self)
+        self.style().polish(self)
+
+        # Rafraîchir aussi tous les widgets enfants
+        for child in self.findChildren(QWidget):
+            child.style().unpolish(child)
+            child.style().polish(child)
+
     def _connect_theme_selector_signals(self) -> None:
         """Connecte les signaux du sélecteur de thème."""
         try:
@@ -659,3 +684,26 @@ class SettingsPanel(QFrame):
 
         self.VL_contentSettings.addWidget(section)
         return section
+
+    def scroll_to_top(self) -> None:
+        """Scroll vers le haut du panel de paramètres."""
+        if hasattr(self, "settingsScrollArea"):
+            self.settingsScrollArea.verticalScrollBar().setValue(0)
+
+    def scroll_to_bottom(self) -> None:
+        """Scroll vers le bas du panel de paramètres."""
+        if hasattr(self, "settingsScrollArea"):
+            scrollbar = self.settingsScrollArea.verticalScrollBar()
+            scrollbar.setValue(scrollbar.maximum())
+
+    def scroll_to_widget(self, widget: QWidget) -> None:
+        """
+        Scroll vers un widget spécifique dans le panel de paramètres.
+
+        Args:
+            widget: Le widget vers lequel scroll
+        """
+        if hasattr(self, "settingsScrollArea") and widget:
+            # Calculer la position du widget dans le scroll area
+            widget_pos = widget.mapTo(self.contentSettings, widget.rect().topLeft())
+            self.settingsScrollArea.verticalScrollBar().setValue(widget_pos.y())

@@ -25,26 +25,23 @@ from PySide6.QtCore import (
     QRect,
     QSize,
 )
+from PySide6.QtGui import (
+    QCursor,
+)
 from PySide6.QtWidgets import (
     QWidget,
     QFrame,
     QSizeGrip,
     QHBoxLayout,
 )
-from PySide6.QtGui import (
-    QCursor,
-)
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-## ==> GLOBALS
-# ///////////////////////////////////////////////////////////////
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import Any
 
-## ==> FUNCTIONS
-# ///////////////////////////////////////////////////////////////
-
-## ==> VARIABLES
+# UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
 
 # CLASS
@@ -52,27 +49,47 @@ from PySide6.QtGui import (
 
 
 class CustomGrip(QWidget):
-    def __init__(self, parent, position, disable_color=False) -> None:
+    """
+    Widget de redimensionnement personnalisé pour les fenêtres.
 
-        # SETUP UI
-        QWidget.__init__(self)
+    Cette classe fournit des poignées de redimensionnement personnalisées
+    pour les différents bords d'une fenêtre (haut, bas, gauche, droite).
+    Chaque poignée permet de redimensionner la fenêtre parente.
+    """
+
+    def __init__(
+        self, parent: QWidget, position: Qt.Edge, disable_color: bool = False
+    ) -> None:
+        """
+        Initialise la poignée de redimensionnement.
+
+        Parameters
+        ----------
+        parent : QWidget
+            Le widget parent à redimensionner.
+        position : Qt.Edge
+            La position de la poignée (Qt.TopEdge, Qt.BottomEdge, etc.).
+        disable_color : bool, optional
+            Désactive les couleurs de la poignée (défaut: False).
+        """
+        # ////// SETUP UI
+        super().__init__()
         self.parent = parent
         self.setParent(parent)
         self.wi = Widgets()
 
-        # SHOW TOP GRIP
-        # ///////////////////////////////////////////////////////////////
+        # ////// SHOW TOP GRIP
         if position == Qt.TopEdge:
             self.wi.top(self)
             self.setGeometry(0, 0, self.parent.width(), 10)
             self.setMaximumHeight(10)
 
-            # GRIPS
+            # ////// SETUP GRIPS
             top_left = QSizeGrip(self.wi.top_left)
             top_right = QSizeGrip(self.wi.top_right)
 
-            # RESIZE TOP
-            def resize_top(event) -> None:
+            # ////// RESIZE TOP FUNCTION
+            def resize_top(event: Any) -> None:
                 delta = event.pos()
                 height = max(
                     self.parent.minimumHeight(), self.parent.height() - delta.y()
@@ -84,15 +101,13 @@ class CustomGrip(QWidget):
 
             self.wi.top.mouseMoveEvent = resize_top
 
-            # ENABLE COLOR
-            # //////
+            # ////// ENABLE COLOR
             if disable_color:
                 self.wi.top_left.setStyleSheet("background: transparent")
                 self.wi.top_right.setStyleSheet("background: transparent")
                 self.wi.top.setStyleSheet("background: transparent")
 
-        # SHOW BOTTOM GRIP
-        # ///////////////////////////////////////////////////////////////
+        # ////// SHOW BOTTOM GRIP
         elif position == Qt.BottomEdge:
             self.wi.bottom(self)
             self.setGeometry(0, self.parent.height() - 10, self.parent.width(), 10)
@@ -120,15 +135,14 @@ class CustomGrip(QWidget):
                 self.wi.bottom_right.setStyleSheet("background: transparent")
                 self.wi.bottom.setStyleSheet("background: transparent")
 
-        # SHOW LEFT GRIP
-        # ///////////////////////////////////////////////////////////////
+        # ////// SHOW LEFT GRIP
         elif position == Qt.LeftEdge:
             self.wi.left(self)
-            self.setGeometry(0, 10, 10, self.parent.height())
+            self.setGeometry(0, 10, 10, self.parent.height() - 20)
             self.setMaximumWidth(10)
 
             # RESIZE LEFT
-            def resize_left(event) -> None:
+            def resize_left(event: Any) -> None:
                 delta = event.pos()
                 width = max(self.parent.minimumWidth(), self.parent.width() - delta.x())
                 geo = self.parent.geometry()
@@ -147,13 +161,17 @@ class CustomGrip(QWidget):
         # ///////////////////////////////////////////////////////////////
         elif position == Qt.RightEdge:
             self.wi.right(self)
-            self.setGeometry(self.parent.width() - 10, 10, 10, self.parent.height())
+            self.setGeometry(
+                self.parent.width() - 10, 10, 10, self.parent.height() - 20
+            )
             self.setMaximumWidth(10)
 
-            def resize_right(event) -> None:
+            def resize_right(event: Any) -> None:
                 delta = event.pos()
-                width = max(self.parent.minimumWidth(), self.parent.width() + delta.x())
-                self.parent.resize(width, self.parent.height())
+                width = max(self.parent.minimumWidth(), delta.x())
+                geo = self.parent.geometry()
+                geo.setWidth(width)
+                self.parent.setGeometry(geo)
                 event.accept()
 
             self.wi.rightgrip.mouseMoveEvent = resize_right
@@ -166,12 +184,14 @@ class CustomGrip(QWidget):
     # EVENT FUNCTIONS
     # ///////////////////////////////////////////////////////////////
 
-    def mouseReleaseEvent(self, event) -> None:
+    def mouseReleaseEvent(self, event: Any) -> None:
+        """Gère l'événement de relâchement de souris."""
         self.mousePos = None
 
     # ///////////////////////////////////////////////////////////////
 
-    def resizeEvent(self, event) -> None:
+    def resizeEvent(self, event: Any) -> None:
+        """Gère l'événement de redimensionnement du widget."""
         if hasattr(self.wi, "container_top"):
             self.wi.container_top.setGeometry(0, 0, self.width(), 10)
 
@@ -189,10 +209,27 @@ class CustomGrip(QWidget):
 # ///////////////////////////////////////////////////////////////
 
 
-class Widgets(object):
-    def top(self, Form) -> None:
+class Widgets:
+    """
+    Classe utilitaire pour créer les widgets de poignées de redimensionnement.
+
+    Cette classe fournit des méthodes pour créer les différents types
+    de poignées (haut, bas, gauche, droite) avec leurs layouts et styles.
+    """
+
+    def top(self, Form: QWidget) -> None:
+        """
+        Crée une poignée de redimensionnement pour le bord supérieur.
+
+        Parameters
+        ----------
+        Form : QWidget
+            Le widget parent pour la poignée.
+        """
         if not Form.objectName():
             Form.setObjectName("Form")
+
+        # ////// SETUP CONTAINER
         self.container_top = QFrame(Form)
         self.container_top.setObjectName("container_top")
         self.container_top.setGeometry(QRect(0, 0, 500, 10))
@@ -200,10 +237,14 @@ class Widgets(object):
         self.container_top.setMaximumSize(QSize(16777215, 10))
         self.container_top.setFrameShape(QFrame.NoFrame)
         self.container_top.setFrameShadow(QFrame.Raised)
+
+        # ////// SETUP LAYOUT
         self.top_layout = QHBoxLayout(self.container_top)
         self.top_layout.setSpacing(0)
         self.top_layout.setObjectName("top_layout")
         self.top_layout.setContentsMargins(0, 0, 0, 0)
+
+        # ////// SETUP TOP LEFT GRIP
         self.top_left = QFrame(self.container_top)
         self.top_left.setObjectName("top_left")
         self.top_left.setMinimumSize(QSize(10, 10))
@@ -213,6 +254,8 @@ class Widgets(object):
         self.top_left.setFrameShape(QFrame.NoFrame)
         self.top_left.setFrameShadow(QFrame.Raised)
         self.top_layout.addWidget(self.top_left)
+
+        # ////// SETUP TOP CENTER GRIP
         self.top = QFrame(self.container_top)
         self.top.setObjectName("top")
         self.top.setCursor(QCursor(Qt.SizeVerCursor))
@@ -220,6 +263,8 @@ class Widgets(object):
         self.top.setFrameShape(QFrame.NoFrame)
         self.top.setFrameShadow(QFrame.Raised)
         self.top_layout.addWidget(self.top)
+
+        # ////// SETUP TOP RIGHT GRIP
         self.top_right = QFrame(self.container_top)
         self.top_right.setObjectName("top_right")
         self.top_right.setMinimumSize(QSize(10, 10))
@@ -232,9 +277,19 @@ class Widgets(object):
 
     # ///////////////////////////////////////////////////////////////
 
-    def bottom(self, Form) -> None:
+    def bottom(self, Form: QWidget) -> None:
+        """
+        Crée une poignée de redimensionnement pour le bord inférieur.
+
+        Parameters
+        ----------
+        Form : QWidget
+            Le widget parent pour la poignée.
+        """
         if not Form.objectName():
             Form.setObjectName("Form")
+
+        # ////// SETUP CONTAINER
         self.container_bottom = QFrame(Form)
         self.container_bottom.setObjectName("container_bottom")
         self.container_bottom.setGeometry(QRect(0, 0, 500, 10))
@@ -242,10 +297,14 @@ class Widgets(object):
         self.container_bottom.setMaximumSize(QSize(16777215, 10))
         self.container_bottom.setFrameShape(QFrame.NoFrame)
         self.container_bottom.setFrameShadow(QFrame.Raised)
+
+        # ////// SETUP LAYOUT
         self.bottom_layout = QHBoxLayout(self.container_bottom)
         self.bottom_layout.setSpacing(0)
         self.bottom_layout.setObjectName("bottom_layout")
         self.bottom_layout.setContentsMargins(0, 0, 0, 0)
+
+        # ////// SETUP BOTTOM LEFT GRIP
         self.bottom_left = QFrame(self.container_bottom)
         self.bottom_left.setObjectName("bottom_left")
         self.bottom_left.setMinimumSize(QSize(10, 10))
@@ -255,6 +314,8 @@ class Widgets(object):
         self.bottom_left.setFrameShape(QFrame.NoFrame)
         self.bottom_left.setFrameShadow(QFrame.Raised)
         self.bottom_layout.addWidget(self.bottom_left)
+
+        # ////// SETUP BOTTOM CENTER GRIP
         self.bottom = QFrame(self.container_bottom)
         self.bottom.setObjectName("bottom")
         self.bottom.setCursor(QCursor(Qt.SizeVerCursor))
@@ -262,6 +323,8 @@ class Widgets(object):
         self.bottom.setFrameShape(QFrame.NoFrame)
         self.bottom.setFrameShadow(QFrame.Raised)
         self.bottom_layout.addWidget(self.bottom)
+
+        # ////// SETUP BOTTOM RIGHT GRIP
         self.bottom_right = QFrame(self.container_bottom)
         self.bottom_right.setObjectName("bottom_right")
         self.bottom_right.setMinimumSize(QSize(10, 10))
@@ -274,9 +337,19 @@ class Widgets(object):
 
     # ///////////////////////////////////////////////////////////////
 
-    def left(self, Form) -> None:
+    def left(self, Form: QWidget) -> None:
+        """
+        Crée une poignée de redimensionnement pour le bord gauche.
+
+        Parameters
+        ----------
+        Form : QWidget
+            Le widget parent pour la poignée.
+        """
         if not Form.objectName():
             Form.setObjectName("Form")
+
+        # ////// SETUP LEFT GRIP
         self.leftgrip = QFrame(Form)
         self.leftgrip.setObjectName("left")
         self.leftgrip.setGeometry(QRect(0, 10, 10, 480))
@@ -288,10 +361,20 @@ class Widgets(object):
 
     # ///////////////////////////////////////////////////////////////
 
-    def right(self, Form) -> None:
+    def right(self, Form: QWidget) -> None:
+        """
+        Crée une poignée de redimensionnement pour le bord droit.
+
+        Parameters
+        ----------
+        Form : QWidget
+            Le widget parent pour la poignée.
+        """
         if not Form.objectName():
             Form.setObjectName("Form")
         Form.resize(500, 500)
+
+        # ////// SETUP RIGHT GRIP
         self.rightgrip = QFrame(Form)
         self.rightgrip.setObjectName("right")
         self.rightgrip.setGeometry(QRect(0, 0, 10, 500))

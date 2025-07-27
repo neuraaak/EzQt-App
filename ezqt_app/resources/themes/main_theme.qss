@@ -129,78 +129,86 @@ QPlainTextEdit:focus {
 ScrollBars */
 QScrollBar:horizontal {
     border: none;
-    background: $_accent_color1;
-    height: 8px;
-    margin: 0px 21px 0 21px;
-	border-radius: 0px;
+    background: $_main_surface;
+    height: 12px;
+    margin: 0px 20px 0 20px;
+    border-radius: 0px;
 }
 QScrollBar::handle:horizontal {
-    background: $_main_accent_color;
-    min-width: 25px;
-	border-radius: 4px
+    background: $_main_border;
+    min-width: 30px;
+    border-radius: 8px;
+    margin: 2px 0px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: $_accent_color1;
 }
 QScrollBar::add-line:horizontal {
     border: none;
-    background: $_accent_color2;
+    background: $_main_surface;
     width: 20px;
-	border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
     subcontrol-position: right;
     subcontrol-origin: margin;
+    border-radius: 0px;
 }
 QScrollBar::sub-line:horizontal {
     border: none;
-    background: $_accent_color2;
+    background: $_main_surface;
     width: 20px;
-	border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
     subcontrol-position: left;
     subcontrol-origin: margin;
+    border-radius: 0px;
 }
-QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal
-{
-	background: none;
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
+    background: none;
+    border: none;
+    width: 0px;
+    height: 0px;
 }
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
-{
-	background: none;
-}
-QScrollBar:vertical {
-	border: none;
-	background: $_accent_color1;
-	width: 8px;
-	margin: 21px 0 21px 0;
-	border-radius: 0px;
-}
-QScrollBar::handle:vertical {	
-	background: $_main_accent_color;
-    min-height: 25px;
-	border-radius: 4px
-}
-QScrollBar::add-line:vertical {
-	border: none;
-    background: $_accent_color2;
-	height: 20px;
-	border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-	subcontrol-position: bottom;
-	subcontrol-origin: margin;
-}
-QScrollBar::sub-line:vertical {
-	border: none;
-	background: $_accent_color2;
-	height: 20px;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	subcontrol-position: top;
-	subcontrol-origin: margin;
-}
-QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-	background: none;
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
 }
 
+QScrollBar:vertical {
+    border: none;
+    background: $_main_surface;
+    width: 12px;
+    margin: 20px 0 20px 0;
+    border-radius: 0px;
+}
+QScrollBar::handle:vertical {    
+    background: $_main_border;
+    min-height: 30px;
+    border-radius: 8px;
+    margin: 2px 0px;
+}
+QScrollBar::handle:vertical:hover {
+    background: $_accent_color1;
+}
+QScrollBar::add-line:vertical {
+    border: none;
+    background: $_main_surface;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    border-radius: 0px;
+}
+QScrollBar::sub-line:vertical {
+    border: none;
+    background: $_main_surface;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+    border-radius: 0px;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+    border: none;
+    width: 0px;
+    height: 0px;
+}
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-	background: none;
+    background: none;
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -447,29 +455,26 @@ AutoCompleteInput:focus {
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 PasswordInput */
-PasswordInput QWidget {
-	background-color: rgb(27, 29, 35);
-	border: 2px solid $_accent_color4;
-	border-radius: 4px 4px 4px 4px;
+PasswordInput {
+    background-color: rgb(27, 29, 35);
+    border: 2px solid $_accent_color1;
+    border-radius: 4px 4px 4px 4px;
+    padding: 2px;
 }
 
 PasswordInput QLineEdit {
-	background-color: transparent;
-	border: none;
-	border-radius: 4px 4px 4px 4px;
-	padding: 0px 4px 4px 4px;
+	background-color: $_main_surface;
+	border-radius: 5px;
+	border: 2px solid $_main_surface;
+	padding-left: 10px;
 	selection-color: $_select_text_color;
 	selection-background-color: $_main_accent_color;
 }
 PasswordInput QLineEdit:hover {
-	background-color: transparent;
-	border: none;
-	border-radius: 4px 4px 4px 4px;
+	border: 2px solid $_accent_color4;
 }
 PasswordInput QLineEdit:focus {
-	background-color: transparent;
-	border: none;
-	border-radius: 4px 4px 4px 4px;
+	border: 2px solid $_accent_color4;
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -753,6 +758,19 @@ QFrame[objectName^="settingContainer_"] {
 	border: none;
 }
 
+#themeSettingsContainer {
+	background-color: transparent;
+	border: none;
+}
+
+#VL_settingsPanel {
+	background-color: $_main_surface;
+}
+
+#VL_contentSettings {
+	background-color: $_main_surface;
+}
+
 
 /** ///////////////////////////////////////////////////////////////////////////////////////////////// */
 /** APPLICATION RELATED */
@@ -857,6 +875,11 @@ LEFT MENU */
 	color: $_select_text_color;
 }
 
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SETTINGS PANEL */
+/* #settingsScrollArea QScrollBar:vertical {
+    background: transparent;
+} */
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 CONTENT */
@@ -870,6 +893,19 @@ CONTENT */
 }
 #settingsTopBorder {
 	background-color: $_main_accent_color;
+}
+
+#contentSettings {
+	background-color: $_main_surface;
+}
+
+#settingsScrollArea {
+	background-color: $_main_surface;
+	border: none;
+}
+
+#settingsScrollArea QWidget {
+	background-color: $_main_surface;
 }
 
 #contentSettings .QPushButton {	
@@ -891,7 +927,8 @@ CONTENT */
 
 #themeToggleButton {
 	background-color: $_main_border;
-	border-radius: 4px;
+	border: 2px solid $_accent_color1;
+	border-radius: 6px;
 }
 #themeToggleButton #selector {
 	background-color: $_main_border;

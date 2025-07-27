@@ -17,63 +17,87 @@ from PySide6.QtGui import (
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 from ...kernel.app_settings import Settings
 from ...kernel.app_resources import *
 
-## ==> GLOBALS
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import Union
+
+# UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
 
-## ==> VARIABLES
-# ///////////////////////////////////////////////////////////////
-
-## ==> CLASSES
+# CLASS
 # ///////////////////////////////////////////////////////////////
 
 
 class ThemeIcon(QIcon):
-    def __init__(self, original_icon: QIcon) -> None:
+    """
+    Icône avec support automatique des thèmes.
+
+    Cette classe étend QIcon pour fournir une icône qui s'adapte
+    automatiquement au thème actuel (clair/sombre). L'icône change
+    de couleur en fonction du thème de l'application.
+    """
+
+    def __init__(self, original_icon: Union[QIcon, str]) -> None:
+        """
+        Initialise l'icône avec support de thème.
+
+        Parameters
+        ----------
+        original_icon : QIcon or str
+            L'icône originale ou le chemin vers l'icône.
+        """
         super().__init__()
         self.original_icon = (
             QIcon(original_icon) if isinstance(original_icon, str) else original_icon
         )
         self.updateIcon()
-        # //////
         self._connect_theme_changed()
 
+    # ////// UTILITY FUNCTIONS
     # ///////////////////////////////////////////////////////////////
 
-    def _connect_theme_changed(self):
-        """Connect to theme changed signal using lazy import to avoid circular imports."""
+    def _connect_theme_changed(self) -> None:
+        """
+        Connecte au signal de changement de thème.
+
+        Utilise un import lazy pour éviter les imports circulaires.
+        """
         try:
             # Import lazy pour éviter l'import circulaire
             from ...widgets.core.ez_app import EzApplication
+
             EzApplication.instance().themeChanged.connect(self.updateIcon)
         except ImportError:
             # Fallback si l'import échoue
             print("Warning: Could not connect to EzApplication theme signal")
 
-    # ///////////////////////////////////////////////////////////////
-
     def updateIcon(self) -> None:
+        """
+        Met à jour l'icône selon le thème actuel.
+
+        Change la couleur de l'icône en fonction du thème :
+        - Thème sombre : icône claire
+        - Thème clair : icône sombre
+        """
         icon_color = "light" if Settings.Gui.THEME == "dark" else "dark"
 
-        # Get the QPixmap from the original QIcon
+        # ////// GET ORIGINAL PIXMAP
         pixmap = self.original_icon.pixmap(self.original_icon.availableSizes()[0])
 
-        # Create an image for manipulation
+        # ////// CREATE IMAGE FOR MANIPULATION
         image = pixmap.toImage()
 
-        # Determine the new color
-        new_color = QColor(
-            Qt.white if icon_color == "light" else Qt.black
-        )
+        # ////// DETERMINE NEW COLOR
+        new_color = QColor(Qt.white if icon_color == "light" else Qt.black)
 
-        # Create a new QPixmap to draw the colored icon
+        # ////// CREATE NEW PIXMAP
         new_pixmap = QPixmap(image.size())
         new_pixmap.fill(Qt.transparent)
 
-        # Draw the new colored icon
+        # ////// DRAW COLORED ICON
         painter = QPainter(new_pixmap)
         painter.drawImage(0, 0, image)
         painter.setCompositionMode(QPainter.CompositionMode_SourceIn)

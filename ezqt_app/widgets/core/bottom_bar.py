@@ -17,57 +17,76 @@
 
 # IMPORT BASE
 # ///////////////////////////////////////////////////////////////
-import json
-import importlib.util
-import sys
 from pathlib import Path
-from typing import Union, Dict, Optional
+import importlib.util
+import re
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
-from PySide6.QtCore import QSize, Qt, QUrl
-from PySide6.QtGui import QDesktopServices, QFont
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel
+from PySide6.QtCore import (
+    QSize,
+    Qt,
+    QUrl,
+)
+from PySide6.QtGui import (
+    QDesktopServices,
+    QFont,
+)
+from PySide6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+)
 
 # IMPORT / GUI AND MODULES AND WIDGETS
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 from ...kernel.app_components import Fonts
 from ...kernel.translation_helpers import set_tr
 
-## ==> GLOBALS
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import Union, Dict, Optional, Any
+
+# UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
 
-## ==> VARIABLES
-# ///////////////////////////////////////////////////////////////
-
-## ==> CLASSES
+# CLASS
 # ///////////////////////////////////////////////////////////////
 
 
 class BottomBar(QFrame):
     """
-    This class is used to create a bottom bar for the main window.
-    It contains a credits label, a version label, and a size grip area.
+    Barre de bas de page pour la fenêtre principale.
+
+    Cette classe fournit une barre de bas de page avec des crédits,
+    une version et une zone de redimensionnement. Les crédits peuvent
+    être cliquables et ouvrir un client email.
     """
 
-    # ///////////////////////////////////////////////////////////////
+    def __init__(self, parent: Optional[Any] = None) -> None:
+        """
+        Initialise la barre de bas de page.
 
-    def __init__(self, parent=None):
+        Parameters
+        ----------
+        parent : Any, optional
+            Le widget parent (défaut: None).
+        """
         super().__init__(parent)
 
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP WIDGET PROPERTIES
         self.setObjectName("bottomBar")
         self.setMinimumSize(QSize(0, 22))
         self.setMaximumSize(QSize(16777215, 22))
         self.setFrameShape(QFrame.NoFrame)
         self.setFrameShadow(QFrame.Raised)
 
+        # ////// SETUP MAIN LAYOUT
         self.HL_bottomBar = QHBoxLayout(self)
         self.HL_bottomBar.setSpacing(0)
         self.HL_bottomBar.setObjectName("HL_bottomBar")
         self.HL_bottomBar.setContentsMargins(0, 0, 0, 0)
 
+        # ////// SETUP CREDITS LABEL
         self.creditsLabel = QLabel(self)
         self.creditsLabel.setObjectName("creditsLabel")
         self.creditsLabel.setMaximumSize(QSize(16777215, 16))
@@ -75,11 +94,13 @@ class BottomBar(QFrame):
         self.creditsLabel.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
         self.HL_bottomBar.addWidget(self.creditsLabel)
 
+        # ////// SETUP VERSION LABEL
         self.version = QLabel(self)
         self.version.setObjectName("version")
         self.version.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self.HL_bottomBar.addWidget(self.version)
 
+        # ////// SETUP SIZE GRIP
         self.appSizeGrip = QFrame(self)
         self.appSizeGrip.setObjectName("appSizeGrip")
         self.appSizeGrip.setMinimumSize(QSize(20, 0))
@@ -88,36 +109,26 @@ class BottomBar(QFrame):
         self.appSizeGrip.setFrameShadow(QFrame.Raised)
         self.HL_bottomBar.addWidget(self.appSizeGrip)
 
-        # ///////////////////////////////////////////////////////////////
-        # Initialiser avec la valeur par défaut
+        # ////// INITIALIZE DEFAULT VALUES
         self.set_credits("Made with ❤️ by EzQt_App")
-
-        # Détecter automatiquement la version
         self.set_version_auto()
 
+    # ////// UTILITY FUNCTIONS
     # ///////////////////////////////////////////////////////////////
 
-    def set_credits(self, credits: Union[str, Dict, str]) -> None:
+    def set_credits(self, credits: Union[str, Dict[str, str]]) -> None:
         """
-        Définit le texte des crédits avec support du système de traduction.
+        Définit les crédits avec support pour texte simple ou dictionnaire.
 
-        Args:
-            credits: Peut être :
-                - str: Texte simple à traduire
-                - dict: Dictionnaire avec 'name' et 'email' pour créer un lien cliquable
-                - str (JSON): Chaîne JSON avec 'name' et 'email'
+        Parameters
+        ----------
+        credits : str or Dict[str, str]
+            Crédits sous forme de texte simple ou dictionnaire avec 'name' et 'email'.
         """
         try:
-            # Si c'est un dictionnaire ou JSON, créer un lien cliquable
             if isinstance(credits, dict):
+                # Crédits avec nom et email
                 self._create_clickable_credits(credits)
-            elif isinstance(credits, str) and credits.strip().startswith("{"):
-                try:
-                    credits_dict = json.loads(credits)
-                    self._create_clickable_credits(credits_dict)
-                except json.JSONDecodeError:
-                    # Si ce n'est pas du JSON valide, traiter comme du texte simple
-                    set_tr(self.creditsLabel, credits)
             else:
                 # Texte simple avec traduction
                 set_tr(self.creditsLabel, credits)
@@ -126,12 +137,14 @@ class BottomBar(QFrame):
             # En cas d'erreur, utiliser le texte par défaut
             set_tr(self.creditsLabel, "Made with ❤️ by EzQt_App")
 
-    def _create_clickable_credits(self, credits_data: Dict) -> None:
+    def _create_clickable_credits(self, credits_data: Dict[str, str]) -> None:
         """
         Crée un lien cliquable pour les crédits avec nom et email.
 
-        Args:
-            credits_data: Dictionnaire avec 'name' et 'email'
+        Parameters
+        ----------
+        credits_data : Dict[str, str]
+            Dictionnaire avec 'name' et 'email'.
         """
         try:
             name = credits_data.get("name", "Unknown")
@@ -164,8 +177,10 @@ class BottomBar(QFrame):
         """
         Ouvre le client email par défaut avec l'adresse spécifiée.
 
-        Args:
-            email: Adresse email à ouvrir
+        Parameters
+        ----------
+        email : str
+            Adresse email à ouvrir.
         """
         try:
             QDesktopServices.openUrl(QUrl(f"mailto:{email}"))
@@ -176,7 +191,9 @@ class BottomBar(QFrame):
     def set_version_auto(self) -> None:
         """
         Détecte automatiquement la version du projet utilisateur.
-        Cherche d'abord __version__ dans le module principal, sinon utilise la valeur par défaut.
+
+        Cherche d'abord __version__ dans le module principal,
+        sinon utilise la valeur par défaut.
         """
         detected_version = self._detect_project_version()
         if detected_version:
@@ -188,8 +205,10 @@ class BottomBar(QFrame):
         """
         Détecte la version du projet utilisateur en cherchant __version__ dans main.py.
 
-        Returns:
-            str: Version détectée ou None si non trouvée
+        Returns
+        -------
+        str or None
+            Version détectée ou None si non trouvée.
         """
         try:
             # Chercher main.py dans le répertoire courant
@@ -202,8 +221,6 @@ class BottomBar(QFrame):
                 content = f.read()
 
             # Chercher __version__ = "..." dans le contenu
-            import re
-
             version_match = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', content)
             if version_match:
                 return f"v{version_match.group(1)}"
@@ -230,8 +247,10 @@ class BottomBar(QFrame):
         """
         Définit le texte de version avec support du système de traduction.
 
-        Args:
-            text: Texte de la version (peut être "v1.0.0" ou juste "1.0.0")
+        Parameters
+        ----------
+        text : str
+            Texte de la version (peut être "v1.0.0" ou juste "1.0.0").
         """
         # S'assurer que la version commence par "v"
         if not text.startswith("v"):

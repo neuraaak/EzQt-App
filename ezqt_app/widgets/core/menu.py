@@ -3,7 +3,6 @@
 
 # IMPORT BASE
 # ///////////////////////////////////////////////////////////////
-from typing import Dict, List
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
@@ -22,89 +21,101 @@ from PySide6.QtWidgets import (
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 from ...kernel.app_components import *
 from ...kernel.app_resources import *
 from ...kernel.app_settings import Settings
 
-## ==> GLOBALS
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import Dict, List, Optional, Union, Any
+
+# UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
 
-## ==> VARIABLES
-# ///////////////////////////////////////////////////////////////
-
-## ==> CLASSES
+# CLASS
 # ///////////////////////////////////////////////////////////////
 
 
 class Menu(QFrame):
     """
-    This class is used to create a menu container.
-    It contains a main menu frame and a toggle box.
-    The main menu frame contains a top menu and a bottom menu.
-    The toggle box contains a toggle button.
-    The menu container is used to display the menu.
+    Conteneur de menu avec support d'expansion/réduction.
+
+    Cette classe fournit un conteneur de menu avec un bouton de basculement
+    pour étendre ou réduire la largeur du menu. Le menu contient une section
+    supérieure pour les éléments de menu et une section inférieure pour le
+    bouton de basculement.
     """
 
+    # ////// CLASS VARIABLES
     menus: Dict[str, QPushButton] = {}
     _buttons: List = []  # Type hint removed to avoid circular import
     _icons: List = []  # Type hint removed to avoid circular import
 
-    # ///////////////////////////////////////////////////////////////
-
     def __init__(
-        self, parent: QWidget = None, shrink_width: int = 60, extended_width: int = 240
+        self,
+        parent: Optional[QWidget] = None,
+        shrink_width: int = 60,
+        extended_width: int = 240,
     ) -> None:
-        super(Menu, self).__init__(parent)
+        """
+        Initialise le conteneur de menu.
 
-        # ///////////////////////////////////////////////////////////////
-        # Store configuration
+        Parameters
+        ----------
+        parent : QWidget, optional
+            Le widget parent (défaut: None).
+        shrink_width : int, optional
+            Largeur du menu réduit (défaut: 60).
+        extended_width : int, optional
+            Largeur du menu étendu (défaut: 240).
+        """
+        super().__init__(parent)
+
+        # ////// STORE CONFIGURATION
         self._shrink_width = shrink_width
         self._extended_width = extended_width
 
+        # ////// SETUP WIDGET PROPERTIES
         self.setObjectName("menuContainer")
         self.setMinimumSize(QSize(self._shrink_width, 0))
         self.setMaximumSize(QSize(self._shrink_width, 16777215))
         self.setFrameShape(QFrame.NoFrame)
         self.setFrameShadow(QFrame.Raised)
-        # //////
+
+        # ////// SETUP MAIN LAYOUT
         self.VL_menuContainer = QVBoxLayout(self)
         self.VL_menuContainer.setSpacing(0)
         self.VL_menuContainer.setObjectName("VL_menuContainer")
         self.VL_menuContainer.setContentsMargins(0, 0, 0, 0)
 
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP MAIN MENU FRAME
         self.mainMenuFrame = QFrame(self)
         self.mainMenuFrame.setObjectName("mainMenuFrame")
         self.mainMenuFrame.setFrameShape(QFrame.NoFrame)
         self.mainMenuFrame.setFrameShadow(QFrame.Raised)
-        #
         self.VL_menuContainer.addWidget(self.mainMenuFrame)
-        # //////
+
+        # ////// SETUP MAIN MENU LAYOUT
         self.VL_mainMenuFrame = QVBoxLayout(self.mainMenuFrame)
         self.VL_mainMenuFrame.setSpacing(0)
         self.VL_mainMenuFrame.setObjectName("VL_mainMenuFrame")
         self.VL_mainMenuFrame.setContentsMargins(0, 0, 0, 0)
 
-        # ToggleContainer for expand button
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP TOGGLE CONTAINER
         self.toggleBox = QFrame(self.mainMenuFrame)
         self.toggleBox.setObjectName("toggleBox")
         self.toggleBox.setMaximumSize(QSize(16777215, 45))
         self.toggleBox.setFrameShape(QFrame.NoFrame)
         self.toggleBox.setFrameShadow(QFrame.Raised)
-        #
         self.VL_mainMenuFrame.addWidget(self.toggleBox)
-        # //////
+
+        # ////// SETUP TOGGLE LAYOUT
         self.VL_toggleBox = QVBoxLayout(self.toggleBox)
         self.VL_toggleBox.setSpacing(0)
         self.VL_toggleBox.setObjectName("VL_toggleBox")
         self.VL_toggleBox.setContentsMargins(0, 0, 0, 0)
 
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP TOGGLE BUTTON
         # Lazy import to avoid circular imports
         from ...widgets.extended.menu_button import MenuButton
         from ...widgets.extended.theme_icon import ThemeIcon
@@ -114,7 +125,7 @@ class Menu(QFrame):
             icon=Icons.icon_menu,
             text="Hide",
             shrink_size=self._shrink_width,
-            spacing=35,
+            spacing=15,  # Réduit de 35 à 15 pour un meilleur alignement
             duration=Settings.Gui.TIME_ANIMATION,
         )
         self.toggleButton.setObjectName("toggleButton")
@@ -137,40 +148,54 @@ class Menu(QFrame):
         #
         self.VL_toggleBox.addWidget(self.toggleButton)
 
-        # The Menu itself
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP TOP MENU
         self.topMenu = QFrame(self.mainMenuFrame)
         self.topMenu.setObjectName("topMenu")
         self.topMenu.setFrameShape(QFrame.NoFrame)
         self.topMenu.setFrameShadow(QFrame.Raised)
-        #
         self.VL_mainMenuFrame.addWidget(self.topMenu, 0, Qt.AlignTop)
-        # //////
+
+        # ////// SETUP TOP MENU LAYOUT
         self.VL_topMenu = QVBoxLayout(self.topMenu)
         self.VL_topMenu.setSpacing(0)
         self.VL_topMenu.setObjectName("VL_topMenu")
         self.VL_topMenu.setContentsMargins(0, 0, 0, 0)
 
         # ////// SYNC INITIAL STATE
-        # Menu container starts shrinked (60px width), so sync toggle button state
         self._sync_initial_state()
 
+    # ////// UTILITY FUNCTIONS
     # ///////////////////////////////////////////////////////////////
 
-    def _sync_initial_state(self):
-        """Sync the initial state of all buttons with the menu container state."""
-        # Menu container starts shrinked (configured width)
-        # So all buttons should start in shrink state
+    def _sync_initial_state(self) -> None:
+        """
+        Synchronise l'état initial de tous les boutons avec l'état du conteneur.
+
+        Le conteneur de menu démarre réduit, donc tous les boutons
+        doivent démarrer dans l'état réduit.
+        """
         if hasattr(self, "toggleButton"):
             # Force toggle button to shrink state
             self.toggleButton.set_state(False)  # False = shrink state
             # Sync all existing menu buttons
             self.sync_all_menu_states(False)
 
-    # ///////////////////////////////////////////////////////////////
+    def add_menu(self, name: str, icon: Optional[Union[str, Any]] = None) -> Any:
+        """
+        Ajoute un élément de menu au conteneur.
 
-    def add_menu(self, name: str, icon: str | Icons = None):
+        Parameters
+        ----------
+        name : str
+            Nom de l'élément de menu.
+        icon : str or Icons, optional
+            Icône de l'élément de menu (défaut: None).
+
+        Returns
+        -------
+        MenuButton
+            Le bouton de menu créé.
+        """
         # Lazy import to avoid circular imports
         from ...widgets.extended.menu_button import MenuButton
         from ...widgets.extended.theme_icon import ThemeIcon
@@ -180,7 +205,7 @@ class Menu(QFrame):
             icon=icon,
             text=name,
             shrink_size=self._shrink_width,
-            spacing=35,
+            spacing=15,  # Réduit de 35 à 15 pour un meilleur alignement
             duration=Settings.Gui.TIME_ANIMATION,
         )
         menu.setObjectName(f"menu_{name}")
@@ -193,46 +218,70 @@ class Menu(QFrame):
         menu.setFont(Fonts.SEGOE_UI_10_REG)
         menu.setCursor(QCursor(Qt.PointingHandCursor))
         menu.setLayoutDirection(Qt.LeftToRight)
-        # Don't set contents margins here - MenuButton handles its own positioning
-        # menu.setContentsMargins(20, 0, 0, 0)
-        #
+
+        # ////// SETUP THEME ICON
         theme_icon = ThemeIcon(icon)
         self._buttons.append(menu)
         self._icons.append(theme_icon)
+
         # Connect to the toggle button to sync state
         self.toggleButton.stateChanged.connect(menu.set_state)
-        #
+
         self.VL_topMenu.addWidget(menu)
         Menu.menus[name] = menu
 
-        # //////
         return menu
 
-    # ///////////////////////////////////////////////////////////////
-
     def update_all_theme_icons(self) -> None:
-        """Update theme icons for all buttons."""
+        """Met à jour les icônes de thème pour tous les boutons."""
         for i, btn in enumerate(self._buttons):
             if hasattr(btn, "update_theme_icon") and self._icons[i]:
-                # Use the dedicated method for theme icon updates
                 btn.update_theme_icon(self._icons[i])
 
     def sync_all_menu_states(self, extended: bool) -> None:
-        """Sync all menu buttons with the given state."""
+        """
+        Synchronise tous les boutons de menu avec l'état donné.
+
+        Parameters
+        ----------
+        extended : bool
+            True pour étendu, False pour réduit.
+        """
         for btn in self._buttons:
             if btn != self.toggleButton:  # Don't sync the toggle button itself
                 btn.set_state(extended)
 
     def get_menu_state(self) -> bool:
-        """Get the current menu state (True for extended, False for shrink)."""
+        """
+        Obtient l'état actuel du menu.
+
+        Returns
+        -------
+        bool
+            True si étendu, False si réduit.
+        """
         if hasattr(self, "toggleButton"):
             return self.toggleButton.is_extended
         return False
 
     def get_shrink_width(self) -> int:
-        """Get the configured shrink width."""
+        """
+        Obtient la largeur de réduction configurée.
+
+        Returns
+        -------
+        int
+            La largeur de réduction.
+        """
         return self._shrink_width
 
     def get_extended_width(self) -> int:
-        """Get the configured extended width."""
+        """
+        Obtient la largeur d'extension configurée.
+
+        Returns
+        -------
+        int
+            La largeur d'extension.
+        """
         return self._extended_width

@@ -14,79 +14,84 @@ from PySide6.QtWidgets import (
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS
-# /////////////////////////////////////////////////////////////////////////////////////////////
-
-## ==> GLOBALS
 # ///////////////////////////////////////////////////////////////
 
-## ==> VARIABLES
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import Optional
+
+# UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
 
-## ==> CLASSES
+# CLASS
 # ///////////////////////////////////////////////////////////////
 
 
 class Fonts:
-    # Regular
-    SEGOE_UI_8_REG = None
-    SEGOE_UI_10_REG = None
-    SEGOE_UI_12_REG = None
+    """
+    Classe de gestion des polices de caractères.
 
-    # Semibold
-    SEGOE_UI_8_SB = None
-    SEGOE_UI_10_SB = None
-    SEGOE_UI_12_SB = None
+    Cette classe fournit des polices Segoe UI prédéfinies
+    avec différentes tailles et styles (Regular, Semibold).
+    """
 
-    # ///////////////////////////////////////////////////////////////
+    # ////// REGULAR FONTS
+    SEGOE_UI_8_REG: Optional[QFont] = None
+    SEGOE_UI_10_REG: Optional[QFont] = None
+    SEGOE_UI_12_REG: Optional[QFont] = None
+
+    # ////// SEMIBOLD FONTS
+    SEGOE_UI_8_SB: Optional[QFont] = None
+    SEGOE_UI_10_SB: Optional[QFont] = None
+    SEGOE_UI_12_SB: Optional[QFont] = None
+
     def __init__(self) -> None:
+        """Initialise la classe Fonts."""
         pass
 
-    # ///////////////////////////////////////////////////////////////
     @classmethod
     def initFonts(cls) -> None:
+        """
+        Initialise toutes les polices de caractères.
 
-        # Segoe UI - 8
-        # ///////////////////////////////////////////////////////////////
+        Cette méthode doit être appelée au démarrage de l'application
+        pour configurer toutes les polices Segoe UI.
+        """
+        # ////// SEGOE UI REGULAR - 8
         cls.SEGOE_UI_8_REG = QFont()
         cls.SEGOE_UI_8_REG.setFamily("Segoe UI")
         cls.SEGOE_UI_8_REG.setPointSize(8)
         cls.SEGOE_UI_8_REG.setBold(False)
         cls.SEGOE_UI_8_REG.setItalic(False)
 
-        # Segoe UI - 10
-        # ///////////////////////////////////////////////////////////////
+        # ////// SEGOE UI REGULAR - 10
         cls.SEGOE_UI_10_REG = QFont()
         cls.SEGOE_UI_10_REG.setFamily("Segoe UI")
         cls.SEGOE_UI_10_REG.setPointSize(10)
         cls.SEGOE_UI_10_REG.setBold(False)
         cls.SEGOE_UI_10_REG.setItalic(False)
 
-        # Segoe UI - 12
-        # ///////////////////////////////////////////////////////////////
+        # ////// SEGOE UI REGULAR - 12
         cls.SEGOE_UI_12_REG = QFont()
         cls.SEGOE_UI_12_REG.setFamily("Segoe UI")
         cls.SEGOE_UI_12_REG.setPointSize(12)
         cls.SEGOE_UI_12_REG.setBold(False)
         cls.SEGOE_UI_12_REG.setItalic(False)
 
-        # Segoe UI Semibold - 8
-        # ///////////////////////////////////////////////////////////////
+        # ////// SEGOE UI SEMIBOLD - 8
         cls.SEGOE_UI_8_SB = QFont()
         cls.SEGOE_UI_8_SB.setFamily("Segoe UI Semibold")
         cls.SEGOE_UI_8_SB.setPointSize(8)
         cls.SEGOE_UI_8_SB.setBold(False)
         cls.SEGOE_UI_8_SB.setItalic(False)
 
-        # Segoe UI Semibold - 10
-        # ///////////////////////////////////////////////////////////////
+        # ////// SEGOE UI SEMIBOLD - 10
         cls.SEGOE_UI_10_SB = QFont()
         cls.SEGOE_UI_10_SB.setFamily("Segoe UI Semibold")
         cls.SEGOE_UI_10_SB.setPointSize(10)
         cls.SEGOE_UI_10_SB.setBold(False)
         cls.SEGOE_UI_10_SB.setItalic(False)
 
-        # Segoe UI Semibold - 12
-        # ///////////////////////////////////////////////////////////////
+        # ////// SEGOE UI SEMIBOLD - 12
         cls.SEGOE_UI_12_SB = QFont()
         cls.SEGOE_UI_12_SB.setFamily("Segoe UI Semibold")
         cls.SEGOE_UI_12_SB.setPointSize(12)
@@ -94,53 +99,56 @@ class Fonts:
         cls.SEGOE_UI_12_SB.setItalic(False)
 
 
-# ///////////////////////////////////////////////////////////////
-# ///////////////////////////////////////////////////////////////
-
-
 class SizePolicy:
-    # Horizontal priority
-    H_EXPANDING_V_FIXED = None
-    H_EXPANDING_V_PREFERRED = None
+    """
+    Classe de gestion des politiques de taille.
 
-    # Vertical priority
-    H_PREFERRED_V_EXPANDING = None
+    Cette classe fournit des politiques de taille prédéfinies
+    pour différents types de widgets Qt.
+    """
 
-    # No priority
-    H_EXPANDING_V_EXPANDING = None
+    # ////// HORIZONTAL PRIORITY
+    H_EXPANDING_V_FIXED: Optional[QSizePolicy] = None
+    H_EXPANDING_V_PREFERRED: Optional[QSizePolicy] = None
 
-    # ///////////////////////////////////////////////////////////////
+    # ////// VERTICAL PRIORITY
+    H_PREFERRED_V_EXPANDING: Optional[QSizePolicy] = None
+
+    # ////// NO PRIORITY
+    H_EXPANDING_V_EXPANDING: Optional[QSizePolicy] = None
+
     def __init__(self) -> None:
+        """Initialise la classe SizePolicy."""
         pass
 
-    # ///////////////////////////////////////////////////////////////
     @classmethod
     def initSizePolicy(cls) -> None:
+        """
+        Initialise toutes les politiques de taille.
 
-        # Horizontal Expanding - Vertical Fixed
-        # ///////////////////////////////////////////////////////////////
+        Cette méthode doit être appelée au démarrage de l'application
+        pour configurer toutes les politiques de taille prédéfinies.
+        """
+        # ////// HORIZONTAL EXPANDING - VERTICAL FIXED
         cls.H_EXPANDING_V_FIXED = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         cls.H_EXPANDING_V_FIXED.setHorizontalStretch(0)
         cls.H_EXPANDING_V_FIXED.setVerticalStretch(0)
 
-        # Horizontal Expanding - Vertical Preferred
-        # ///////////////////////////////////////////////////////////////
+        # ////// HORIZONTAL EXPANDING - VERTICAL PREFERRED
         cls.H_EXPANDING_V_PREFERRED = QSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Preferred
         )
         cls.H_EXPANDING_V_PREFERRED.setHorizontalStretch(0)
         cls.H_EXPANDING_V_PREFERRED.setVerticalStretch(0)
 
-        # Horizontal Preferred - Vertical Expanding
-        # ///////////////////////////////////////////////////////////////
+        # ////// HORIZONTAL PREFERRED - VERTICAL EXPANDING
         cls.H_PREFERRED_V_EXPANDING = QSizePolicy(
             QSizePolicy.Preferred, QSizePolicy.Expanding
         )
         cls.H_PREFERRED_V_EXPANDING.setHorizontalStretch(0)
         cls.H_PREFERRED_V_EXPANDING.setVerticalStretch(0)
 
-        # Horizontal Expanding - Vertical Expanding
-        # ///////////////////////////////////////////////////////////////
+        # ////// HORIZONTAL EXPANDING - VERTICAL EXPANDING
         cls.H_EXPANDING_V_EXPANDING = QSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding
         )

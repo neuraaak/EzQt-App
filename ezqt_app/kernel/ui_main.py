@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 #
 # BY: WANDERSON M.PIMENTA
 # PROJECT MADE WITH: Qt Designer and PySide6
@@ -13,15 +13,14 @@
 # commercially, I recommend reading them on the official website:
 # https://doc.qt.io/qtforpython/licenses.html
 #
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 
 # IMPORT BASE
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 
 # IMPORT SPECS
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 from PySide6.QtCore import (
-    Qt,
     QSize,
     QMetaObject,
 )
@@ -31,166 +30,141 @@ from PySide6.QtWidgets import (
     QFrame,
     QVBoxLayout,
     QHBoxLayout,
-    QLabel,
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////
 from .app_components import *
 from .app_resources import *
 from ..widgets.core import *
 from ..kernel.app_settings import Settings
 
-## ==> GLOBALS
-# /////////////////////////////////////////////////////////////////////////////////////////////
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 
-## ==> VARIABLES
-# /////////////////////////////////////////////////////////////////////////////////////////////
+#  UTILITY FUNCTIONS
+# ///////////////////////////////////////////////////////////////
 
-## ==> CLASSES
-# /////////////////////////////////////////////////////////////////////////////////////////////
+#  CLASS
+# ///////////////////////////////////////////////////////////////
 
 
-class Ui_MainWindow(object):
+class Ui_MainWindow:
+    """
+    Interface utilisateur principale de l'application.
+
+    Cette classe définit la structure de l'interface utilisateur
+    principale avec tous ses composants (header, menu, contenu, etc.).
+    """
+
     def __init__(self) -> None:
+        """Initialise l'interface utilisateur principale."""
         pass
 
-    # ///////////////////////////////////////////////////////////////
-
     def setupUi(self, MainWindow: QMainWindow) -> None:
+        """
+        Configure l'interface utilisateur principale.
+
+        Parameters
+        ----------
+        MainWindow : QMainWindow
+            La fenêtre principale à configurer.
+        """
         if not MainWindow.objectName():
             MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1280, 720)
         MainWindow.setMinimumSize(QSize(940, 560))
 
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP MAIN STYLESHEET WIDGET
         self.styleSheet = QWidget(MainWindow)
         self.styleSheet.setObjectName("styleSheet")
         self.styleSheet.setFont(Fonts.SEGOE_UI_10_REG)
-        # //////
+
+        # ////// SETUP MAIN MARGINS
         self.appMargins = QVBoxLayout(self.styleSheet)
         self.appMargins.setSpacing(0)
         self.appMargins.setObjectName("appMargins")
         self.appMargins.setContentsMargins(10, 10, 10, 10)
 
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP BACKGROUND APP
         self.bgApp = QFrame(self.styleSheet)
         self.bgApp.setObjectName("bgApp")
         self.bgApp.setStyleSheet("")
         self.bgApp.setFrameShape(QFrame.NoFrame)
         self.bgApp.setFrameShadow(QFrame.Raised)
-        #
         self.appMargins.addWidget(self.bgApp)
-        # //////
+
+        # ////// SETUP APP LAYOUT
         self.appLayout = QVBoxLayout(self.bgApp)
         self.appLayout.setSpacing(0)
         self.appLayout.setObjectName("appLayout")
         self.appLayout.setContentsMargins(0, 0, 0, 0)
 
-        # ///////////////////////////////////////////////////////////////
-        # BALISE HEADER
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP HEADER
         self.headerContainer = Header(parent=self.bgApp)
-        #
         self.appLayout.addWidget(self.headerContainer)
 
-        # ///////////////////////////////////////////////////////////////
-        # END HEADER
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP CONTENT BOX
         self.contentBox = QFrame(self.bgApp)
         self.contentBox.setObjectName("contentBox")
         self.contentBox.setFrameShape(QFrame.NoFrame)
         self.contentBox.setFrameShadow(QFrame.Raised)
-        #
         self.appLayout.addWidget(self.contentBox)
-        # //////
+
+        # ////// SETUP CONTENT BOX LAYOUT
         self.HL_contentBox = QHBoxLayout(self.contentBox)
         self.HL_contentBox.setSpacing(0)
         self.HL_contentBox.setObjectName("HL_contentBox")
         self.HL_contentBox.setContentsMargins(0, 0, 0, 0)
 
-        # ///////////////////////////////////////////////////////////////
-        # BALISE MENU
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP MENU
         self.menuContainer = Menu(
             parent=self.contentBox,
             shrink_width=Settings.Gui.MENU_PANEL_SHRINKED_WIDTH,
             extended_width=Settings.Gui.MENU_PANEL_EXTENDED_WIDTH,
         )
-        #
         self.HL_contentBox.addWidget(self.menuContainer)
 
-        # ///////////////////////////////////////////////////////////////
-        # END MENU
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP CONTENT BOTTOM
         self.contentBottom = QFrame(self.contentBox)
         self.contentBottom.setObjectName("contentBottom")
         self.contentBottom.setFrameShape(QFrame.NoFrame)
         self.contentBottom.setFrameShadow(QFrame.Raised)
-        #
         self.HL_contentBox.addWidget(self.contentBottom)
-        # //////
+
+        # ////// SETUP CONTENT BOTTOM LAYOUT
         self.VL_contentBottom = QVBoxLayout(self.contentBottom)
         self.VL_contentBottom.setSpacing(0)
         self.VL_contentBottom.setObjectName("VL_contentBottom")
         self.VL_contentBottom.setContentsMargins(0, 0, 0, 0)
 
+        # ////// SETUP CONTENT
         self.content = QFrame(self.contentBottom)
         self.content.setObjectName("content")
         self.content.setFrameShape(QFrame.NoFrame)
         self.content.setFrameShadow(QFrame.Raised)
-        #
         self.VL_contentBottom.addWidget(self.content)
-        # //////
+
+        # ////// SETUP CONTENT LAYOUT
         self.HL_content = QHBoxLayout(self.content)
         self.HL_content.setSpacing(0)
         self.HL_content.setObjectName("HL_content")
         self.HL_content.setContentsMargins(0, 0, 0, 0)
 
-        # ///////////////////////////////////////////////////////////////
-        # BALISE PAGE CONTAINER
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP PAGE CONTAINER
         self.pagesContainer = PageContainer(self.contentBottom)
-        #
         self.HL_content.addWidget(self.pagesContainer)
 
-        # ///////////////////////////////////////////////////////////////
-        # END PAGE CONTAINER
-        # ///////////////////////////////////////////////////////////////
-
-        # ///////////////////////////////////////////////////////////////
-        # BALISE SETTINGS PANEL
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP SETTINGS PANEL
         self.settingsPanel = SettingsPanel(
             parent=self.content,
             width=Settings.Gui.SETTINGS_PANEL_WIDTH,
         )
-        #
         self.HL_content.addWidget(self.settingsPanel)
 
-        # ///////////////////////////////////////////////////////////////
-        # END SETTINGS PANEL
-        # ///////////////////////////////////////////////////////////////
-
-        # ///////////////////////////////////////////////////////////////
-        # BALISE BOTTOM BAR
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// SETUP BOTTOM BAR
         self.bottomBar = BottomBar(parent=self.contentBottom)
-        #
         self.VL_contentBottom.addWidget(self.bottomBar)
 
-        # ///////////////////////////////////////////////////////////////
-        # END BOTTOM BAR
-        # ///////////////////////////////////////////////////////////////
-
+        # ////// FINAL SETUP
         MainWindow.setCentralWidget(self.styleSheet)
         QMetaObject.connectSlotsByName(MainWindow)
