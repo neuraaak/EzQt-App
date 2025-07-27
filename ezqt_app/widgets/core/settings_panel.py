@@ -3,7 +3,6 @@
 
 # IMPORT BASE
 # ///////////////////////////////////////////////////////////////
-from typing import List, Dict, Any, Optional
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
@@ -17,9 +16,9 @@ from PySide6.QtWidgets import (
     QWidget,
     QFrame,
     QVBoxLayout,
-    QHBoxLayout,
     QLabel,
     QScrollArea,
+    QSizePolicy,
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS
@@ -30,6 +29,9 @@ from ...kernel.app_settings import Settings
 
 # Import lazy pour éviter l'import circulaire
 # from ...kernel import Kernel
+
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import List, Dict, Any, Optional
 
 ## ==> GLOBALS
 # ///////////////////////////////////////////////////////////////
@@ -276,7 +278,7 @@ class SettingsPanel(QFrame):
         return widget
 
     def _create_toggle_widget(
-        self, label: str, description: str, default: bool, key: str = None
+        self, label: str, description: str, default: bool, key: Optional[str] = None
     ) -> QWidget:
         """Crée un widget toggle avec label et description."""
         from ...widgets.extended.setting_widgets import SettingToggle
@@ -288,7 +290,12 @@ class SettingsPanel(QFrame):
         return widget
 
     def _create_select_widget(
-        self, label: str, description: str, options: list, default: str, key: str = None
+        self,
+        label: str,
+        description: str,
+        options: List[str],
+        default: str,
+        key: Optional[str] = None,
     ) -> QWidget:
         """Crée un widget select avec label et description."""
         from ...widgets.extended.setting_widgets import SettingSelect
@@ -307,7 +314,7 @@ class SettingsPanel(QFrame):
         max_val: int,
         default: int,
         unit: str,
-        key: str = None,
+        key: Optional[str] = None,
     ) -> QWidget:
         """Crée un widget slider avec label et description."""
         from ...widgets.extended.setting_widgets import SettingSlider
@@ -319,7 +326,7 @@ class SettingsPanel(QFrame):
         return widget
 
     def _create_checkbox_widget(
-        self, label: str, description: str, default: bool, key: str = None
+        self, label: str, description: str, default: bool, key: Optional[str] = None
     ) -> QWidget:
         """Crée un widget checkbox avec label et description."""
         from ...widgets.extended.setting_widgets import SettingCheckbox
@@ -331,7 +338,7 @@ class SettingsPanel(QFrame):
         return widget
 
     def _create_text_widget(
-        self, label: str, description: str, default: str, key: str = None
+        self, label: str, description: str, default: str, key: Optional[str] = None
     ) -> QWidget:
         """Crée un widget text avec label et description."""
         from ...widgets.extended.setting_widgets import SettingText

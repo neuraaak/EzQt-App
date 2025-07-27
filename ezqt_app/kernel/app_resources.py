@@ -12,7 +12,6 @@
 from .base_resources import *
 
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
-from typing import Any
 
 # UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////

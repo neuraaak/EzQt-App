@@ -3,19 +3,18 @@
 
 # IMPORT BASE
 # ///////////////////////////////////////////////////////////////
-from typing import List, Optional, Any
-from PySide6.QtCore import Signal, Qt, QSize
+from PySide6.QtCore import (
+    Signal,
+    Qt,
+)
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QCheckBox,
     QComboBox,
     QSlider,
     QLineEdit,
-    QFrame,
-    QPushButton,
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS
@@ -23,6 +22,8 @@ from PySide6.QtWidgets import (
 from ...kernel.app_components import *
 from ...kernel.app_settings import Settings
 from ezqt_widgets import ToggleSwitch
+
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 
 ## ==> GLOBALS
 # ///////////////////////////////////////////////////////////////
@@ -47,8 +48,6 @@ class BaseSettingWidget(QWidget):
     def set_key(self, key: str):
         """Définit la clé du paramètre."""
         self._key = key
-    
-
 
 
 class SettingToggle(BaseSettingWidget):

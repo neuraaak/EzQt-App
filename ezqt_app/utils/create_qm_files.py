@@ -1,14 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Script pour créer des fichiers .qm dans le bon format Qt
-Basé sur la documentation Qt et les exemples existants
-"""
+# ///////////////////////////////////////////////////////////////
 
+# IMPORT BASE
+# ///////////////////////////////////////////////////////////////
 import xml.etree.ElementTree as ET
 from pathlib import Path
 import struct
 import hashlib
+
+# IMPORT SPECS
+# ///////////////////////////////////////////////////////////////
+
+# IMPORT / GUI AND MODULES AND WIDGETS
+# ///////////////////////////////////////////////////////////////
+
+## ==> GLOBALS
+# ///////////////////////////////////////////////////////////////
+
+## ==> VARIABLES
+# ///////////////////////////////////////////////////////////////
+
+## ==> CLASSES
+# ///////////////////////////////////////////////////////////////
+
+## ==> MAIN
+# ///////////////////////////////////////////////////////////////
 
 def create_proper_qm_from_ts(ts_file_path: Path, qm_file_path: Path):
     """Crée un fichier .qm dans le bon format Qt"""
@@ -111,3 +128,6 @@ def main():
     print("📋 Prochaines étapes:")
     print("   1. Testez les nouveaux fichiers .qm")
     print("   2. Si ça ne fonctionne toujours pas, utilisez les .ts")
+
+if __name__ == "__main__":
+    main()

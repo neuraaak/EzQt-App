@@ -19,7 +19,6 @@
 # ///////////////////////////////////////////////////////////////
 import sys
 from pathlib import Path
-from typing import Any
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
@@ -46,6 +45,9 @@ from PySide6.QtWidgets import (
 from .app_settings import Settings
 from .app_functions import Kernel
 from ..widgets.custom_grips.custom_grips import CustomGrip
+
+# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+from typing import Any
 
 ## ==> GLOBALS
 # ///////////////////////////////////////////////////////////////

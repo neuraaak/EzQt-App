@@ -1,16 +1,33 @@
 # -*- coding: utf-8 -*-
-"""
-Gestionnaire de traduction pour EzQt_App
-"""
+# ///////////////////////////////////////////////////////////////
 
-from PySide6.QtCore import QTranslator, QCoreApplication, QLocale, Signal, QObject
-from pathlib import Path
-import os
+# IMPORT BASE
+# ///////////////////////////////////////////////////////////////
 import sys
+from pathlib import Path
 from colorama import Fore, Style
 
-# Import APP_PATH depuis app_functions
+# IMPORT SPECS
+# ///////////////////////////////////////////////////////////////
+from PySide6.QtCore import (
+    QTranslator,
+    QCoreApplication,
+    Signal,
+    QObject,
+)
+
+# IMPORT / GUI AND MODULES AND WIDGETS
+# ///////////////////////////////////////////////////////////////
 from .app_functions import APP_PATH
+
+## ==> GLOBALS
+# ///////////////////////////////////////////////////////////////
+
+## ==> VARIABLES
+# ///////////////////////////////////////////////////////////////
+
+## ==> CLASSES
+# ///////////////////////////////////////////////////////////////
 
 
 class TranslationManager(QObject):
@@ -318,21 +335,30 @@ class TranslationManager(QObject):
                 self._set_widget_text(widget, translated)
             except Exception as e:
                 pass
-        
+
         # Mettre à jour les widgets spéciaux qui nécessitent une logique particulière
         self._update_special_widgets()
-    
+
     def _update_special_widgets(self):
         """Met à jour les widgets spéciaux qui nécessitent une logique particulière"""
         try:
             # Trouver tous les SettingsPanel dans l'application
-            from PySide6.QtWidgets import QApplication
+            from PySide6.QtWidgets import (
+                QMouseEvent,
+                QEnterEvent,
+                QPaintEvent,
+                QResizeEvent,
+                QShowEvent,
+                QHideEvent,
+                QApplication,
+            )
+
             app = QApplication.instance()
             if app:
                 # Parcourir tous les widgets de l'application
                 for widget in app.allWidgets():
                     # Vérifier si c'est un SettingsPanel
-                    if hasattr(widget, 'update_theme_selector_items'):
+                    if hasattr(widget, "update_theme_selector_items"):
                         try:
                             widget.update_theme_selector_items()
                         except Exception as e:
@@ -345,6 +371,9 @@ class TranslationManager(QObject):
         self._translatable_widgets.clear()
         self._translatable_texts.clear()
 
+
+## ==> MAIN
+# ///////////////////////////////////////////////////////////////
 
 # Instance globale (créée de manière lazy pour éviter les problèmes de contexte Qt)
 _translation_manager_instance = None

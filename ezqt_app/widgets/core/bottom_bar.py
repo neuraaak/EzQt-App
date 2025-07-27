@@ -30,9 +30,9 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QDesktopServices,
-    QFont,
 )
 from PySide6.QtWidgets import (
+    QWidget,
     QFrame,
     QHBoxLayout,
     QLabel,
@@ -44,7 +44,7 @@ from ...kernel.app_components import Fonts
 from ...kernel.translation_helpers import set_tr
 
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
-from typing import Union, Dict, Optional, Any
+from typing import Union, Dict, Optional
 
 # UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ class BottomBar(QFrame):
     être cliquables et ouvrir un client email.
     """
 
-    def __init__(self, parent: Optional[Any] = None) -> None:
+    def __init__(self, parent: Optional[QWidget] = None) -> None:
         """
         Initialise la barre de bas de page.
 

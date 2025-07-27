@@ -34,7 +34,7 @@ from .kernel import *
 from .widgets.core.ez_app import EzApplication
 
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
-from typing import Optional, Any
+from typing import Optional, Any, Union
 
 # ////// GLOBALS
 # ///////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@ class EzQt_App(QMainWindow):
     # SET APP ICON
     # ///////////////////////////////////////////////////////////////
     def setAppIcon(
-        self, icon: str | QPixmap, yShrink: int = 0, yOffset: int = 0
+        self, icon: Union[str, QPixmap], yShrink: int = 0, yOffset: int = 0
     ) -> None:
         return self.ui.headerContainer.set_app_logo(
             logo=icon, y_shrink=yShrink, y_offset=yOffset
@@ -275,7 +275,7 @@ class EzQt_App(QMainWindow):
 
     # RESIZE EVENTS
     # ///////////////////////////////////////////////////////////////
-    def resizeEvent(self, event) -> None:
+    def resizeEvent(self, event: QResizeEvent) -> None:
         # Update Size Grips
         UIFunctions.resize_grips(self)
 
@@ -474,7 +474,7 @@ class EzQt_App(QMainWindow):
 
     # MOUSE CLICK EVENTS
     # ///////////////////////////////////////////////////////////////
-    def mousePressEvent(self, event) -> None:
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         # SET DRAG POS WINDOW
         self.dragPos = event.globalPosition().toPoint()
 

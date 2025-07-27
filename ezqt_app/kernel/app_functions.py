@@ -11,9 +11,11 @@ import yaml
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
-from PySide6.QtGui import QFontDatabase
 from PySide6.QtCore import (
     QSize,
+)
+from PySide6.QtGui import (
+    QFontDatabase,
 )
 
 # IMPORT / GUI AND MODULES AND WIDGETS

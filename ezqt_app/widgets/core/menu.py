@@ -12,6 +12,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import (
     QCursor,
+    QPixmap,
 )
 from PySide6.QtWidgets import (
     QWidget,
@@ -27,7 +28,7 @@ from ...kernel.app_resources import *
 from ...kernel.app_settings import Settings
 
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
-from typing import Dict, List, Optional, Union, Any
+from typing import Dict, List, Optional, Union
 
 # UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
@@ -180,7 +181,7 @@ class Menu(QFrame):
             # Sync all existing menu buttons
             self.sync_all_menu_states(False)
 
-    def add_menu(self, name: str, icon: Optional[Union[str, Any]] = None) -> Any:
+    def add_menu(self, name: str, icon: Optional[Union[str, QPixmap]] = None):
         """
         Ajoute un élément de menu au conteneur.
 

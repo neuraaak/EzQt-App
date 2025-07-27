@@ -237,7 +237,9 @@ class MenuButton(QToolButton):
         self._min_height: Optional[int] = min_height
         self._duration: int = duration
         self._current_icon: Optional[QIcon] = None
-        self._is_extended: bool = False  # Start in shrink state (menu is shrinked at startup)
+        self._is_extended: bool = (
+            False  # Start in shrink state (menu is shrinked at startup)
+        )
 
         # ////// CALCULATE ICON POSITION
         # Calculate the ideal icon position so it stays fixed when menu expands
@@ -250,7 +252,9 @@ class MenuButton(QToolButton):
         self.text_label = QLabel()
 
         # ////// CONFIGURE ICON LABEL
-        self.icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.icon_label.setAlignment(
+            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignVCenter
+        )
         self.icon_label.setStyleSheet("background-color: transparent;")
 
         # ////// CONFIGURE TEXT LABEL
@@ -262,7 +266,9 @@ class MenuButton(QToolButton):
 
         # ////// SETUP LAYOUT
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)  # No margins, we'll handle positioning manually
+        layout.setContentsMargins(
+            0, 0, 0, 0
+        )  # No margins, we'll handle positioning manually
         layout.setSpacing(0)  # No spacing, we'll handle it manually
         layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)  # Always center vertically
         layout.addWidget(self.icon_label)
@@ -485,7 +491,7 @@ class MenuButton(QToolButton):
                 icon_left = icon_center - (self._icon_size.width() // 2)
                 layout.setContentsMargins(icon_left, 2, icon_left, 2)
                 layout.setSpacing(0)
-        
+
         # Apply animation if requested
         if animate:
             self._animate_state_change()
@@ -495,12 +501,15 @@ class MenuButton(QToolButton):
         Anime le changement d'état.
         """
         # Stop any ongoing animation
-        if hasattr(self, 'animation') and self.animation.state() == QPropertyAnimation.State.Running:
+        if (
+            hasattr(self, "animation")
+            and self.animation.state() == QPropertyAnimation.State.Running
+        ):
             self.animation.stop()
-        
+
         # Get current and target geometries
         current_rect = self.geometry()
-        
+
         if self._is_extended:
             # Animate to extended state
             # Calculate target width based on content
@@ -508,14 +517,16 @@ class MenuButton(QToolButton):
             text_width = 0
             if self.text:
                 text_width = self.text_label.fontMetrics().horizontalAdvance(self.text)
-            target_width = self._icon_x_position + icon_width + self._spacing + text_width + 8
+            target_width = (
+                self._icon_x_position + icon_width + self._spacing + text_width + 8
+            )
         else:
             # Animate to shrink state
             target_width = self._shrink_size
-        
+
         target_rect = current_rect
         target_rect.setWidth(target_width)
-        
+
         # Start animation
         self.animation = QPropertyAnimation(self, b"geometry")
         self.animation.setDuration(self._duration)
