@@ -29,17 +29,20 @@ EzQt_App est un framework Python conçu pour faciliter la création d'applicatio
 ## 📖 **Documentation par catégorie**
 
 ### **📋 Documentation Générale**
-- [**TRANSLATION_SYSTEM.md**](./TRANSLATION_SYSTEM.md) - Système de traduction complet
 - [**CHANGELOG.md**](../CHANGELOG.md) - Historique des versions et changements
+
+### **🔧 Documentation API**
+- [**api/README.md**](./api/README.md) - Vue d'ensemble de l'API
+- [**api/API_DOCUMENTATION.md**](./api/API_DOCUMENTATION.md) - Documentation complète de tous les composants
+- [**api/STYLE_GUIDE.md**](./api/STYLE_GUIDE.md) - Guide de style et personnalisation QSS
+
+### **🖥️ Documentation CLI**
+- [**cli/README.md**](./cli/README.md) - Interface en ligne de commande et utilitaires
 
 ### **🧪 Documentation des Tests**
 - [**tests/README.md**](./tests/README.md) - Vue d'ensemble des tests
-- [**tests/unit_README.md**](./tests/unit_README.md) - Tests unitaires détaillés
-- [**tests/kernel_README.md**](./tests/kernel_README.md) - Tests du kernel
-- [**tests/widgets_README.md**](./tests/widgets_README.md) - Tests des widgets
-- [**tests/utils_README.md**](./tests/utils_README.md) - Tests des utilitaires
-- [**tests/integration_README.md**](./tests/integration_README.md) - Tests d'intégration
-- [**tests/translation_manager.md**](./tests/translation_manager.md) - Tests du gestionnaire de traduction
+- [**tests/QUICK_START_TESTS.md**](./tests/QUICK_START_TESTS.md) - Guide de démarrage rapide
+- [**tests/TESTS_DOCUMENTATION.md**](./tests/TESTS_DOCUMENTATION.md) - Documentation complète des tests
 
 ## 🚀 **Installation et utilisation**
 

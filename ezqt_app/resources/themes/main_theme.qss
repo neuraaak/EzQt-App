@@ -548,6 +548,50 @@ DateButton:pressed {
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
+DraggableList */
+DraggableList {
+	background-color: $_main_border;
+	border: 2px solid $_accent_color1;
+	border-radius: 6px;
+	padding: 8px;
+	color: rgb(255, 255, 255);
+}
+
+DraggableList QScrollArea {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 6px;
+	padding: 4px 0px 4px 4px;
+}
+
+DraggableList QScrollArea QWidget {
+	background-color: transparent;
+	border: none;
+}
+
+[type="DraggableItem"] {
+	background-color: $_main_border;
+	border: 1px solid $_accent_color1;
+	border-radius: 6px 6px 6px 6px;
+}
+
+[type="DraggableItem"]:hover {
+	background-color: $_accent_color1;
+	border: 2px solid $_accent_color4;
+}
+
+[type="DraggableItem"][dragging="true"] {
+	background-color: $_accent_color4;
+	color: $_select_text_color;
+}
+
+[type="DraggableItem"] QLabel {
+	background-color: transparent;
+	border: none;
+	color: $_base_text_color;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
 OptionSelector */
 OptionSelector {
 	background-color: $_main_border;

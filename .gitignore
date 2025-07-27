@@ -25,6 +25,8 @@ wheels/
 env/
 venv/
 ENV/
+env.bak/
+venv.bak/
 
 # IDE
 .vscode/
@@ -33,18 +35,10 @@ ENV/
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Project specific
-*.spec
-requirements.txt
-build_upload.bat
-
-# Tests
+# Testing
 .pytest_cache/
 .coverage
+coverage.xml
 htmlcov/
 .tox/
 .cache
@@ -52,8 +46,49 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
-.pytest_cache/
+
+# Benchmarks
 .benchmarks/
 
-# Documentation build
-docs/_build/
+# Build artifacts
+*.spec
+build_upload.bat
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+_temp/
+*.tmp
+*.temp
+
+# CLI specific
+*.log
+*.pid
+
+# Development
+.env
+.env.local
+.env.*.local
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

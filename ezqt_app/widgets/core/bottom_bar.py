@@ -20,6 +20,7 @@
 from pathlib import Path
 import importlib.util
 import re
+import sys
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
@@ -199,7 +200,27 @@ class BottomBar(QFrame):
         if detected_version:
             self.set_version(detected_version)
         else:
-            self.set_version("")
+            # Fallback vers la version d'EzQt_App si aucune version n'est trouvée
+            try:
+                import ezqt_app
+
+                if hasattr(ezqt_app, "__version__"):
+                    self.set_version(f"v{ezqt_app.__version__}")
+                else:
+                    self.set_version("")  # Version par défaut
+            except ImportError:
+                self.set_version("")  # Version par défaut
+
+    def set_version_forced(self, version: str) -> None:
+        """
+        Force la version affichée (ignore la détection automatique).
+
+        Parameters
+        ----------
+        version : str
+            Version à afficher (ex: "v1.0.0" ou "1.0.0").
+        """
+        self.set_version(version)
 
     def _detect_project_version(self) -> Optional[str]:
         """
@@ -211,13 +232,70 @@ class BottomBar(QFrame):
             Version détectée ou None si non trouvée.
         """
         try:
-            # Chercher main.py dans le répertoire courant
+            # Méthode 1: Chercher dans le répertoire courant
             main_py_path = Path.cwd() / "main.py"
-            if not main_py_path.exists():
-                return None
+            if main_py_path.exists():
+                version = self._extract_version_from_file(main_py_path)
+                if version:
+                    return version
 
-            # Lire le contenu de main.py
-            with open(main_py_path, "r", encoding="utf-8") as f:
+            # Méthode 2: Chercher dans le répertoire du script principal
+            script_dir = Path(sys.argv[0]).parent if sys.argv else Path.cwd()
+            main_py_path = script_dir / "main.py"
+            if main_py_path.exists():
+                version = self._extract_version_from_file(main_py_path)
+                if version:
+                    return version
+
+            # Méthode 3: Chercher dans le répertoire parent (cas où l'exe est dans un sous-dossier)
+            parent_dir = Path.cwd().parent
+            main_py_path = parent_dir / "main.py"
+            if main_py_path.exists():
+                version = self._extract_version_from_file(main_py_path)
+                if version:
+                    return version
+
+            # Méthode 4: Essayer d'importer le module principal
+            try:
+                import main
+
+                if hasattr(main, "__version__"):
+                    return f"v{main.__version__}"
+            except ImportError:
+                pass
+
+            # Méthode 5: Fallback vers la version d'EzQt_App
+            try:
+                import ezqt_app
+
+                if hasattr(ezqt_app, "__version__"):
+                    return f"v{ezqt_app.__version__}"
+            except ImportError:
+                pass
+
+            return None
+
+        except Exception as e:
+            # En cas d'erreur, retourner None
+            return None
+
+    def _extract_version_from_file(self, file_path: Path) -> Optional[str]:
+        """
+        Extrait la version d'un fichier Python.
+
+        Parameters
+        ----------
+        file_path : Path
+            Chemin vers le fichier Python.
+
+        Returns
+        -------
+        str or None
+            Version extraite ou None si non trouvée.
+        """
+        try:
+            # Lire le contenu du fichier
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Chercher __version__ = "..." dans le contenu
@@ -227,7 +305,7 @@ class BottomBar(QFrame):
 
             # Si pas trouvé avec regex, essayer d'importer le module
             try:
-                spec = importlib.util.spec_from_file_location("main", main_py_path)
+                spec = importlib.util.spec_from_file_location("main", file_path)
                 if spec and spec.loader:
                     main_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(main_module)
@@ -239,8 +317,7 @@ class BottomBar(QFrame):
 
             return None
 
-        except Exception as e:
-            # En cas d'erreur, retourner None
+        except Exception:
             return None
 
     def set_version(self, text: str) -> None:

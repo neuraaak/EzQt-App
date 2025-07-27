@@ -4,10 +4,10 @@
 """
 EzQt_App package initialization.
 """
-__version__ = "3.1.0"
+__version__ = "3.2.0"
 
 # CLI
-from .utils.cli import main
+from .cli.main import cli
 
 # MAIN
 from .main import init

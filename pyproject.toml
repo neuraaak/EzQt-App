@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "EzQt_App"
-version = "3.1.0"
+version = "3.2.0"
 description = "Lightweight framework based on PySide6 to quickly build modern desktop applications, with integrated resource, theme, and reusable component management."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
@@ -27,6 +27,7 @@ dependencies = [
     "ruamel.yaml==0.18.6",
     "colorama==0.4.6",
     "requests==2.32.3",
+    "click>=8.0.0",
     "ezqt-widgets>=2.0.0",
 ]
 
@@ -39,12 +40,12 @@ dev = [
     "pytest-xdist>=3.0.0",   # Pour les tests parallèles
     "flake8>=5.0.0",
     "black>=22.0.0",
-    "mypy>=1.0.0"
+    "mypy>=1.0.0",
+    "click>=8.0.0"
 ]
 
 [project.scripts]
-ezqt_init = "ezqt_app.utils.cli:main"
-ezqt_qm_convert = "ezqt_app.utils.create_qm_files:main"
+ezqt = "ezqt_app.cli.main:cli"
 
 [tool.setuptools.packages.find]
 where = ["."]
