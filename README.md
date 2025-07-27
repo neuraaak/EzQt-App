@@ -73,6 +73,24 @@ my_project/
     modules/
 ```
 
+## Project Structure
+
+```
+ezqt_app/
+├── README.md                    # Documentation principale
+├── docs/                        # Documentation technique
+│   ├── README.md               # Vue d'ensemble de la documentation
+│   └── TRANSLATION_SYSTEM.md   # Système de traduction
+├── tests/                       # Tests unitaires et d'intégration
+│   ├── README.md               # Documentation des tests
+│   ├── unit/                   # Tests unitaires
+│   ├── integration/            # Tests d'intégration
+│   └── fixtures/               # Données de test
+├── ezqt_app/                   # Code source principal
+├── modules/                    # Modules externes
+└── pyproject.toml             # Configuration du projet
+```
+
 ## Customization
 
 - Edit the theme in `bin/themes/main_theme.qss` or use the toggle in the UI.

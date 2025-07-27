@@ -1,8 +1,11 @@
 # Inclure la doc principale
 include README.md
-include TRANSLATION_SYSTEM.md
+include CHANGELOG.md
 include LICENSE
 include MANIFEST.in
+
+# Inclure la documentation
+recursive-include docs *.md
 
 # Inclure les ressources de ezqt_app (tous sous-dossiers)
 recursive-include ezqt_app/resources *
