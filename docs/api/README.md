@@ -20,13 +20,23 @@ This directory contains the complete API documentation for the EzQt_App framewor
   - Color schemes and styling best practices
   - Integration with existing themes
 
+### 🔧 Helper Functions
+- **[HELPERS_GUIDE.md](HELPERS_GUIDE.md)** - Helper functions guide
+  - Simplified API for common operations
+  - Configuration management helpers
+  - UI operation helpers
+  - Translation helpers
+  - Usage examples and best practices
+
 ## Quick Navigation
 
 ### 🧠 Core Components (`ezqt_app.kernel`)
-- **Kernel** : Core application functions and resource management
-- **TranslationManager** : Multilingual translation system
-- **Settings** : Application configuration and parameters
-- **Helper.Maker** : File and resource generation utilities
+- **Kernel Architecture** : Modular design with specialized packages
+- **App Functions Package** : Asset, config, resource, and settings management
+- **UI Functions Package** : Window, panel, menu, and theme management
+- **Resource Definitions** : Image and icon resource definitions
+- **Translation Package** : Complete internationalization system
+- **Helper Functions** : Simplified API for common operations
 
 ### 🎨 Widget Components (`ezqt_app.widgets`)
 - **EzApplication** : Extended QApplication with theme support
@@ -40,9 +50,9 @@ This directory contains the complete API documentation for the EzQt_App framewor
 - **Create QM Files** : Translation file conversion utilities
 
 ### 🌍 Translation System (`ezqt_app.kernel.translation`)
-- **TranslationManager** : Complete translation management
+- **TranslationManager** : Complete translation management with .ts support
 - **Translation Helpers** : Utility functions for translations
-- **Translation Config** : Configuration and setup
+- **Translation Config** : Language configuration and setup
 
 ## Usage
 

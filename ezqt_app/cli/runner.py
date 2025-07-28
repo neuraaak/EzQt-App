@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 import click
 
+from ..kernel.app_functions.printer import get_printer
+
 
 class ProjectRunner:
     """Handles EzQt_App project operations and template management."""
@@ -394,7 +396,8 @@ class CustomWidget(QFrame):
         
     def on_button_clicked(self):
         """Handle button click event."""
-        print("Custom widget button clicked!")
+        printer = get_printer()
+        printer.info("Custom widget button clicked!")
 '''
 
         with open("src/widgets/custom_widget.py", "w", encoding="utf-8") as f:

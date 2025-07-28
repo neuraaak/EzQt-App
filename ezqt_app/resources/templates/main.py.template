@@ -38,7 +38,7 @@ def add_things_to_my_app(w: EzQt_App) -> None:
 
     ##########
     # Si initialisé avec ezqt_app.init(). Retourne un QWidget.
-    home = w.addMenu("Home", AppIcons.cil_home)
+    home = w.addMenu("Home", Icons.cil_home)
 
     # Pour utiliser les ressources intégrées au framework
     home = w.addMenu("My first menu", Icons.cil_home)
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # //////
     window = EzQt_App(themeFileName="main_theme.qss")
     window.setAppIcon(
-        AppImages.logo_placeholder, yShrink=0
+        Images.logo_placeholder, yShrink=0
     )  # Pour set le logo du header d'application
     window.show()
 

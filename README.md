@@ -52,7 +52,7 @@ app.exec()
 - **Kernel** - Core application functions and resource management
 - **TranslationManager** - Multilingual translation system
 - **Settings** - Application configuration and parameters
-- **Helper.Maker** - File and resource generation utilities
+- **FileMaker** - File and resource generation utilities
 
 ### 🎨 **Widget Module (`ezqt_app.widgets`)**
 - **EzApplication** - Extended QApplication with theme support

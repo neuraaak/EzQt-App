@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RCC>
+    <qresource prefix="/">
+        <file>themes/themes\main_theme.qss</file>
+        <file>config/config\app.yaml</file>
+        <file>translations/translations\ezqt_app_de.ts</file>
+        <file>translations/translations\ezqt_app_en.ts</file>
+        <file>translations/translations\ezqt_app_es.ts</file>
+        <file>translations/translations\ezqt_app_fr.ts</file>
+    </qresource>
+</RCC>

@@ -7,10 +7,11 @@ This document presents all available tests for the EzQt_App framework, organized
 ## Table of Contents
 
 - [🧠 Kernel Tests](#-kernel-tests)
-  - [TranslationManager](#translationmanager)
+  - [App Functions Package](#app-functions-package)
+  - [UI Functions Package](#ui-functions-package)
+  - [Translation Package](#translation-package)
   - [Settings](#settings)
   - [Helper.Maker](#helpermaker)
-  - [AppFunctions](#appfunctions)
 - [🎨 Widget Tests](#-widget-tests)
   - [Core Widgets](#core-widgets)
   - [Extended Widgets](#extended-widgets)
@@ -36,19 +37,64 @@ tests/
 
 ## 🧠 Kernel Tests
 
-### TranslationManager
+### App Functions Package
+**File :** `test_kernel/test_app_functions.py`  
+**Tests :** 30+ tests
+
+Modular application functions package with specialized managers.
+
+**Covered tests :**
+- ✅ AssetsManager: Asset generation and verification
+- ✅ ConfigManager: YAML configuration loading and saving
+- ✅ ResourceManager: System resources like font loading
+- ✅ SettingsManager: Application settings management
+- ✅ Kernel: Main facade class combining all managers
+- ✅ Helper functions: Simplified API operations
+- ✅ Error handling and fallbacks
+- ✅ Configuration management with dot notation
+
+**Statistics :**
+- **Tests :** 30+
+- **Pass :** 30+
+- **Skip :** 0
+- **Coverage :** ~95%
+
+### UI Functions Package
+**File :** `test_kernel/test_ui_functions.py`  
+**Tests :** 25+ tests
+
+Modular UI functions package with specialized managers.
+
+**Covered tests :**
+- ✅ WindowManager: Window state management
+- ✅ PanelManager: Panel animations
+- ✅ MenuManager: Menu management
+- ✅ ThemeManager: Theme loading and application
+- ✅ UIDefinitions: UI definitions and custom grips
+- ✅ UIFunctions: Main facade class
+- ✅ Helper functions: Simplified UI operations
+- ✅ Window operations and animations
+
+**Statistics :**
+- **Tests :** 25+
+- **Pass :** 25+
+- **Skip :** 0
+- **Coverage :** ~95%
+
+### Translation Package
 **File :** `test_kernel/test_translation_manager.py`  
 **Tests :** 25+ tests
 
-Multilingual translation management system.
+Modular translation system with .ts file support.
 
 **Covered tests :**
-- ✅ Initialization with default and custom languages
+- ✅ TranslationManager: Core translation functionality
+- ✅ Config: Language configuration
+- ✅ Helpers: Translation helper functions
 - ✅ Language loading by code and name
 - ✅ Widget registration and unregistration
 - ✅ Text translation and retranslation
 - ✅ Language change signals
-- ✅ Language mapping (name ↔ code)
 - ✅ Error handling for invalid languages
 - ✅ Singleton behavior and persistence
 
@@ -96,8 +142,7 @@ File and resource generation utility.
 - **Skip :** 0
 - **Coverage :** ~95%
 
-### AppFunctions
-**File :** `test_kernel/test_app_functions.py`  
+
 **Tests :** 20+ tests
 
 Application utility functions.

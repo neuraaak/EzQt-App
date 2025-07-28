@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
 # ///////////////////////////////////////////////////////////////
+# EzQt_App - A Modern Qt Application Framework
+# ///////////////////////////////////////////////////////////////
 #
-# BY: WANDERSON M.PIMENTA
-# PROJECT MADE WITH: Qt Designer and PySide6
-# V: 1.0.0
+# Author: EzQt_App Team
+# Website: https://github.com/ezqt-app/ezqt_app
 #
-# This project can be used freely for all uses, as long as they maintain the
-# respective credits only in the Python scripts, any information in the visual
-# interface (GUI) can be modified without any implication.
+# This file is part of EzQt_App.
 #
-# There are limitations on Qt licenses if you want to use your products
-# commercially, I recommend reading them on the official website:
-# https://doc.qt.io/qtforpython/licenses.html
+# EzQt_App is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
+# EzQt_App is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with EzQt_App.  If not, see <https://www.gnu.org/licenses/>.
 # ///////////////////////////////////////////////////////////////
 
 # IMPORT BASE

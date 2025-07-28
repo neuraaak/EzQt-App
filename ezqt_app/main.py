@@ -1,61 +1,180 @@
 # -*- coding: utf-8 -*-
 # ///////////////////////////////////////////////////////////////
+# EzQt_App - A Modern Qt Application Framework
+# ///////////////////////////////////////////////////////////////
+#
+# Author: EzQt_App Team
+# Website: https://github.com/ezqt-app/ezqt_app
+#
+# This file is part of EzQt_App.
+#
+# EzQt_App is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# EzQt_App is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with EzQt_App.  If not, see <https://www.gnu.org/licenses/>.
+# ///////////////////////////////////////////////////////////////
+
+"""
+New Main Module for EzQt_App
+============================
+
+This module provides the new initialization system for EzQt_App,
+using the modular initialization package.
+"""
 
 # IMPORT BASE
 # ///////////////////////////////////////////////////////////////
-import sys
-import locale
-import os
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
+from typing import Optional, TYPE_CHECKING
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
-from ezqt_app.kernel import Kernel
+from .kernel.initialization import init as init_app
+from .kernel.app_functions.printer import get_printer
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+if TYPE_CHECKING:
+    from ezqt_app.kernel.initialization import Initializer, StartupConfig
+    from ezqt_app.kernel.app_functions import FileMaker
 
-# UTILITY FUNCTIONS
+# ///////////////////////////////////////////////////////////////
+# MAIN FUNCTIONS
 # ///////////////////////////////////////////////////////////////
 
-# CLASS
-# ///////////////////////////////////////////////////////////////
 
-
-def init(mkTheme: bool = True) -> None:
+def init(mk_theme: bool = True) -> None:
     """
-    Initialise l'application EzQt_App.
+    Initialize the EzQt_App application using the new modular system.
 
-    Cette fonction configure l'encodage UTF-8 au niveau système,
-    charge les ressources requises et génère les fichiers nécessaires.
+    This function uses the new initialization package to:
+    - Configure UTF-8 encoding at system level
+    - Load required resources and generate necessary files
+    - Setup the complete application environment
 
     Parameters
     ----------
-    mkTheme : bool, optional
-        Génère le fichier de thème (défaut: True).
+    mk_theme : bool, optional
+        Generate theme file (default: True).
     """
-    # ////// CONFIGURE UTF-8 ENCODING
-    # Configure UTF-8 encoding at system level
-    # Set UTF-8 encoding for stdout/stderr
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
-    if hasattr(sys.stderr, "reconfigure"):
-        sys.stderr.reconfigure(encoding="utf-8")
+    init_app(mk_theme)
 
-    # ////// SET ENVIRONMENT VARIABLES
-    # Set environment variables for UTF-8
-    os.environ["PYTHONIOENCODING"] = "utf-8"
-    os.environ["QT_FONT_DPI"] = "96"
 
-    # ////// SET LOCALE
-    # Set locale to UTF-8
-    try:
-        locale.setlocale(locale.LC_ALL, "")
-    except locale.Error:
-        # Fallback for systems without proper locale support
-        pass
+def setup_project(base_path: Optional[str] = None) -> bool:
+    """
+    Setup a new EzQt_App project using the new modular system.
 
-    # ////// INITIALIZE KERNEL
-    Kernel.checkAssetsRequirements()
-    Kernel.makeRequiredFiles(mkTheme=mkTheme)
+    Parameters
+    ----------
+    base_path : str, optional
+        Base path for the project (default: current directory).
+
+    Returns
+    -------
+    bool
+        True if setup was successful.
+    """
+    from ezqt_app.kernel.initialization import setup_project as setup_project_app
+
+    return setup_project_app(base_path)
+
+
+def generate_assets() -> bool:
+    """
+    Generate all required assets using the new modular system.
+
+    Returns
+    -------
+    bool
+        True if generation was successful.
+    """
+    from ezqt_app.kernel.initialization import generate_assets as generate_assets_app
+
+    return generate_assets_app()
+
+
+def configure_startup() -> None:
+    """
+    Configure startup settings using the new modular system.
+    """
+    from ezqt_app.kernel.initialization import (
+        configure_startup as configure_startup_app,
+    )
+
+    configure_startup_app()
+
+
+# ///////////////////////////////////////////////////////////////
+# UTILITY FUNCTIONS
+# ///////////////////////////////////////////////////////////////
+
+
+def get_initializer() -> "Initializer":
+    """
+    Get the main initializer instance.
+
+    Returns
+    -------
+    Initializer
+        The main initializer instance.
+    """
+    from ezqt_app.kernel.initialization import Initializer
+
+    return Initializer()
+
+
+def get_file_maker(verbose: bool = False) -> "FileMaker":
+    """
+    Get the file maker instance.
+
+    Parameters
+    ----------
+    verbose : bool, optional
+        Enable verbose output mode, default False
+
+    Returns
+    -------
+    FileMaker
+        The file maker instance.
+    """
+    from ezqt_app.kernel.app_functions import FileMaker
+
+    return FileMaker(verbose=verbose)
+
+
+def get_startup_config() -> "StartupConfig":
+    """
+    Get the startup configuration instance.
+
+    Returns
+    -------
+    StartupConfig
+        The startup configuration instance.
+    """
+    from ezqt_app.kernel.initialization import StartupConfig
+
+    return StartupConfig()
+
+
+# ///////////////////////////////////////////////////////////////
+# MAIN ENTRY POINT
+# ///////////////////////////////////////////////////////////////
+
+if __name__ == "__main__":
+    # Example usage of the new initialization system
+    printer = get_printer()
+    printer.section("EzQt_App - New Initialization System")
+
+    # Initialize the application
+    init(mk_theme=True)
+
+    printer.success("Application initialized successfully!")
+    printer.info("Ready to create your EzQt_App application!")

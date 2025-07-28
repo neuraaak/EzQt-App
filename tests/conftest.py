@@ -18,9 +18,17 @@ def qt_application():
     Nécessaire pour tester les widgets Qt avec support des thèmes.
     """
     # ////// CRÉER L'APPLICATION QT
+    # Utiliser EzApplication directement pour éviter les warnings High DPI
+    from ezqt_app.widgets.core.ez_app import EzApplication
+
     app = QApplication.instance()
     if app is None:
-        app = QApplication(sys.argv)
+        app = EzApplication(sys.argv)
+    elif not isinstance(app, EzApplication):
+        # Si une instance QApplication existe mais n'est pas EzApplication, la détruire
+        app.quit()
+        app.deleteLater()
+        app = EzApplication(sys.argv)
 
     # ////// AJOUTER LE SIGNAL THEMECHANGED SI IL N'EXISTE PAS
     if not hasattr(app, "themeChanged"):

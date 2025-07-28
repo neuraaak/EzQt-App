@@ -28,6 +28,9 @@ from PySide6.QtWidgets import (
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
+from ...kernel.app_settings import Settings
+from ...kernel.app_resources import *
+from ...kernel.app_functions.printer import get_printer
 
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 from typing import Optional, Union, Tuple, Any
@@ -92,7 +95,6 @@ def load_icon_from_source(source: Optional[Union[QIcon, str]]) -> Optional[QIcon
 
         # ////// HANDLE URL
         if source.startswith("http://") or source.startswith("https://"):
-            print(f"Loading icon from URL: {source}")
             try:
                 import requests
 
@@ -123,7 +125,7 @@ def load_icon_from_source(source: Optional[Union[QIcon, str]]) -> Optional[QIcon
                     pixmap = colorize_pixmap(pixmap, "#FFFFFF", 0.5)
                     return QIcon(pixmap)
             except Exception as e:
-                print(f"Failed to load icon from URL: {e}")
+                get_printer().warning(f"Failed to load icon from URL: {e}")
                 return None
 
         # ////// HANDLE LOCAL SVG
@@ -145,20 +147,20 @@ def load_icon_from_source(source: Optional[Union[QIcon, str]]) -> Optional[QIcon
                 painter.end()
                 return QIcon(pixmap)
             except Exception as e:
-                print(f"Failed to load SVG icon: {e}")
+                get_printer().warning(f"Failed to load SVG icon: {e}")
                 return None
 
         # ////// HANDLE LOCAL/RESOURCE RASTER IMAGE
         else:
             icon = QIcon(source)
             if icon.isNull():
-                print(f"Invalid icon path: {source}")
+                get_printer().warning(f"Invalid icon path: {source}")
                 return None
             return icon
 
     # ////// HANDLE INVALID TYPE
     else:
-        print(f"Invalid icon source type: {type(source)}")
+        get_printer().warning(f"Invalid icon source type: {type(source)}")
         return None
 
 

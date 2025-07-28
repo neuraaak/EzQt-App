@@ -7,10 +7,12 @@ This documentation presents all available components in the EzQt_App framework, 
 ## Table of Contents
 
 - [🧠 Core Module](#-core-module-ezqt_appkernel)
-  - [Kernel](#kernel)
-  - [TranslationManager](#translationmanager)
-  - [Settings](#settings)
-  - [Helper.Maker](#helpermaker)
+  - [Kernel Architecture](#kernel-architecture)
+  - [App Functions Package](#app-functions-package)
+  - [UI Functions Package](#ui-functions-package)
+  - [Resource Definitions](#resource-definitions)
+  - [Translation Package](#translation-package)
+  - [Helper Functions](#helper-functions)
 - [🎨 Widget Module](#-widget-module-ezqt_appwidgets)
   - [EzApplication](#ezapplication)
   - [EzQt_App](#ezqt_app)
@@ -20,15 +22,17 @@ This documentation presents all available components in the EzQt_App framework, 
   - [CLI](#cli)
   - [QMessageLogger](#qmessagelogger)
   - [Create QM Files](#create-qm-files)
-- [🌍 Translation Module](#-translation-module-ezqt_appkerneltranslation)
-  - [Translation Helpers](#translation-helpers)
-  - [Translation Config](#translation-config)
-  - [Translation System Guide](#translation-system-guide)
 
 ## Module Structure
 
 ### 🧠 Core Module (`ezqt_app.kernel`)
-Core application functions, resource management, and configuration.
+Core application functions, resource management, and configuration with modular architecture.
+
+**New Architecture:**
+- **Modular Design**: Refactored into specialized packages
+- **Helper Functions**: Simplified API for common operations
+- **Centralized Resources**: Unified resource management
+- **Translation System**: Complete internationalization support
 
 ### 🎨 Widget Module (`ezqt_app.widgets`)
 Custom widgets and UI components for modern applications.
@@ -36,18 +40,55 @@ Custom widgets and UI components for modern applications.
 ### 🔧 CLI Module (`ezqt_app.cli`)
 Command line interface and project management tools.
 
-### 🌍 Translation Module (`ezqt_app.kernel.translation`)
-Translation system and internationalization support.
-
 ## Components by Module
 
 ### 🧠 Core Components
 
-#### Kernel
-**File :** `kernel/app_functions.py`  
+#### Kernel Architecture
+**Package :** `kernel/`
+
+**New Modular Structure:**
+```
+kernel/
+├── __init__.py              # Main interface
+├── common.py                # Common variables (APP_PATH)
+├── globals.py               # Global UI state variables
+├── app_functions/           # Application functions package
+│   ├── __init__.py         # Package interface
+│   ├── assets_manager.py   # Asset management
+│   ├── config_manager.py   # YAML configuration
+│   ├── resource_manager.py # System resources
+│   ├── settings_manager.py # Application settings
+│   ├── kernel.py           # Main facade class
+│   └── helpers.py          # Helper functions
+├── ui_functions/            # UI functions package
+│   ├── __init__.py         # Package interface
+│   ├── window_manager.py   # Window state management
+│   ├── panel_manager.py    # Panel animations
+│   ├── menu_manager.py     # Menu management
+│   ├── theme_manager.py    # Theme management
+│   ├── ui_definitions.py   # UI definitions
+│   ├── ui_functions.py     # Main facade class
+│   └── helpers.py          # Helper functions
+├── resource_definitions/    # Resource definitions package
+│   ├── __init__.py         # Package interface
+│   ├── images.py           # Image definitions
+│   ├── icons.py            # Icon definitions
+│   └── base_resources.py   # Qt compiled resources
+├── translation/             # Translation package
+│   ├── __init__.py         # Package interface
+│   ├── config.py           # Language configuration
+│   ├── manager.py          # Translation manager
+│   └── helpers.py          # Translation helpers
+├── app_resources.py         # Resource facade
+├── app_settings.py          # Application settings
+├── app_components.py        # Base components
+└── ui_main.py              # Main UI interface
+```
+
 **Style Guide :** [See QSS styles](STYLE_GUIDE.md#kernel)
 
-Core application functions and resource management.
+Core application functions and resource management with modular architecture.
 
 **Features :**
 - Asset management and generation
@@ -55,6 +96,8 @@ Core application functions and resource management.
 - Font resource loading
 - File and directory management
 - Package resource handling
+- Modular design with specialized packages
+- Helper functions for simplified API
 
 **Main methods :**
 - `checkAssetsRequirements()` : Check and generate required assets
@@ -69,26 +112,138 @@ Core application functions and resource management.
 - `getConfigPath(config_name)` : Get configuration file path
 - `getPackageResource(resource_path)` : Get package resource path
 
-#### TranslationManager
-**File :** `kernel/translation_manager.py`  
-**Style Guide :** [See QSS styles](STYLE_GUIDE.md#translationmanager)
+#### App Functions Package
+**Package :** `kernel/app_functions/`
 
-Multilingual translation management system.
+**Specialized Managers:**
+- **AssetsManager**: Asset generation and verification
+- **ConfigManager**: YAML configuration loading and saving
+- **ResourceManager**: System resources like font loading
+- **SettingsManager**: Application settings management
+- **Kernel**: Main facade class combining all managers
 
-**Features :**
-- Language loading and switching
-- Widget registration for automatic retranslation
-- Support for .ts and .qm files
-- Language mapping (name ↔ code)
-- Singleton pattern implementation
+**Helper Functions:**
+- `load_config_section(section)` : Load YAML configuration section
+- `save_config_section(section, data)` : Save YAML configuration section
+- `get_setting(section, key, default)` : Get configuration setting with fallback
+- `set_setting(section, key, value)` : Set configuration setting
+- `load_fonts()` : Load system fonts
+- `verify_assets()` : Verify asset integrity
+- `get_resource_path(resource_type, name)` : Get resource path
+- `get_kernel_instance()` : Get kernel instance
+- `is_development_mode()` : Check development mode
+- `get_app_version()` : Get application version
+- `get_app_name()` : Get application name
 
-**Main methods :**
-- `load_language(language_name)` : Load language by name
-- `load_language_by_code(language_code)` : Load language by code
-- `register_widget(widget, original_text)` : Register widget for translation
-- `unregister_widget(widget)` : Unregister widget
-- `translate(text)` : Translate text
+#### UI Functions Package
+**Package :** `kernel/ui_functions/`
+
+**Specialized Managers:**
+- **WindowManager**: Window state management (maximize/restore)
+- **PanelManager**: Menu and settings panel animations
+- **MenuManager**: Menu item selection and style refreshing
+- **ThemeManager**: QSS theme loading and application
+- **UIDefinitions**: General UI definitions and custom grips
+- **UIFunctions**: Main facade class combining all UI managers
+
+**Helper Functions:**
+- `maximize_window(window)` : Maximize main window
+- `restore_window(window)` : Restore main window
+- `toggle_window_state(window)` : Toggle window state
+- `load_theme(theme_name)` : Load QSS theme
+- `apply_theme(widget, theme_content)` : Apply theme to widget
+- `animate_panel(panel, direction, duration)` : Animate panel
+- `select_menu_item(button, enable)` : Select menu item
+- `refresh_menu_style()` : Refresh menu style
+- `setup_custom_grips(window)` : Setup custom grips
+- `connect_window_events(window)` : Connect window events
+- `get_ui_functions_instance()` : Get UI functions instance
+- `is_window_maximized(window)` : Check if window is maximized
+- `get_window_status(window)` : Get window status
+- `apply_default_theme(widget)` : Apply default theme
+- `setup_window_title_bar(window, title_bar)` : Setup title bar
+
+#### Resource Definitions Package
+**Package :** `kernel/resource_definitions/`
+
+**Components:**
+- **Images**: Image resource definitions
+- **Icons**: Icon resource definitions
+- **BaseResources**: Qt compiled resource data
+
+#### Translation Package
+**Package :** `kernel/translation/`
+
+**Components:**
+- **Config**: Language configuration and supported languages
+- **Manager**: Translation manager with .ts file support
+- **Helpers**: Translation helper functions
+
+**Translation Helper Functions:**
+- `tr(text)` : Translate text
+- `set_tr(widget, text)` : Set translatable text on widget
+- `register_tr(widget, text)` : Register widget for translation
+- `unregister_tr(widget)` : Unregister widget
+- `change_language(language_name)` : Change application language
 - `get_available_languages()` : Get available languages
+- `get_current_language()` : Get current language
+
+#### Helper Functions
+**Package :** `kernel/`
+
+**Simplified API for common operations:**
+
+**Configuration Helpers:**
+```python
+from ezqt_app.kernel import get_setting, set_setting
+
+# Get configuration with fallback
+theme = get_setting("app", "theme", "dark")
+width = get_setting("ui", "window.width", 800)
+
+# Set configuration
+set_setting("app", "theme", "light")
+set_setting("ui", "window.width", 1024)
+```
+
+**Resource Helpers:**
+```python
+from ezqt_app.kernel import load_fonts, verify_assets, get_resource_path
+
+# Load system fonts
+load_fonts()
+
+# Verify assets
+status = verify_assets()
+
+# Get resource path
+font_path = get_resource_path("fonts", "Segoe UI.ttf")
+```
+
+**UI Helpers:**
+```python
+from ezqt_app.kernel import maximize_window, apply_theme, load_theme
+
+# Window operations
+maximize_window(main_window)
+
+# Theme operations
+theme_content = load_theme("dark_theme")
+apply_theme(widget, theme_content)
+```
+
+**Translation Helpers:**
+```python
+from ezqt_app.kernel import tr, change_language
+
+# Translate text
+translated = tr("Hello")
+
+# Change language
+change_language("Français")
+```
+
+
 - `get_current_language_code()` : Get current language code
 
 **Signals :**
@@ -120,7 +275,7 @@ Application configuration and settings management.
 - `Settings.Animation` : Animation configuration
 
 #### Helper.Maker
-**File :** `helper.py`  
+**File :** `main.py`  
 **Style Guide :** [See QSS styles](STYLE_GUIDE.md#helpermaker)
 
 File and resource generation utilities.

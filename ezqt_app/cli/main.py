@@ -12,7 +12,7 @@ from pathlib import Path
 import pkg_resources
 from colorama import Fore, Style
 
-from ezqt_app.helper import Helper
+from ezqt_app.kernel.app_functions import FileMaker
 from .runner import ProjectRunner
 
 
@@ -29,15 +29,11 @@ def cli():
 
 
 @cli.command()
-@click.option(
-    "--force", "-f", is_flag=True, help="Force overwrite of existing files"
-)
+@click.option("--force", "-f", is_flag=True, help="Force overwrite of existing files")
 @click.option(
     "--verbose", "-v", is_flag=True, help="Verbose output with detailed information"
 )
-@click.option(
-    "--no-main", is_flag=True, help="Skip main.py generation"
-)
+@click.option("--no-main", is_flag=True, help="Skip main.py generation")
 def init(force, verbose, no_main):
     """
     🚀 Initialize a new EzQt_App project
@@ -51,12 +47,12 @@ def init(force, verbose, no_main):
     try:
         # Initialize project assets
         click.echo("🔄 Initializing EzQt_App project...")
-        
-        maker = Helper.Maker(base_path=Path.cwd())
-        
+
+        maker = FileMaker(base_path=Path.cwd(), verbose=verbose)
+
         if verbose:
             click.echo("📦 Generating assets...")
-        
+
         maker.make_assets_binaries()
         maker.make_qrc()
         maker.make_rc_py()
@@ -65,26 +61,32 @@ def init(force, verbose, no_main):
         # Generate main.py example
         if not no_main:
             template_path = Path(
-                pkg_resources.resource_filename("ezqt_app", "resources/main_generic.txt")
+                pkg_resources.resource_filename(
+                    "ezqt_app", "resources/templates/main.py.template"
+                )
             )
-            
+
             if template_path.exists():
                 main_py = Path.cwd() / "main.py"
-                
+
                 if main_py.exists() and not force:
                     if click.confirm("main.py already exists. Overwrite?"):
-                        maker.make_generic_main(template_path)
+                        maker.make_main_from_template(template_path)
                         click.echo("✅ main.py overwritten")
                     else:
-                        click.echo(f"{Fore.YELLOW}⚠️  main.py preserved{Style.RESET_ALL}")
+                        click.echo(
+                            f"{Fore.YELLOW}⚠️  main.py preserved{Style.RESET_ALL}"
+                        )
                 else:
-                    maker.make_generic_main(template_path)
+                    maker.make_main_from_template(template_path)
                     click.echo("✅ main.py generated")
             else:
-                click.echo(f"{Fore.RED}❌ Template main_generic.txt not found{Style.RESET_ALL}")
+                click.echo(
+                    f"{Fore.RED}❌ Template main.py.template not found{Style.RESET_ALL}"
+                )
 
         click.echo("✅ Project initialization completed!")
-        
+
         if verbose:
             click.echo("\n📋 Generated files:")
             click.echo("  - assets/ (icons, images, themes)")
@@ -98,6 +100,7 @@ def init(force, verbose, no_main):
         click.echo(f"{Fore.RED}❌ Error during initialization: {e}{Style.RESET_ALL}")
         if verbose:
             import traceback
+
             click.echo(traceback.format_exc())
         sys.exit(1)
 
@@ -112,9 +115,12 @@ def convert():
     """
     try:
         from ezqt_app.cli.create_qm_files import main as convert_main
+
         convert_main()
     except ImportError:
-        click.echo(f"{Fore.RED}❌ Translation conversion module not found{Style.RESET_ALL}")
+        click.echo(
+            f"{Fore.RED}❌ Translation conversion module not found{Style.RESET_ALL}"
+        )
         sys.exit(1)
     except Exception as e:
         click.echo(f"{Fore.RED}❌ Error during conversion: {e}{Style.RESET_ALL}")
@@ -131,12 +137,15 @@ def mkqm(verbose):
     """
     if verbose:
         click.echo("🔍 Verbose mode enabled")
-    
+
     try:
         from ezqt_app.cli.create_qm_files import main as convert_main
+
         convert_main()
     except ImportError:
-        click.echo(f"{Fore.RED}❌ Translation conversion module not found{Style.RESET_ALL}")
+        click.echo(
+            f"{Fore.RED}❌ Translation conversion module not found{Style.RESET_ALL}"
+        )
         sys.exit(1)
     except Exception as e:
         click.echo(f"{Fore.RED}❌ Error during conversion: {e}{Style.RESET_ALL}")
@@ -189,7 +198,9 @@ def test(unit, integration, coverage, verbose):
         click.echo(f"{Fore.RED}❌ Tests failed: {e}{Style.RESET_ALL}")
         sys.exit(1)
     except FileNotFoundError:
-        click.echo(f"{Fore.RED}❌ Test runner not found. Make sure you're in the project root.{Style.RESET_ALL}")
+        click.echo(
+            f"{Fore.RED}❌ Test runner not found. Make sure you're in the project root.{Style.RESET_ALL}"
+        )
         sys.exit(1)
 
 
@@ -220,12 +231,16 @@ def docs(serve, port):
                 ) as httpd:
                     httpd.serve_forever()
             else:
-                click.echo(f"{Fore.RED}❌ Documentation directory not found{Style.RESET_ALL}")
+                click.echo(
+                    f"{Fore.RED}❌ Documentation directory not found{Style.RESET_ALL}"
+                )
 
         except KeyboardInterrupt:
             click.echo("\n⏹️  Documentation server stopped")
         except Exception as e:
-            click.echo(f"{Fore.RED}❌ Error serving documentation: {e}{Style.RESET_ALL}")
+            click.echo(
+                f"{Fore.RED}❌ Error serving documentation: {e}{Style.RESET_ALL}"
+            )
     else:
         click.echo("📖 Documentation options:")
         click.echo("  --serve, -s     Serve documentation locally")
@@ -251,6 +266,7 @@ def info():
         # Check PySide6
         try:
             import PySide6
+
             click.echo(f"PySide6: {PySide6.__version__}")
         except ImportError:
             click.echo("PySide6: Not installed")
@@ -258,12 +274,14 @@ def info():
         # Check dependencies
         try:
             import yaml
+
             click.echo("PyYaml: Available")
         except ImportError:
             click.echo("PyYaml: Not installed")
 
         try:
             import colorama
+
             click.echo("Colorama: Available")
         except ImportError:
             click.echo("Colorama: Not installed")
@@ -279,7 +297,9 @@ def info():
         click.echo("=" * 40)
 
     except ImportError:
-        click.echo(f"{Fore.RED}❌ EzQt_App not found in current environment{Style.RESET_ALL}")
+        click.echo(
+            f"{Fore.RED}❌ EzQt_App not found in current environment{Style.RESET_ALL}"
+        )
 
 
 @cli.command()
@@ -296,13 +316,15 @@ def create(template, name, verbose):
         click.echo("🔍 Verbose mode enabled")
 
     runner = ProjectRunner(verbose)
-    
+
     try:
         success = runner.create_project_template(template, name)
         if success:
             click.echo("✅ Project template created successfully!")
         else:
-            click.echo(f"{Fore.RED}❌ Failed to create project template{Style.RESET_ALL}")
+            click.echo(
+                f"{Fore.RED}❌ Failed to create project template{Style.RESET_ALL}"
+            )
             sys.exit(1)
     except Exception as e:
         click.echo(f"{Fore.RED}❌ Error creating template: {e}{Style.RESET_ALL}")
@@ -310,4 +332,4 @@ def create(template, name, verbose):
 
 
 if __name__ == "__main__":
-    cli() 
+    cli()

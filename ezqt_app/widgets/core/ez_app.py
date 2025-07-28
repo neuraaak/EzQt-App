@@ -50,6 +50,15 @@ class EzApplication(QApplication):
         **kwargs : Any
             Arguments nommés passés à QApplication.
         """
+        # Configurer High DPI AVANT de créer l'instance QApplication
+        from PySide6.QtCore import Qt
+        from PySide6.QtGui import QGuiApplication
+        
+        # Appeler setHighDpiScaleFactorRoundingPolicy avant de créer QApplication
+        QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
+            Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+        )
+
         # Vérifier s'il y a déjà une instance QApplication
         existing_app = QApplication.instance()
         if existing_app and not isinstance(existing_app, EzApplication):
@@ -78,6 +87,14 @@ class EzApplication(QApplication):
         Méthode de classe pour créer une instance EzApplication pour les tests.
         Cette méthode contourne la vérification de singleton pour les tests.
         """
+        # Configurer High DPI AVANT de créer QApplication
+        from PySide6.QtCore import Qt
+        from PySide6.QtGui import QGuiApplication
+        
+        QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
+            Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+        )
+
         # Vérifier s'il y a déjà une instance
         existing_app = QApplication.instance()
         if existing_app:

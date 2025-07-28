@@ -42,7 +42,7 @@ from PySide6.QtWidgets import (
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 from ...kernel.app_components import Fonts
-from ...kernel.translation_helpers import set_tr
+from ...kernel.translation import set_tr
 
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 from typing import Union, Dict, Optional

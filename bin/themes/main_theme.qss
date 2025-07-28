@@ -1,0 +1,1016 @@
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+
+SET APP STYLESHEET - FULL STYLES HERE
+DARK THEME - DRACULA COLOR BASED
+
+# BY: WANDERSON M.PIMENTA
+# PROJECT MADE WITH: Qt Designer and PySide6
+# V: 1.0.0
+#
+# This project can be used freely for all uses, as long as they maintain the
+# respective credits only in the Python scripts, any information in the visual
+# interface (GUI) can be modified without any implication.
+#
+# There are limitations on Qt licenses if you want to use your products
+# commercially, I recommend reading them on the official website:
+# https://doc.qt.io/qtforpython/licenses.html
+
+///////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+/** GLOBAL */
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Widget */
+QWidget{
+	color: $_base_text_color;
+	font: 10pt "Segoe UI";
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Tooltip */
+QToolTip {
+	color: #ffffff;
+	background-color: $_semi_transparent;
+	border: 1px solid $_main_border;
+	background-image: none;
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 2px solid $_main_accent_color;
+	text-align: left;
+	padding-left: 8px;
+	margin: 0px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+QTableWidget */
+QTableWidget {	
+	background-color: transparent;
+	padding: 10px;
+	border-radius: 5px;
+	gridline-color: $_main_border;
+	border-bottom: 1px solid rgb(44, 49, 60);
+}
+QTableWidget::item{
+	border-color: rgb(44, 49, 60);
+	padding-left: 5px;
+	padding-right: 5px;
+	gridline-color: rgb(44, 49, 60);
+}
+QTableWidget::item:selected{
+	background-color: $_main_accent_color;
+}
+QHeaderView::section{
+	background-color: $_main_surface;
+	max-width: 30px;
+	border: 1px solid $_main_border;
+	border-style: none;
+    border-bottom: 1px solid rgb(44, 49, 60);
+    border-right: 1px solid rgb(44, 49, 60);
+}
+QTableWidget::horizontalHeader {	
+	background-color: $_main_surface;
+}
+QHeaderView::section:horizontal
+{
+    border: 1px solid $_main_surface;
+	background-color: $_main_surface;
+	padding: 3px;
+	border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+QHeaderView::section:vertical
+{
+    border: 1px solid rgb(44, 49, 60);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+LineEdit */
+QLineEdit {
+	background-color: $_main_surface;
+	border-radius: 5px;
+	border: 2px solid $_main_surface;
+	padding-left: 10px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+QLineEdit:hover {
+	border: 2px solid $_accent_color4;
+}
+QLineEdit:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+PlainTextEdit */
+QPlainTextEdit {
+	background-color: rgb(27, 29, 35);
+	border-radius: 5px;
+	padding: 10px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+QPlainTextEdit  QScrollBar:vertical {
+    width: 8px;
+}
+QPlainTextEdit  QScrollBar:horizontal {
+    height: 8px;
+}
+QPlainTextEdit:hover {
+	border: 2px solid $_accent_color4;
+}
+QPlainTextEdit:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ScrollBars */
+QScrollBar:horizontal {
+    border: none;
+    background: $_main_surface;
+    height: 12px;
+    margin: 0px 20px 0 20px;
+    border-radius: 0px;
+}
+QScrollBar::handle:horizontal {
+    background: $_main_border;
+    min-width: 30px;
+    border-radius: 8px;
+    margin: 2px 0px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: $_accent_color1;
+}
+QScrollBar::add-line:horizontal {
+    border: none;
+    background: $_main_surface;
+    width: 20px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+    border-radius: 0px;
+}
+QScrollBar::sub-line:horizontal {
+    border: none;
+    background: $_main_surface;
+    width: 20px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+    border-radius: 0px;
+}
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
+    background: none;
+    border: none;
+    width: 0px;
+    height: 0px;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: $_main_surface;
+    width: 12px;
+    margin: 20px 0 20px 0;
+    border-radius: 0px;
+}
+QScrollBar::handle:vertical {    
+    background: $_main_border;
+    min-height: 30px;
+    border-radius: 8px;
+    margin: 2px 0px;
+}
+QScrollBar::handle:vertical:hover {
+    background: $_accent_color1;
+}
+QScrollBar::add-line:vertical {
+    border: none;
+    background: $_main_surface;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    border-radius: 0px;
+}
+QScrollBar::sub-line:vertical {
+    border: none;
+    background: $_main_surface;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+    border-radius: 0px;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+    border: none;
+    width: 0px;
+    height: 0px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+PushButton */
+QPushButton {
+	border: 2px solid $_accent_color1;
+	border-radius: 5px;	
+	background-color: $_accent_color1;
+}
+QPushButton:hover {
+	background-color: $_main_border;
+	border: 2px solid rgb(61, 70, 86);
+}
+QPushButton:pressed {	
+	background-color: $_accent_color3;
+	border: 2px solid rgb(43, 50, 61);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+CheckBox */
+QCheckBox::indicator {
+    border: 3px solid $_accent_color1;
+	width: 15px;
+	height: 15px;
+	border-radius: 10px;
+    background: rgb(44, 49, 60);
+}
+QCheckBox::indicator:hover {
+    border: 3px solid $_accent_color1;
+}
+QCheckBox::indicator:checked {
+    background: 3px solid $_accent_color1;
+	border: 3px solid $_accent_color1;	
+	background-image: url(:/icons/icons/cil-check-alt.png);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+RadioButton */
+QRadioButton::indicator {
+    border: 3px solid $_accent_color1;
+	width: 15px;
+	height: 15px;
+	border-radius: 10px;
+    background: rgb(44, 49, 60);
+}
+QRadioButton::indicator:hover {
+    border: 3px solid $_accent_color1;
+}
+QRadioButton::indicator:checked {
+    background: 3px solid $_accent_color4;
+	border: 3px solid $_accent_color1;	
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ComboBox */
+QComboBox{
+	background-color: rgb(27, 29, 35);
+	border-radius: 5px;
+	border: 2px solid $_main_surface;
+	padding: 5px;
+	padding-left: 10px;
+}
+QComboBox:hover{
+	border: 2px solid $_accent_color4;
+}
+QComboBox::drop-down {
+	subcontrol-origin: padding;
+	subcontrol-position: top right;
+	width: 25px; 
+	border-left-width: 3px;
+	border-left-color: rgba(39, 44, 54, 150);
+	border-left-style: solid;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;	
+	background-image: url(:/icons/icons/cil-arrow-bottom.png);
+	background-position: center;
+	background-repeat: no-reperat;
+}
+QComboBox QAbstractItemView {
+	color: $_main_accent_color;	
+	background-color: $_main_surface;
+	padding: 10px;
+	selection-background-color: $_accent_color1;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Sliders */
+QSlider::groove:horizontal {
+    border-radius: 5px;
+    height: 10px;
+	margin: 0px;
+	background-color: $_accent_color1;
+}
+QSlider::groove:horizontal:hover {
+	background-color: rgb(55, 62, 76);
+}
+QSlider::handle:horizontal {
+    background-color: $_main_accent_color;
+    border: none;
+    height: 10px;
+    width: 10px;
+    margin: 0px;
+	border-radius: 5px;
+}
+QSlider::handle:horizontal:hover {
+    background-color: $_main_accent_color;
+}
+QSlider::handle:horizontal:pressed {
+    background-color: $_main_accent_color;
+}
+
+QSlider::groove:vertical {
+    border-radius: 5px;
+    width: 10px;
+    margin: 0px;
+	background-color: $_accent_color1;
+}
+QSlider::groove:vertical:hover {
+	background-color: rgb(55, 62, 76);
+}
+QSlider::handle:vertical {
+    background-color: $_main_accent_color;
+	border: none;
+    height: 10px;
+    width: 10px;
+    margin: 0px;
+	border-radius: 5px;
+}
+QSlider::handle:vertical:hover {
+    background-color: $_main_accent_color;
+}
+QSlider::handle:vertical:pressed {
+    background-color: $_main_accent_color;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+CommandLinkButton */
+QCommandLinkButton {	
+	color: $_main_accent_color;
+	border-radius: 5px;
+	padding: 5px;
+}
+QCommandLinkButton:hover {	
+	color: rgb(255, 170, 255);
+	background-color: rgb(44, 49, 60);
+}
+QCommandLinkButton:pressed {	
+	color: $_main_accent_color;
+	background-color: rgb(52, 58, 71);
+}
+
+
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+/** EXTENDED WIDGETS */
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
+
+/* ==> MenuButton Widget */
+QToolButton[type="MenuButton"] {
+	border: none;
+	border-radius: 0;
+	background-color: transparent;
+	/* text-align removed - MenuButton handles its own alignment */
+}
+QToolButton[type="MenuButton"]:hover {
+	background-color: $_main_border;
+}
+QToolButton[type="MenuButton"]:pressed {
+	background-color: $_main_accent_color;
+	color: $_select_text_color;
+}
+
+
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+/** EZQT WIDGETS */
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+IndicatorLabel */
+IndicatorLabel {
+	background-color: rgb(86, 86, 86);
+	border: 2px solid rgb(66, 66, 66);
+	border-radius: 6px 6px 6px 6px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+HoverLabel */
+HoverLabel {
+	background-color: rgb(86, 86, 86);
+	border: 2px solid rgb(66, 66, 66);
+	border-radius: 6px 6px 6px 6px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ClickableTagLabel */
+ClickableTagLabel[status="unselected"] {
+	background-color: rgb(72, 72, 72);
+	border: 1px solid rgb(112, 112, 112);
+	border-radius: 4px 4px 4px 4px;
+}
+ClickableTagLabel[status="selected"] {
+	border: none;
+	color: rgb(255, 255, 255);
+}
+
+ClickableTagLabel QLabel {
+	background-color: rgb(50, 50, 50);
+	border: 1px solid rgb(50, 50, 50);
+	border-radius: 4px 4px 4px 4px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SearchInput */
+SearchInput {
+	background-color: rgb(27, 29, 35);
+	border: 2px solid $_accent_color1;
+	border-radius: 5px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+SearchInput:hover {
+	border: 2px solid $_accent_color4;
+}
+SearchInput:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+AutoCompleteInput */
+AutoCompleteInput {
+	background-color: rgb(27, 29, 35);
+	border: 2px solid $_accent_color1;
+	border-radius: 5px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+AutoCompleteInput:hover {
+	border: 2px solid $_accent_color4;
+}
+AutoCompleteInput:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+PasswordInput */
+PasswordInput {
+    background-color: rgb(27, 29, 35);
+    border: 2px solid $_accent_color1;
+    border-radius: 4px 4px 4px 4px;
+    padding: 2px;
+}
+
+PasswordInput QLineEdit {
+	background-color: $_main_surface;
+	border-radius: 5px;
+	border: 2px solid $_main_surface;
+	padding-left: 10px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+PasswordInput QLineEdit:hover {
+	border: 2px solid $_accent_color4;
+}
+PasswordInput QLineEdit:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+TabReplaceTextEdit */
+TabReplaceTextEdit {
+	background-color: rgb(27, 29, 35);
+	border-radius: 5px;
+	padding: 10px;
+	selection-color: $_select_text_color;
+	selection-background-color: $_main_accent_color;
+}
+TabReplaceTextEdit QScrollBar:vertical {
+    width: 8px;
+}
+TabReplaceTextEdit QScrollBar:horizontal {
+    height: 8px;
+}
+TabReplaceTextEdit:hover {
+	border: 2px solid $_accent_color4;
+}
+TabReplaceTextEdit:focus {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+IconButton */
+IconButton {
+	background-color: $_accent_color1;
+	border-radius: 5px;	
+	border: 2px solid $_accent_color1;
+}
+IconButton:hover {
+	background-color: $_main_border;
+	border: 2px solid rgb(61, 70, 86);
+}
+IconButton:pressed {	
+	background-color: $_accent_color3;
+	border: 2px solid rgb(43, 50, 61);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+LoaderButton */
+LoaderButton {
+	background-color: $_accent_color1;
+	border-radius: 5px;	
+	border: 2px solid $_accent_color1;
+}
+LoaderButton:hover {
+	background-color: $_main_border;
+	border: 2px solid rgb(61, 70, 86);
+}
+LoaderButton:pressed {	
+	background-color: $_accent_color3;
+	border: 2px solid rgb(43, 50, 61);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+DateButton */
+DateButton {
+	background-color: $_accent_color1;
+	border-radius: 5px;	
+	border: 2px solid $_accent_color1;
+}
+DateButton:hover {
+	background-color: $_main_border;
+	border: 2px solid rgb(61, 70, 86);
+}
+DateButton:pressed {	
+	background-color: $_accent_color3;
+	border: 2px solid rgb(43, 50, 61);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+DraggableList */
+DraggableList {
+	background-color: $_main_border;
+	border: 2px solid $_accent_color1;
+	border-radius: 6px;
+	padding: 8px;
+	color: rgb(255, 255, 255);
+}
+
+DraggableList QScrollArea {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 6px;
+	padding: 4px 0px 4px 4px;
+}
+
+DraggableList QScrollArea QWidget {
+	background-color: transparent;
+	border: none;
+}
+
+[type="DraggableItem"] {
+	background-color: $_main_border;
+	border: 1px solid $_accent_color1;
+	border-radius: 6px 6px 6px 6px;
+}
+
+[type="DraggableItem"]:hover {
+	background-color: $_accent_color1;
+	border: 2px solid $_accent_color4;
+}
+
+[type="DraggableItem"][dragging="true"] {
+	background-color: $_accent_color4;
+	color: $_select_text_color;
+}
+
+[type="DraggableItem"] QLabel {
+	background-color: transparent;
+	border: none;
+	color: $_base_text_color;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+OptionSelector */
+OptionSelector {
+	background-color: $_main_border;
+	border-radius: 4px;
+}
+OptionSelector [type="OptionSelector_Selector"] {
+	background-color: $_main_border;
+	border: 2px solid $_main_accent_color;
+	border-radius: 4px;	
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ToggleIcon */
+ToggleIcon {
+	background-color: transparent;
+	border: none;
+	border-radius: 4px 4px 4px 4px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+ToggleSwitch */
+ToggleSwitch {
+	background-color: $_main_border;
+	border: 2px solid $_accent_color1;
+	border-radius: 12px;
+}
+
+ToggleSwitch:hover {
+	border: 2px solid $_accent_color4;
+}
+
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+/** SETTING WIDGETS */
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+BaseSettingWidget */
+BaseSettingWidget {
+	background-color: transparent;
+	border: none;
+}
+
+BaseSettingWidget QLabel {
+	color: $_base_text_color;
+	font: 10pt "Segoe UI";
+	font-weight: bold;
+}
+
+BaseSettingWidget QLabel[objectName="settingDescription"] {
+	color: $_accent_color4;
+	font: 8pt "Segoe UI";
+	margin-top: 2px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingToggle */
+SettingToggle {
+	background-color: transparent;
+	border: none;
+}
+
+SettingToggle ToggleSwitch {
+	background-color: transparent;
+	border: none;
+}
+
+SettingCheckbox ToggleSwitch {
+	background-color: transparent;
+	border: none;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingSelect */
+SettingSelect {
+	background-color: transparent;
+	border: none;
+}
+
+SettingSelect QComboBox {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 4px;
+	padding: 4px 8px;
+	color: $_base_text_color;
+	font: 9pt "Segoe UI";
+}
+
+SettingSelect QComboBox:hover {
+	border: 2px solid $_accent_color4;
+}
+
+SettingSelect QComboBox:focus {
+	border: 2px solid $_main_accent_color;
+}
+
+SettingSelect QComboBox::drop-down {
+	border: none;
+	width: 20px;
+}
+
+SettingSelect QComboBox::down-arrow {
+	image: url(:/icons/icons/cil-arrow-bottom.png);
+	width: 12px;
+	height: 12px;
+	background: none;
+}
+
+SettingSelect QComboBox QAbstractItemView {
+	color: $_main_accent_color;	
+	background-color: $_main_surface;
+	padding: 8px;
+	selection-background-color: $_accent_color1;
+	border: 1px solid $_main_border;
+	border-radius: 4px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingSlider */
+SettingSlider {
+	background-color: transparent;
+	border: none;
+}
+
+SettingSlider QSlider {
+	background-color: transparent;
+	border: none;
+}
+
+SettingSlider QSlider::groove:horizontal {
+	background-color: $_accent_color1;
+	border-radius: 2px;
+	height: 4px;
+}
+
+SettingSlider QSlider::handle:horizontal {
+	background-color: $_main_accent_color;
+	border: none;
+	border-radius: 6px;
+	width: 12px;
+	height: 12px;
+	margin: -4px 0;
+}
+
+SettingSlider QSlider::handle:horizontal:hover {
+	background-color: $_main_accent_color;
+}
+
+SettingSlider QLabel[objectName="settingValueLabel"] {
+	color: $_main_accent_color;
+	font: 9pt "Segoe UI";
+	font-weight: bold;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingText */
+SettingText {
+	background-color: transparent;
+	border: none;
+}
+
+SettingText QLineEdit {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 4px;
+	padding: 6px 8px;
+	color: $_base_text_color;
+	font: 9pt "Segoe UI";
+}
+
+SettingText QLineEdit:hover {
+	border: 2px solid $_accent_color4;
+}
+
+SettingText QLineEdit:focus {
+	border: 2px solid $_main_accent_color;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SettingCheckbox */
+SettingCheckbox {
+	background-color: transparent;
+	border: none;
+}
+
+SettingCheckbox QCheckBox {
+	background-color: $_main_surface;
+	border: 2px solid $_accent_color1;
+	border-radius: 3px;
+	width: 16px;
+	height: 16px;
+}
+
+SettingCheckbox QCheckBox:checked {
+	background-color: $_main_accent_color;
+	border: 2px solid $_main_accent_color;
+	image: url(:/icons/icons/cil-check-alt.png);
+}
+
+SettingCheckbox QCheckBox:hover {
+	border: 2px solid $_accent_color4;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Setting Containers */
+QFrame[objectName^="settingContainer_"] {
+	background-color: transparent;
+	border: none;
+}
+
+#themeSettingsContainer {
+	background-color: transparent;
+	border: none;
+}
+
+#VL_settingsPanel {
+	background-color: $_main_surface;
+}
+
+#VL_contentSettings {
+	background-color: $_main_surface;
+}
+
+
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+/** APPLICATION RELATED */
+/** ///////////////////////////////////////////////////////////////////////////////////////////////// */
+
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Bg App */
+#bgApp {	
+	background-color: $_page_color;
+	border: 1px solid $_main_border;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+HEADER */
+#headerContainer{	
+	background-color: $_main_surface;
+}
+#headerAppLogo {
+	background-color: transparent;
+	background-position: centered;
+	background-repeat: no-repeat;
+}
+#headerAppName {
+	font: 63 12pt "Segoe UI Semibold";
+}
+#headerAppDescription {
+	font: 8pt "Segoe UI";
+	color: $_main_accent_color;
+}
+
+/* ==> Top Buttons */
+#headerButtons .QPushButton {
+	background-color: $_transparent;
+	border: none;
+	border-radius: 5px;
+}
+#headerButtons .QPushButton:hover {
+	background-color: $_main_border;
+	border-style: solid;
+	border-radius: 4px;
+}
+#headerButtons .QPushButton:pressed {
+	background-color: $_main_border;
+	border-style: solid;
+	border-radius: 4px;
+}
+
+/* ==> settingsTopBtn */
+.QPushButton#settingsTopBtn:pressed {
+	background-color: $_main_accent_color;
+	border-style: solid;
+	border-radius: 4px;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+LEFT MENU */
+#menuContainer {	
+	background-color: $_main_surface;
+}
+#mainMenuFrame{
+	border-top: 3px solid $_main_border;
+}
+
+/* ==> Toggle Button */
+#toggleButton {
+	background-color: $_accent_color3;
+	border: none;
+	border-radius: 0;	
+	text-align: left;
+}
+#toggleButton .QLabel{
+	color: $_accent_color4;
+}
+#toggleButton:hover {
+	background-color: $_main_border;
+}
+#toggleButton:hover .QLabel{
+	color: $_base_text_color;
+}
+#toggleButton:pressed {
+	background-color: $_main_accent_color;
+}
+/* ==> Menu Items */
+#topMenu QToolButton {	
+	border: none;
+	border-radius: 0;	
+	background-color: transparent;
+}
+#topMenu QToolButton[class="inactive"] {	
+	background-color: transparent;
+}
+#topMenu QToolButton[class="active"] {	
+	background-color: transparent;
+	border-left: 3px solid $_main_accent_color;
+}
+#topMenu QToolButton:hover {
+	background-color: $_main_border;
+}
+#topMenu QToolButton:pressed {	
+	background-color: $_main_accent_color;
+	color: $_select_text_color;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+SETTINGS PANEL */
+/* #settingsScrollArea QScrollBar:vertical {
+    background: transparent;
+} */
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+CONTENT */
+#contentBottom{
+	border-top: 3px solid $_main_border;
+}
+
+/* ==> Settings Panel */
+#settingsPanel {
+	background-color: $_main_surface;
+}
+#settingsTopBorder {
+	background-color: $_main_accent_color;
+}
+
+#contentSettings {
+	background-color: $_main_surface;
+}
+
+#settingsScrollArea {
+	background-color: $_main_surface;
+	border: none;
+}
+
+#settingsScrollArea QWidget {
+	background-color: $_main_surface;
+}
+
+#contentSettings .QPushButton {	
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 22px solid transparent;
+	background-color:transparent;
+	text-align: left;
+	padding-left: 44px;
+}
+#contentSettings .QPushButton:hover {
+	background-color: $_page_color;
+}
+#contentSettings .QPushButton:pressed {	
+	background-color: $_main_accent_color;
+	color: $_select_text_color;
+}
+
+#themeToggleButton {
+	background-color: $_main_border;
+	border: 2px solid $_accent_color1;
+	border-radius: 6px;
+}
+#themeToggleButton #selector {
+	background-color: $_main_border;
+	border: 2px solid $_main_accent_color;
+	border-radius: 4px;	
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+Theme Label */
+#themeLabel {
+	color: $_base_text_color;
+	font: 10pt "Segoe UI";
+	font-weight: bold;
+}
+
+/* ==> pagesContainer */
+#pagesContainer QPushButton {
+	border: 2px solid $_accent_color1;
+	border-radius: 5px;	
+	background-color: $_accent_color1;
+}
+#pagesContainer QPushButton:hover {
+	background-color: $_main_border;
+	border: 2px solid rgb(61, 70, 86);
+}
+#pagesContainer QPushButton:pressed {	
+	background-color: $_accent_color3;
+	border: 2px solid rgb(43, 50, 61);
+}
+
+/* ==> Bottom Bar */
+#bottomBar {
+	background-color: $_main_surface;
+}
+#bottomBar QLabel {
+	font-size: 11px;
+	color: $_accent_color4;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 2px;
+}

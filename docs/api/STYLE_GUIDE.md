@@ -99,9 +99,9 @@ theme_mode = Settings.Gui.THEME
 
 **Usage example:**
 ```python
-from ezqt_app.helper import Helper
+from ezqt_app.kernel.app_functions import FileMaker
 
-maker = Helper.Maker()
+maker = FileMaker()
 maker.make_assets_binaries()
 maker.make_qrc()
 ```

@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # /////////////////////////////////////////////////////////////////////////////////////////////
+from ...kernel.app_functions.printer import get_printer
 from ...kernel.app_components import *
 from ...kernel.app_resources import *
 from ...kernel.app_settings import Settings
@@ -110,7 +111,9 @@ class SettingsPanel(QFrame):
         self.contentSettings.setObjectName("contentSettings")
         self.contentSettings.setFrameShape(QFrame.NoFrame)
         self.contentSettings.setFrameShadow(QFrame.Raised)
-        self.contentSettings.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.contentSettings.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+        )
         #
         self.settingsScrollArea.setWidget(self.contentSettings)
         # //////
@@ -145,47 +148,38 @@ class SettingsPanel(QFrame):
 
         # ///////////////////////////////////////////////////////////////
 
-        # Lazy import to avoid circular imports
+        # Créer le sélecteur de thème si OptionSelector est disponible
         try:
             from ezqt_widgets import OptionSelector
-            from ...kernel.translation_helpers import tr
 
-            # Créer les items traduits dès le début
-            try:
-                translated_items = [tr("Light"), tr("Dark")]
-            except:
-                # Fallback si la traduction n'est pas disponible
-                translated_items = ["Light", "Dark"]
-
-            # Charger la valeur par défaut depuis le YAML
-            try:
-                from ...kernel.app_functions import Kernel
-
-                settings_panel = Kernel.loadKernelConfig("settings_panel")
-                default_theme = settings_panel.get("theme", {}).get("default", "dark")
-                # Convertir en ID : 0 = Light, 1 = Dark
-                default_id = 0 if default_theme.lower() == "light" else 1
-            except Exception:
-                default_id = 1  # Dark par défaut si erreur
-
+            # Créer le sélecteur de thème avec la bonne signature
+            # OptionSelector attend: items, default_id, min_width, min_height, orientation, animation_duration, parent
             self.themeToggleButton = OptionSelector(
-                items=translated_items,
-                default_id=default_id,  # ID basé sur le thème par défaut du YAML
-                parent=self.themeSettingsContainer,
+                items=["Light", "Dark"],  # Liste des options
+                default_id=1,  # 0 = Light, 1 = Dark (Dark par défaut)
+                min_width=None,
+                min_height=None,
+                orientation="horizontal",
                 animation_duration=Settings.Gui.TIME_ANIMATION,
+                parent=self.themeSettingsContainer,
             )
             self.themeToggleButton.setObjectName("themeToggleButton")
-            self.themeToggleButton.setSizePolicy(SizePolicy.H_EXPANDING_V_FIXED)
+            self.themeToggleButton.setSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+            )
             self.themeToggleButton.setFixedHeight(40)
             self._widgets.append(self.themeToggleButton)
 
             # Connecter le signal de changement du sélecteur de thème
             self._connect_theme_selector_signals()
 
-            #
+            # Ajouter au layout
             self.VL_themeSettingsContainer.addWidget(self.themeToggleButton)
+
         except ImportError:
-            print("Warning: OptionSelector not available, theme toggle not created")
+            get_printer().warning(
+                "OptionSelector not available, theme toggle not created"
+            )
 
         # ///////////////////////////////////////////////////////////////
         # Chargement automatique depuis YAML si demandé
@@ -221,9 +215,11 @@ class SettingsPanel(QFrame):
                         widget.set_value(default_value)
 
         except KeyError:
-            print("Warning: Section 'settings_panel' not found in YAML configuration")
+            get_printer().warning(
+                "Section 'settings_panel' not found in YAML configuration"
+            )
         except Exception as e:
-            print(f"Warning: Error loading settings from YAML: {e}")
+            get_printer().warning(f"Error loading settings from YAML: {e}")
 
     def add_setting_from_config(self, key: str, config: dict) -> QWidget:
         """Ajoute un paramètre basé sur sa configuration YAML."""
@@ -471,12 +467,12 @@ class SettingsPanel(QFrame):
                 # Sauvegarder directement dans settings_panel[key].default
                 Kernel.writeYamlConfig(["settings_panel", key, "default"], value)
             except Exception as e:
-                print(f"Warning: Could not save setting '{key}' to YAML: {e}")
+                get_printer().warning(f"Could not save setting '{key}' to YAML: {e}")
 
             # Gestion spéciale pour les changements de langue
             if key == "language":
                 try:
-                    from ...kernel.translation_manager import get_translation_manager
+                    from ...kernel.translation import get_translation_manager
 
                     translation_manager = get_translation_manager()
                     # Vérifier si la langue change vraiment
@@ -486,7 +482,7 @@ class SettingsPanel(QFrame):
                         # Émettre le signal de changement de langue
                         self.languageChanged.emit()
                 except Exception as e:
-                    print(f"Warning: Could not change language: {e}")
+                    get_printer().warning(f"Could not change language: {e}")
 
             # Émettre un signal pour l'application
             self.settingChanged.emit(key, value)
@@ -522,7 +518,7 @@ class SettingsPanel(QFrame):
                     ["settings_panel", key, "default"], widget.get_value()
                 )
             except Exception as e:
-                print(f"Warning: Could not save setting '{key}' to YAML: {e}")
+                get_printer().warning(f"Could not save setting '{key}' to YAML: {e}")
 
     # ///////////////////////////////////////////////////////////////
     # Méthodes existantes (conservées pour compatibilité)
@@ -587,7 +583,7 @@ class SettingsPanel(QFrame):
             self.settingChanged.emit("theme", english_value)
 
         except Exception as e:
-            print(f"Warning: Could not handle theme selector change: {e}")
+            get_printer().warning(f"Could not handle theme selector change: {e}")
 
     def _on_theme_selector_clicked(self):
         """Appelé quand le sélecteur de thème est cliqué."""
@@ -607,13 +603,13 @@ class SettingsPanel(QFrame):
                 self.settingChanged.emit("theme", current_value)
 
         except Exception as e:
-            print(f"Warning: Could not handle theme selector click: {e}")
+            get_printer().warning(f"Could not handle theme selector click: {e}")
 
     def update_theme_selector_items(self) -> None:
         """Met à jour les items du sélecteur de thème avec les traductions."""
         try:
             if hasattr(self, "themeToggleButton"):
-                from ...kernel.translation_helpers import tr
+                from ...kernel.translation import tr
 
                 # Traduire les items pour l'affichage
                 translated_items = [tr("Light"), tr("Dark")]

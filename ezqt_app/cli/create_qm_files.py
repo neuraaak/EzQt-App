@@ -5,7 +5,6 @@
 # IMPORT BASE
 # ///////////////////////////////////////////////////////////////
 import xml.etree.ElementTree as ET
-from pathlib import Path
 import struct
 import hashlib
 import pkg_resources
@@ -15,6 +14,10 @@ import pkg_resources
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
+from ..kernel.common import Path
+from ..kernel.app_functions.printer import get_printer
+
+# TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 
 ## ==> GLOBALS
 # ///////////////////////////////////////////////////////////////
@@ -29,37 +32,24 @@ import pkg_resources
 # ///////////////////////////////////////////////////////////////
 
 
-def create_proper_qm_from_ts(ts_file_path: Path, qm_file_path: Path):
+def create_proper_qm_from_ts(ts_file_path: Path, qm_file_path: Path) -> bool:
     """Crée un fichier .qm dans le bon format Qt"""
 
-    print(f"🔄 Conversion de {ts_file_path.name} vers {qm_file_path.name}...")
+    printer = get_printer()
+    printer.info(f"Conversion de {ts_file_path.name} vers {qm_file_path.name}...")
 
     try:
-        # Parser le fichier XML
-        tree = ET.parse(ts_file_path)
-        root = tree.getroot()
+        # Extraire les traductions du fichier .ts
+        translations = extract_translations_from_ts(ts_file_path)
 
-        # Extraire les traductions
-        translations = {}
-        for message in root.findall(".//message"):
-            source = message.find("source")
-            translation = message.find("translation")
-
-            if source is not None and translation is not None:
-                source_text = source.text.strip() if source.text else ""
-                translation_text = translation.text.strip() if translation.text else ""
-
-                if source_text and translation_text:
-                    translations[source_text] = translation_text
-
-        # Créer un fichier .qm dans le format Qt approprié
+        # Créer le fichier .qm
         create_qt_qm_file(qm_file_path, translations)
 
-        print(f"✅ {len(translations)} traductions converties")
+        printer.success(f"{len(translations)} traductions converties")
         return True
 
     except Exception as e:
-        print(f"❌ Erreur lors de la conversion: {e}")
+        printer.error(f"Erreur lors de la conversion: {e}")
         return False
 
 
@@ -102,54 +92,58 @@ def create_qt_qm_file(qm_file_path: Path, translations: dict):
 
 def main():
     """Fonction principale"""
-    print("🔧 Création de fichiers .qm dans le bon format Qt")
-    print("=" * 60)
+    printer = get_printer()
+    printer.section("Création de fichiers .qm dans le bon format Qt")
 
     # Priorité 1: Chercher dans le projet utilisateur (bin/translations)
-    current_project_translations = Path("bin/translations")
-
-    # Priorité 2: Fallback vers le package ezqt_app
+    current_project_translations = Path.cwd() / "bin" / "translations"
+    # Priorité 2: Chercher dans le package installé
     try:
-        package_path = pkg_resources.resource_filename("ezqt_app", "")
-        package_translations = Path(package_path) / "resources" / "translations"
-    except Exception:
-        package_translations = Path("ezqt_app/resources/translations")
+        package_translations = Path(
+            pkg_resources.resource_filename("ezqt_app", "resources/translations")
+        )
+    except:
+        package_translations = (
+            Path(__file__).parent.parent / "resources" / "translations"
+        )
 
-    # Déterminer quel dossier utiliser
+    # Choisir le dossier de traductions
     if current_project_translations.exists():
         translations_dir = current_project_translations
-        print(f"📁 Utilisation du dossier projet: {translations_dir}")
+        printer.info(f"Utilisation du dossier projet: {translations_dir}")
     elif package_translations.exists():
         translations_dir = package_translations
-        print(f"📦 Utilisation du dossier package (fallback): {translations_dir}")
+        printer.info(f"Utilisation du dossier package (fallback): {translations_dir}")
     else:
-        print(f"❌ Aucun dossier de traductions trouvé")
-        print(f"   Projet: {current_project_translations}")
-        print(f"   Package: {package_translations}")
-        print("💡 Assurez-vous d'être dans un projet EzQt_App ou lancez 'ezqt init'")
+        printer.error("Aucun dossier de traductions trouvé")
+        printer.verbose_msg(f"   Projet: {current_project_translations}")
+        printer.verbose_msg(f"   Package: {package_translations}")
+        printer.info(
+            "Assurez-vous d'être dans un projet EzQt_App ou lancez 'ezqt init'"
+        )
         return
 
-    # Trouver tous les fichiers .ts
+    # Chercher les fichiers .ts
     ts_files = list(translations_dir.glob("*.ts"))
 
     if not ts_files:
-        print("❌ Aucun fichier .ts trouvé")
+        printer.error("Aucun fichier .ts trouvé")
         return
 
-    print(f"📄 Fichiers .ts trouvés: {len(ts_files)}")
+    printer.info(f"Fichiers .ts trouvés: {len(ts_files)}")
 
     # Convertir chaque fichier .ts
     for ts_file in ts_files:
         qm_file = ts_file.with_suffix(".qm")
         if create_proper_qm_from_ts(ts_file, qm_file):
-            print(f"✅ {qm_file.name} créé")
+            printer.success(f"{qm_file.name} créé")
         else:
-            print(f"❌ Échec de création de {qm_file.name}")
+            printer.error(f"Échec de création de {qm_file.name}")
 
-    print("\n🎉 Processus terminé !")
-    print("📋 Prochaines étapes:")
-    print("   1. Testez les nouveaux fichiers .qm")
-    print("   2. Si ça ne fonctionne toujours pas, utilisez les .ts")
+    printer.success("Processus terminé !")
+    printer.info("Prochaines étapes:")
+    printer.verbose_msg("   1. Testez les nouveaux fichiers .qm")
+    printer.verbose_msg("   2. Si ça ne fonctionne toujours pas, utilisez les .ts")
 
 
 if __name__ == "__main__":

@@ -9,11 +9,9 @@ import pytest
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 
-from ezqt_app.kernel.translation_manager import (
+from ezqt_app.kernel.translation import (
     TranslationManager,
     get_translation_manager,
-)
-from ezqt_app.kernel.translation_helpers import (
     tr,
     set_tr,
     register_tr,
@@ -243,7 +241,7 @@ class TestTranslationSystem:
     def test_translation_manager_singleton_behavior(self, qt_application):
         """Test du comportement singleton du gestionnaire de traduction."""
         # Utiliser la fonction singleton pour obtenir le gestionnaire
-        from ezqt_app.kernel.translation_manager import get_translation_manager
+        from ezqt_app.kernel.translation import get_translation_manager
 
         # Obtenir plusieurs références au gestionnaire singleton
         manager1 = get_translation_manager()
@@ -300,7 +298,7 @@ class TestTranslationSystem:
     def test_translation_manager_persistence(self, qt_application):
         """Test de la persistance des données de traduction."""
         # Utiliser la fonction singleton pour obtenir le gestionnaire
-        from ezqt_app.kernel.translation_manager import get_translation_manager
+        from ezqt_app.kernel.translation import get_translation_manager
 
         # Créer le gestionnaire de traduction
         manager = get_translation_manager()

@@ -30,6 +30,7 @@ from PySide6.QtWidgets import *
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
+from .kernel.app_functions.printer import get_printer
 from .kernel import *
 from .widgets.core.ez_app import EzApplication
 
@@ -82,7 +83,7 @@ class EzQt_App(QMainWindow):
 
         # ////// LOAD TRANSLATIONS
         # ///////////////////////////////////////////////////////////////
-        from .kernel.translation_manager import get_translation_manager
+        from .kernel.translation import get_translation_manager
 
         # Charger la langue depuis les paramètres
         try:
@@ -286,9 +287,11 @@ class EzQt_App(QMainWindow):
         try:
             # Import sécurisé des fonctions de traduction
             try:
-                from .kernel.translation_helpers import set_tr, tr as translate_text
+                from .kernel.translation import set_tr, tr as translate_text
             except ImportError as import_error:
-                print(f"Warning: Could not import translation helpers: {import_error}")
+                get_printer().warning(
+                    f"Could not import translation helpers: {import_error}"
+                )
                 return
 
             registered_count = 0
@@ -380,20 +383,17 @@ class EzQt_App(QMainWindow):
 
             # Enregistrer manuellement les widgets spécifiques avec du texte fixe
             self._register_specific_widgets_for_translation()
-
-            print(
-                Fore.LIGHTBLUE_EX
-                + f"+ [AppKernel] | {registered_count} widgets registered for translation."
-                + Style.RESET_ALL
+            get_printer().action(
+                f"[AppKernel] {registered_count} widgets registered for translation."
             )
 
         except Exception as e:
-            print(f"Warning: Could not register widgets for translation: {e}")
+            get_printer().warning(f"Could not register widgets for translation: {e}")
 
     def _register_specific_widgets_for_translation(self) -> None:
         """Enregistre manuellement les widgets spécifiques avec du texte fixe."""
         try:
-            from .kernel.translation_helpers import set_tr
+            from .kernel.translation import set_tr
 
             # Widgets dans ui_main.py avec du texte fixe
 
@@ -485,14 +485,14 @@ class EzQt_App(QMainWindow):
             child_widget = self.childAt(event.position().toPoint())
             if child_widget:
                 child_name = child_widget.objectName()
-                print(child_name)
+                get_printer().verbose_msg(f"Mouse click on widget: {child_name}")
 
             # PRINT MOUSE EVENTS
             # //////
             elif event.buttons() == Qt.LeftButton:
-                print(f"Mouse click: LEFT CLICK")
+                get_printer().verbose_msg("Mouse click: LEFT CLICK")
             elif event.buttons() == Qt.RightButton:
-                print("Mouse click: RIGHT CLICK")
+                get_printer().verbose_msg("Mouse click: RIGHT CLICK")
 
     def set_credits(self, credits):
         """

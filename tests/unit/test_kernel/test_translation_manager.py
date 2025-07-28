@@ -9,7 +9,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 
-from ezqt_app.kernel.translation_manager import TranslationManager
+from ezqt_app.kernel.translation import TranslationManager
 
 
 class TestTranslationManager:

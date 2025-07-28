@@ -12,7 +12,7 @@ from unittest.mock import patch, MagicMock, mock_open
 import tempfile
 import os
 
-from ezqt_app.kernel.app_functions import Kernel
+from ezqt_app.kernel.app_functions import Kernel, APP_PATH
 
 
 class TestKernel:

@@ -1,69 +1,77 @@
 # 📚 Documentation - EzQt_App
 
-## 📋 **Vue d'ensemble**
+## 📋 **Overview**
 
-Ce dossier contient toute la documentation du projet EzQt_App, organisée par catégorie pour faciliter la navigation et la compréhension du framework.
+This directory contains all the documentation for the EzQt_App project, organized by category to facilitate navigation and understanding of the framework.
 
-## 🎯 **À propos d'EzQt_App**
+## 🎯 **About EzQt_App**
 
-EzQt_App est un framework Python conçu pour faciliter la création d'applications Qt modernes, basé sur un template de Wanderson M. Pimenta. Il automatise la gestion des ressources, génère tous les fichiers requis et offre une expérience de bootstrap de projet rapide avec une commande CLI.
+EzQt_App is a Python framework designed to facilitate the creation of modern Qt applications, based on a template by Wanderson M. Pimenta. It automates resource management, generates all required files, and offers a rapid project bootstrap experience with a CLI command.
 
-## 🚀 **Fonctionnalités principales**
 
-### **Génération automatique**
-- Dossiers et fichiers d'assets (icônes, images, thèmes, etc.)
-- Structure de projet complète
-- Fichiers de configuration YAML
 
-### **Interface utilisateur**
-- Thèmes dynamiques (clair/sombre) avec basculement intégré
-- Système de traduction global avec support multi-langues
-- Widgets personnalisés avec animations et thèmes
-- Gestionnaire de ressources avancé avec détection automatique
+## 🚀 **Main Features**
 
-### **Outils de développement**
-- Commande CLI `ezqt_init` pour initialiser rapidement un nouveau projet
-- Exemple `main.py` prêt à l'emploi généré automatiquement
-- Structure modulaire et extensible
+### **Automatic Generation**
+- Asset folders and files (icons, images, themes, etc.)
+- Complete project structure
+- YAML configuration files
 
-## 📖 **Documentation par catégorie**
+### **User Interface**
+- Dynamic themes (light/dark) with integrated switching
+- Global translation system with multi-language support
+- Custom widgets with animations and themes
+- Advanced resource manager with automatic detection
 
-### **📋 Documentation Générale**
-- [**CHANGELOG.md**](../CHANGELOG.md) - Historique des versions et changements
+### **Development Tools**
+- `ezqt_init` CLI command to quickly initialize a new project
+- Ready-to-use `main.py` example generated automatically
+- Modular and extensible structure
 
-### **🔧 Documentation API**
-- [**api/README.md**](./api/README.md) - Vue d'ensemble de l'API
-- [**api/API_DOCUMENTATION.md**](./api/API_DOCUMENTATION.md) - Documentation complète de tous les composants
-- [**api/STYLE_GUIDE.md**](./api/STYLE_GUIDE.md) - Guide de style et personnalisation QSS
+### **Kernel Architecture**
+- **Modular Design**: Refactored into specialized packages
+- **Helper Functions**: Simplified API for common operations
+- **Resource Management**: Centralized asset and configuration handling
+- **Translation System**: Complete internationalization support
 
-### **🖥️ Documentation CLI**
-- [**cli/README.md**](./cli/README.md) - Interface en ligne de commande et utilitaires
+## 📖 **Documentation by Category**
 
-### **🧪 Documentation des Tests**
-- [**tests/README.md**](./tests/README.md) - Vue d'ensemble des tests
-- [**tests/QUICK_START_TESTS.md**](./tests/QUICK_START_TESTS.md) - Guide de démarrage rapide
-- [**tests/TESTS_DOCUMENTATION.md**](./tests/TESTS_DOCUMENTATION.md) - Documentation complète des tests
+### **📋 General Documentation**
+- [**CHANGELOG.md**](../CHANGELOG.md) - Version history and changes
 
-## 🚀 **Installation et utilisation**
+### **🔧 API Documentation**
+- [**api/README.md**](./api/README.md) - API overview
+- [**api/API_DOCUMENTATION.md**](./api/API_DOCUMENTATION.md) - Complete documentation of all components
+- [**api/STYLE_GUIDE.md**](./api/STYLE_GUIDE.md) - Style guide and QSS customization
+
+### **🖥️ CLI Documentation**
+- [**cli/README.md**](./cli/README.md) - Command line interface and utilities
+
+### **🧪 Test Documentation**
+- [**tests/README.md**](./tests/README.md) - Test overview
+- [**tests/QUICK_START_TESTS.md**](./tests/QUICK_START_TESTS.md) - Quick start guide
+- [**tests/TESTS_DOCUMENTATION.md**](./tests/TESTS_DOCUMENTATION.md) - Complete test documentation
+
+## 🚀 **Installation and Usage**
 
 ### **Installation**
 ```bash
-# Via pip (recommandé)
+# Via pip (recommended)
 pip install ezqt_app
 
-# Ou localement
+# Or locally
 git clone https://github.com/neuraaak/ezqt_app.git
 cd ezqt_app
 pip install .
 ```
 
-### **Initialisation d'un projet**
+### **Project Initialization**
 ```bash
-# Initialiser un nouveau projet dans un dossier vide
+# Initialize a new project in an empty folder
 ezqt_init
 ```
 
-### **Utilisation minimale**
+### **Minimal Usage**
 ```python
 import ezqt_app.main as ezqt
 from ezqt_app.app import EzQt_App, EzApplication
@@ -76,6 +84,28 @@ window.show()
 app.exec()
 ```
 
+### **Using Helper Functions**
+```python
+from ezqt_app.kernel import (
+    get_setting, set_setting, load_fonts,
+    maximize_window, apply_theme, tr
+)
+
+# Configuration
+theme = get_setting("app", "theme", "dark")
+set_setting("ui", "window.width", 1200)
+
+# Resources
+load_fonts()
+
+# UI Operations
+maximize_window(main_window)
+apply_theme(widget, theme_content)
+
+# Translation
+translated_text = tr("Hello")
+```
+
 ## 📦 **Dépendances**
 
 - **PySide6==6.9.1** - Framework Qt moderne
@@ -84,17 +114,17 @@ app.exec()
 - **requests==2.32.3** - Requêtes HTTP
 - **ezqt-widgets>=2.0.0** - Widgets personnalisés
 
-## 🧪 **Tests et qualité**
+## 🧪 **Testing and Quality**
 
-### **Exécution des tests**
+### **Running Tests**
 ```bash
-# Depuis la racine du projet
+# From project root
 python tests/run_tests.py --type unit
 
-# Ou directement
+# Or directly
 python -m pytest tests/unit/ -v
 
-# Tests avec couverture
+# Tests with coverage
 python tests/run_tests.py --type unit --coverage
 ```
 
@@ -134,8 +164,24 @@ ezqt_app/
 ├── kernel/                    # Composants fondamentaux
 │   ├── translation_manager.py # Gestionnaire de traduction
 │   ├── app_settings.py        # Paramètres de l'application
-│   ├── app_functions.py       # Fonctions utilitaires
-│   └── helper.py              # Classes d'aide
+│   ├── common.py              # Variables communes (APP_PATH, etc.)
+│   ├── globals.py             # Variables globales (GLOBAL_STATE, etc.)
+│   ├── ui_functions/          # Fonctions UI modulaires
+│   │   ├── __init__.py        # Interface principale
+│   │   ├── window_manager.py  # Gestion de la fenêtre
+│   │   ├── panel_manager.py   # Gestion des panneaux
+│   │   ├── menu_manager.py    # Gestion des menus
+│   │   ├── theme_manager.py   # Gestion des thèmes
+│   │   ├── ui_definitions.py  # Définitions UI
+│   │   └── ui_functions.py    # Classe principale
+│   ├── app_functions/         # Fonctions utilitaires modulaires
+│   │   ├── __init__.py        # Interface principale
+│   │   ├── assets_manager.py  # Gestion des assets
+│   │   ├── config_manager.py  # Gestion de la configuration
+│   │   ├── resource_manager.py # Gestion des ressources
+│   │   ├── settings_manager.py # Gestion des paramètres
+│   │   └── kernel.py          # Classe principale
+│   └── main.py                # Module d'initialisation principal
 ├── widgets/                   # Composants d'interface
 │   ├── core/                  # Widgets principaux
 │   └── extended/              # Widgets étendus
