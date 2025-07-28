@@ -4,7 +4,13 @@
 """
 EzQt_App package initialization.
 """
-__version__ = "4.0.1"
+__version__ = "4.0.2"
+
+# IMPORT QT CONFIG FIRST - This ensures Qt environment is configured before any Qt imports
+from .kernel import qt_config
+
+# IMPORT GLOBALS SECOND - This ensures High DPI configuration is applied early
+from .kernel import globals
 
 # CLI
 from .cli.main import cli

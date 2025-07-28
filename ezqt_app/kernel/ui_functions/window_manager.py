@@ -31,7 +31,7 @@ from PySide6.QtGui import QIcon
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
-from ..globals import GLOBAL_STATE
+from .. import globals
 
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 from typing import Any
@@ -56,11 +56,10 @@ class WindowManager:
         """
         Maximise ou restaure la fenêtre selon son état actuel.
         """
-        global GLOBAL_STATE
-        status = GLOBAL_STATE
+        status = globals.get_global_state()
         if status == False:
             self.showMaximized()
-            GLOBAL_STATE = True
+            globals.set_global_state(True)
             self.ui.appMargins.setContentsMargins(0, 0, 0, 0)
             self.ui.headerContainer.maximizeRestoreAppBtn.setToolTip("Restore")
             self.ui.headerContainer.maximizeRestoreAppBtn.setIcon(
@@ -72,7 +71,7 @@ class WindowManager:
             self.top_grip.hide()
             self.bottom_grip.hide()
         else:
-            GLOBAL_STATE = False
+            globals.set_global_state(False)
             self.showNormal()
             self.resize(self.width() + 1, self.height() + 1)
             self.ui.appMargins.setContentsMargins(10, 10, 10, 10)
@@ -96,7 +95,7 @@ class WindowManager:
         bool
             True si la fenêtre est maximisée, False sinon.
         """
-        return GLOBAL_STATE
+        return globals.get_global_state()
 
     @staticmethod
     def setStatus(self, status) -> None:
@@ -108,5 +107,4 @@ class WindowManager:
         status : bool
             Nouvel état de la fenêtre.
         """
-        global GLOBAL_STATE
-        GLOBAL_STATE = status
+        globals.set_global_state(status)

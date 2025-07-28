@@ -64,8 +64,6 @@ class AssetsManager:
         res = maker.make_qrc()
         maker.make_rc_py() if res else maker.purge_rc_py()
         maker.make_app_resources_module()
-        printer = get_printer()
-        printer.verbose_msg("...")
 
     @staticmethod
     def make_app_resources_module() -> None:
@@ -107,8 +105,3 @@ class AssetsManager:
         translations_res = FileMaker(Path.cwd()).make_translations_from_package(
             translations_package
         )
-
-        # PRINT STATUS
-        if yaml_application or res is True or translations_res is True:
-            printer = get_printer()
-            printer.verbose_msg("...")

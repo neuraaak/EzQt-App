@@ -17,7 +17,7 @@
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
-from ..globals import GLOBAL_STATE, GLOBAL_TITLE_BAR
+from .. import globals
 from .window_manager import WindowManager
 from .panel_manager import PanelManager
 from .menu_manager import MenuManager

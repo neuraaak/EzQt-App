@@ -89,5 +89,3 @@ class ResourceManager:
         # RECURSIVE LOAD
         if not app:
             ResourceManager.load_fonts_resources(app=True)
-            printer = get_printer()
-            printer.verbose_msg("...")

@@ -4,8 +4,11 @@
 # COMMON
 from .common import APP_PATH
 
+# QT CONFIG - Must be imported first to configure Qt environment
+from . import qt_config
+
 # GLOBALS
-from .globals import GLOBAL_STATE, GLOBAL_TITLE_BAR
+from . import globals
 
 # MAINWINDOW
 from .ui_main import Ui_MainWindow

@@ -59,7 +59,7 @@ class Printer:
         """
         print(f"{Fore.GREEN}{prefix} {message}{Style.RESET_ALL}")
 
-    def warning(self, message: str, prefix: str = "⚠️") -> None:
+    def warning(self, message: str, prefix: str = "!") -> None:
         """
         Print a warning message.
 
@@ -219,6 +219,37 @@ class Printer:
         elif status == "warning":
             self.warning(f"[{operation}] {file_path}")
 
+    def custom_print(
+        self, message: str, color: str = "WHITE", prefix: str = ""
+    ) -> None:
+        """
+        Print a custom message with specified color and prefix.
+
+        Parameters
+        ----------
+        message : str
+            The message to print
+        color : str, optional
+            Color name (WHITE, RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, LIGHTBLACK_EX, etc.)
+            default "WHITE"
+        prefix : str, optional
+            Prefix for the message, default ""
+        """
+        color_attr = getattr(Fore, color.upper(), Fore.WHITE)
+        prefix_part = f"{prefix} " if prefix else ""
+        print(f"{color_attr}{prefix_part}{message}{Style.RESET_ALL}")
+
+    def raw_print(self, message: str) -> None:
+        """
+        Print a raw message without any formatting or colors.
+
+        Parameters
+        ----------
+        message : str
+            The message to print directly
+        """
+        print(message)
+
     def qrc_compilation_result(
         self, success: bool, error_message: Optional[str] = None
     ) -> None:
@@ -233,14 +264,9 @@ class Printer:
             Error message if compilation failed
         """
         if success:
-            self.info("Generated resources_rc.py file.")
+            self.info("[FileMaker] Generated binaries definitions from QRC file.")
         else:
-            self.warning(
-                "QRC compilation skipped: PySide6 not available or compilation failed"
-            )
-            self.verbose_msg(
-                "Note: This is optional. The QRC file can be compiled later when PySide6 is available."
-            )
+            self.warning("[FileMaker] QRC compilation skipped")
             if error_message:
                 self.verbose_msg(f"Error details: {error_message}")
 

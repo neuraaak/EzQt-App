@@ -118,9 +118,6 @@ class TranslationManager(QObject):
             "Deutsch": "de",
         }
 
-        # Charger la langue par défaut
-        self.load_language_by_code(DEFAULT_LANGUAGE)
-
     def _get_package_translations_dir(self) -> Path:
         """Récupère le dossier des traductions du package installé"""
         try:
@@ -332,11 +329,12 @@ _translation_manager_instance = None
 
 def get_translation_manager() -> TranslationManager:
     """Retourne l'instance globale du gestionnaire de traduction"""
-    global _translation_manager_instance
+    global _translation_manager_instance, translation_manager
     if _translation_manager_instance is None:
         _translation_manager_instance = TranslationManager()
+        translation_manager = _translation_manager_instance
     return _translation_manager_instance
 
 
-# Alias pour compatibilité
-translation_manager = get_translation_manager()
+# Alias pour compatibilité (sans initialisation automatique)
+translation_manager = None

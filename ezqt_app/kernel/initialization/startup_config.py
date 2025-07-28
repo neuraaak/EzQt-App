@@ -102,6 +102,9 @@ class StartupConfig:
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
         os.environ["QT_SCALE_FACTOR_ROUNDING_POLICY"] = "PassThrough"
 
+        # High DPI configuration is handled globally in kernel.globals
+        # No need to configure it here as it's already done at module import time
+
     def _configure_locale(self) -> None:
         """Configure locale settings."""
         try:

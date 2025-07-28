@@ -100,23 +100,7 @@ class InitializationSequence:
             required=True,
         )
 
-        # Step 2: Check assets requirements
-        self.add_step(
-            name="Check Requirements",
-            description="Verify that all required assets and dependencies are available",
-            function=lambda: Kernel.checkAssetsRequirements(),
-            required=True,
-        )
-
-        # Step 3: Generate required files
-        self.add_step(
-            name="Generate Files",
-            description="Generate required configuration and resource files",
-            function=lambda: Kernel.makeRequiredFiles(mkTheme=True),
-            required=True,
-        )
-
-        # Step 4: Create asset directories
+        # Step 2: Create asset directories (en premier)
         self.add_step(
             name="Create Directories",
             description="Create necessary directories for assets, config, and modules",
@@ -124,51 +108,19 @@ class InitializationSequence:
             required=True,
         )
 
-        # Step 5: Copy YAML configuration
+        # Step 3: Check assets requirements (fait tout le travail nécessaire)
         self.add_step(
-            name="Copy Configuration",
-            description="Copy YAML configuration file from package to application",
-            function=lambda: FileMaker().make_yaml_from_package(),
+            name="Check Requirements",
+            description="Verify that all required assets and dependencies are available",
+            function=lambda: Kernel.checkAssetsRequirements(),
             required=True,
         )
 
-        # Step 6: Copy theme files
+        # Step 4: Generate required files (YAML, QSS, translations)
         self.add_step(
-            name="Copy Themes",
-            description="Copy QSS theme files from package to application",
-            function=lambda: FileMaker().make_qss_from_package(),
-            required=True,
-        )
-
-        # Step 7: Copy translation files
-        self.add_step(
-            name="Copy Translations",
-            description="Copy translation files from package to application",
-            function=lambda: FileMaker().make_translations_from_package(),
-            required=True,
-        )
-
-        # Step 8: Generate QRC file
-        self.add_step(
-            name="Generate QRC",
-            description="Generate Qt resource file from bin directory content",
-            function=lambda: FileMaker().make_qrc(),
-            required=True,
-        )
-
-        # Step 9: Compile resources
-        self.add_step(
-            name="Compile Resources",
-            description="Compile QRC file to Python resource module",
-            function=lambda: FileMaker().make_rc_py(),
-            required=False,
-        )
-
-        # Step 10: Generate resource module
-        self.add_step(
-            name="Generate Resource Module",
-            description="Generate app_resources.py module with asset classes",
-            function=lambda: FileMaker().make_app_resources_module(),
+            name="Generate Files",
+            description="Generate required configuration and resource files",
+            function=lambda: Kernel.makeRequiredFiles(mkTheme=True),
             required=True,
         )
 
@@ -211,13 +163,11 @@ class InitializationSequence:
         import time
 
         if verbose:
-            self.printer.info(
-                "[InitializationSequence] Starting EzQt_App Initialization Sequence"
+            self.printer.custom_print(
+                "~ [Initializer] Starting EzQt_App Initialization Sequence",
+                color="MAGENTA",
             )
-            self.printer.info(
-                f"[InitializationSequence] Total steps: {len(self.steps)}"
-            )
-            self.printer.verbose_msg("")
+            self.printer.raw_print("...")
 
         start_time = time.time()
         successful_steps = 0
@@ -226,12 +176,6 @@ class InitializationSequence:
 
         for i, step in enumerate(self.steps, 1):
             self.current_step = step
-
-            if verbose:
-                self.printer.action(
-                    f"[InitializationSequence] [{i:2d}/{len(self.steps):2d}] {step.name}"
-                )
-                self.printer.verbose_msg(f"    {step.description}")
 
             # Execute step
             step_start_time = time.time()
@@ -243,10 +187,7 @@ class InitializationSequence:
                 step.duration = time.time() - step_start_time
                 successful_steps += 1
 
-                if verbose:
-                    self.printer.success(
-                        f"[InitializationSequence] Step completed successfully ({step.duration:.2f}s)"
-                    )
+                # Suppression de l'affichage de succès des étapes individuelles
 
             except Exception as e:
                 step.status = StepStatus.FAILED
@@ -256,19 +197,18 @@ class InitializationSequence:
 
                 if verbose:
                     self.printer.error(
-                        f"[InitializationSequence] Step failed ({step.duration:.2f}s): {e}"
+                        f"[Initializer] Step failed ({step.duration:.2f}s): {e}"
                     )
 
                 # If step is required, stop execution
                 if step.required:
                     if verbose:
                         self.printer.error(
-                            f"[InitializationSequence] Initialization failed at required step: {step.name}"
+                            f"[Initializer] Initialization failed at required step: {step.name}"
                         )
                     break
 
-            if verbose:
-                self.printer.verbose_msg("")  # Ligne vide
+            # Suppression de la ligne vide entre les étapes
 
         total_time = time.time() - start_time
 
@@ -290,25 +230,17 @@ class InitializationSequence:
 
     def _print_summary(self, summary: Dict[str, Any]) -> None:
         """Print execution summary."""
-        self.printer.info("[InitializationSequence] Initialization Summary")
-        self.printer.info(
-            f"[InitializationSequence] Total Steps: {summary['total_steps']}"
-        )
-        self.printer.success(
-            f"[InitializationSequence] Successful: {summary['successful']}"
-        )
-        self.printer.error(f"[InitializationSequence] Failed: {summary['failed']}")
-        self.printer.warning(f"[InitializationSequence] Skipped: {summary['skipped']}")
-        self.printer.info(
-            f"[InitializationSequence] Total Time: {summary['total_time']:.2f}s"
-        )
-
+        # Suppression du résumé détaillé - on garde juste le message final
         if summary["success"]:
-            self.printer.success(
-                "[InitializationSequence] Initialization completed successfully!"
+            self.printer.raw_print("...")
+            self.printer.custom_print(
+                "~ [Initializer] Initialization completed successfully!", color="MAGENTA"
             )
         else:
-            self.printer.error("[InitializationSequence] Initialization failed!")
+            self.printer.raw_print("...")
+            self.printer.custom_print(
+                "~ [Initializer] Initialization failed!", color="MAGENTA"
+            )
 
     def get_step_status(self, step_name: str) -> Optional[StepStatus]:
         """

@@ -13,14 +13,14 @@
 # ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 from typing import Any
 
-# ////// WIDGETS CORE
+#  WIDGETS CORE
 # ///////////////////////////////////////////////////////////////
 from .widgets.core import *
 
-# ////// WIDGETS EXTENDED
+#  WIDGETS EXTENDED
 # ///////////////////////////////////////////////////////////////
 from .widgets.extended import *
 
-# ////// WIDGETS CUSTOM GRIPS
+#  WIDGETS CUSTOM GRIPS
 # ///////////////////////////////////////////////////////////////
 from .widgets.custom_grips import *

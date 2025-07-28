@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.1] - 2025-01-27
+## [4.0.1] - 2025-07-28
+
+### 🔧 **Development Status Update**
+
+| Change | Description | Impact |
+|--------|-------------|---------|
+| **Development Status** | Changed from "Alpha" to "Beta" in pyproject.toml | Project maturity milestone |
+
+---
+
+## [4.0.0] - 2025-07-28
 
 ### 🎨 **Standardized Logging System**
 
@@ -76,7 +86,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [3.1.0] - 2025-01-27
+## [3.2.0] - 2025-07-27
+
+### 🚀 **Major Framework Restructuring**
+
+| Feature | Description | Impact |
+|---------|-------------|---------|
+| **Modular Architecture** | Complete reorganization of kernel modules into specialized packages | Better maintainability |
+| **FileMaker Integration** | Replaced Helper.Maker with dedicated FileMaker class | Improved file management |
+| **Resource Management** | Enhanced resource detection and loading system | Better performance |
+| **Translation System** | Improved translation management with dedicated modules | Professional i18n |
+
+### 🔧 **System Integration**
+
+| Component | Change | Impact |
+|-----------|--------|---------|
+| **Kernel Structure** | Reorganized into `app_functions/`, `initialization/`, `resource_definitions/`, `translation/`, `ui_functions/` | Modular architecture |
+| **FileMaker Class** | New dedicated class for file generation and management | Centralized file operations |
+| **Resource Definitions** | Separated icons and images into dedicated modules | Better organization |
+| **UI Functions** | Modularized UI management into specialized packages | Cleaner code structure |
+
+### 📚 **Documentation Updates**
+
+| Documentation | Update | Impact |
+|---------------|--------|---------|
+| **API Documentation** | Added comprehensive helpers guide and style guide | Complete reference |
+| **Test Documentation** | Updated with new test structure and guidelines | Better testing practices |
+| **README.md** | Enhanced with new features and structure | Improved user guidance |
+
+### 🧪 **Testing Infrastructure**
+
+| Component | Change | Impact |
+|-----------|--------|---------|
+| **Translation APIs** | Added comprehensive tests for translation APIs | Better reliability |
+| **LibreTranslate Integration** | Added tests for LibreTranslate API integration | Enhanced testing coverage |
+| **Test Structure** | Reorganized test files for better organization | Improved test management |
+
+### 📦 **Dependencies**
+
+| Dependency | Version | Purpose |
+|------------|---------|---------|
+| **Enhanced pyproject.toml** | Updated with new module structure | Modern packaging |
+| **Test Dependencies** | Added comprehensive test requirements | Better testing |
+
+---
+
+## [3.1.0] - 2025-07-27
 
 ### 🚀 **CLI Modernization**
 
@@ -141,7 +196,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [3.0.1] - 2025-01-27
+## [3.0.1] - 2025-07-27
 
 ### 🧪 **Test Infrastructure Stabilization**
 
@@ -170,7 +225,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [3.0.0] - 2025-01-27
+## [3.0.0] - 2025-07-27
 
 ### 🚀 **PySide6 6.9.1 Migration**
 
@@ -221,7 +276,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.3.3] - 2025-01-26
+## [2.3.3] - 2025-07-26
 
 ### 🔧 **Changed**
 - Updated PySide6 from 6.7.3 to 6.9.1
@@ -235,21 +290,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.3.1] - 2025-01-26
+## [2.3.1] - 2025-07-26
 
 ### 🔧 **Changed**
 - Version update and various improvements
 
 ---
 
-## [2.3.0] - 2025-01-26
+## [2.3.0] - 2025-07-26
 
 ### 🚀 **Added**
 - Bottom bar for user interface
 
 ---
 
-## [2.2.1] - 2025-01-26
+## [2.2.1] - 2025-07-26
 
 ### 🚀 **Added**
 - Global translation system with multi-language support
@@ -259,7 +314,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.1.0] - 2025-01-26
+## [2.1.0] - 2025-07-26
 
 ### 🚀 **Added**
 - Settings panel improvements
@@ -267,7 +322,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.0.5] - 2025-01-25
+## [2.0.5] - 2025-07-25
 
 ### 🚀 **Added**
 - MenuButton widget with animation support
@@ -275,7 +330,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.0.4] - 2025-01-24
+## [2.0.4] - 2025-07-24
 
 ### 🚀 **Added**
 - Build/upload script to automate deployment process
@@ -285,14 +340,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.0.3] - 2025-01-24
+## [2.0.3] - 2025-07-24
 
 ### 🔧 **Changed**
 - General version update to 2.0.3
 
 ---
 
-## [2.0.2] - 2025-01-23
+## [2.0.2] - 2025-07-23
 
 ### 🔧 **Changed**
 - Updated version in pyproject.toml and ezqt_app/__init__.py
@@ -300,7 +355,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.0.0] - 2025-01-23
+## [2.0.0] - 2025-07-23
 
 ### 🚀 **Added**
 - Initial project files
@@ -313,7 +368,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.0] - 2025-01-23
+## [1.0.0] - 2025-07-23
 
 ### 🚀 **Added**
 - First project commit
@@ -325,16 +380,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## Change Types
+## Change Types Reference
 
-| Type | Description | Icon |
-|------|-------------|------|
-| **🚀 Added** | New features | 🚀 |
-| **🔧 Changed** | Changes in existing functionality | 🔧 |
-| **🐛 Fixed** | Bug fixes | 🐛 |
-| **🧹 Cleaned** | Removal of obsolete or unnecessary code | 🧹 |
-| **📝 Documentation** | Documentation updates | 📝 |
-| **🔄 Refactored** | Code restructuring without functional changes | 🔄 |
-| **📦 Updated** | Package and dependency updates | 📦 |
-| **🔧 Technical Improvements** | Optimizations and technical enhancements | 🔧 |
-| **📋 Migration** | Migration instructions and notes | 📋 | 
+| Type | Description | Icon | Usage |
+|------|-------------|------|-------|
+| **🚀 Added** | New features | 🚀 | New functionality, features, capabilities |
+| **🔧 Changed** | Changes in existing functionality | 🔧 | Modifications to existing features |
+| **🐛 Fixed** | Bug fixes | 🐛 | Bug corrections and fixes |
+| **🧹 Cleaned** | Removal of obsolete or unnecessary code | 🧹 | Code cleanup and removal |
+| **📝 Documentation** | Documentation updates | 📝 | Documentation changes and improvements |
+| **🔄 Refactored** | Code restructuring without functional changes | 🔄 | Code reorganization and refactoring |
+| **📦 Updated** | Package and dependency updates | 📦 | Dependency and package updates |
+| **🔧 Technical Improvements** | Optimizations and technical enhancements | 🔧 | Performance and technical improvements |
+| **📋 Migration** | Migration instructions and notes | 📋 | Framework or system migrations |
+| **🧪 Test Infrastructure** | Testing improvements and changes | 🧪 | Test-related changes |
+| **🎨 UI/UX Improvements** | User interface and experience changes | 🎨 | Visual and interaction improvements |
+| **📊 Performance** | Performance-related changes | 📊 | Speed and efficiency improvements |
+| **🔒 Security** | Security-related changes | 🔒 | Security improvements and fixes |
+| **🌐 Internationalization** | Multi-language and localization changes | 🌐 | Translation and i18n updates | 

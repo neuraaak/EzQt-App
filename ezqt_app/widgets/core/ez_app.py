@@ -8,6 +8,15 @@ import os
 
 # IMPORT SPECS
 # ///////////////////////////////////////////////////////////////
+
+# Configure High DPI using the centralized configuration
+try:
+    from ...kernel.qt_config import configure_qt_high_dpi
+    configure_qt_high_dpi()
+except (ImportError, RuntimeError, Exception):
+    # If we can't configure it, continue anyway
+    pass
+
 from PySide6.QtCore import (
     Signal,
     Qt,
@@ -15,6 +24,7 @@ from PySide6.QtCore import (
 from PySide6.QtWidgets import (
     QApplication,
 )
+from PySide6.QtGui import QGuiApplication
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
@@ -50,14 +60,22 @@ class EzApplication(QApplication):
         **kwargs : Any
             Arguments nommés passés à QApplication.
         """
-        # Configurer High DPI AVANT de créer l'instance QApplication
-        from PySide6.QtCore import Qt
-        from PySide6.QtGui import QGuiApplication
-        
-        # Appeler setHighDpiScaleFactorRoundingPolicy avant de créer QApplication
-        QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
-            Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
-        )
+        # Configure High DPI JUST BEFORE creating QApplication
+        # This is the critical moment when QGuiApplication is created
+        try:
+            from PySide6.QtCore import Qt
+            from PySide6.QtGui import QGuiApplication
+            
+            # Check if QGuiApplication instance already exists
+            if QGuiApplication.instance() is None:
+                # Set High DPI scale factor rounding policy
+                # This must be called before any QApplication instance is created
+                QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
+                    Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+                )
+        except (ImportError, RuntimeError, Exception):
+            # If we can't configure it, continue anyway
+            pass
 
         # Vérifier s'il y a déjà une instance QApplication
         existing_app = QApplication.instance()
@@ -87,13 +105,22 @@ class EzApplication(QApplication):
         Méthode de classe pour créer une instance EzApplication pour les tests.
         Cette méthode contourne la vérification de singleton pour les tests.
         """
-        # Configurer High DPI AVANT de créer QApplication
-        from PySide6.QtCore import Qt
-        from PySide6.QtGui import QGuiApplication
-        
-        QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
-            Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
-        )
+        # Configure High DPI JUST BEFORE creating QApplication
+        # This is the critical moment when QGuiApplication is created
+        try:
+            from PySide6.QtCore import Qt
+            from PySide6.QtGui import QGuiApplication
+            
+            # Check if QGuiApplication instance already exists
+            if QGuiApplication.instance() is None:
+                # Set High DPI scale factor rounding policy
+                # This must be called before any QApplication instance is created
+                QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
+                    Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+                )
+        except (ImportError, RuntimeError, Exception):
+            # If we can't configure it, continue anyway
+            pass
 
         # Vérifier s'il y a déjà une instance
         existing_app = QApplication.instance()
