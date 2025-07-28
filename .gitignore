@@ -92,3 +92,7 @@ _temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Assets of the project
+bin/
+modules/
