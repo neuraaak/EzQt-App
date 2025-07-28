@@ -13,6 +13,7 @@ This documentation presents all available components in the EzQt_App framework, 
   - [Resource Definitions](#resource-definitions)
   - [Translation Package](#translation-package)
   - [Helper Functions](#helper-functions)
+  - [Standardized Logging System](#standardized-logging-system)
 - [🎨 Widget Module](#-widget-module-ezqt_appwidgets)
   - [EzApplication](#ezapplication)
   - [EzQt_App](#ezqt_app)
@@ -98,6 +99,7 @@ Core application functions and resource management with modular architecture.
 - Package resource handling
 - Modular design with specialized packages
 - Helper functions for simplified API
+- Standardized logging system with consistent formatting
 
 **Main methods :**
 - `checkAssetsRequirements()` : Check and generate required assets
@@ -194,6 +196,100 @@ Core application functions and resource management with modular architecture.
 **Simplified API for common operations:**
 
 **Configuration Helpers:**
+
+#### Standardized Logging System
+**Package :** `kernel/app_functions/printer.py`
+
+**Overview :**
+The EzQt_App framework implements a standardized logging system that provides consistent message formatting across all components. This system ensures professional output with color-coded messages and subsystem identification.
+
+**Features :**
+- **Consistent Formatting** : All messages follow the `[Subsystem] Message` pattern
+- **Color Coding** : Different colors for different message types
+- **Subsystem Identification** : Clear identification of message sources
+- **Verbose Mode** : Optional detailed output for debugging
+- **Configuration Display** : ASCII art boxes for configuration data
+
+**Message Types and Colors :**
+
+| Type | Prefix | Color | Usage |
+|------|--------|-------|-------|
+| **Info** | `~` | White | General information messages |
+| **Action** | `+` | Blue | Actions being performed |
+| **Success** | `✓` | Green | Successful operations |
+| **Warning** | `!` | Orange | Warning messages |
+| **Error** | `✗` | Red | Error messages |
+| **Init** | `🚀` | Magenta | Initialization messages |
+
+**Usage Examples :**
+
+```python
+from ezqt_app.kernel.app_functions.printer import get_printer, Printer
+
+# Get printer instance
+printer = get_printer(verbose=True)
+
+# Different message types
+printer.info("[TranslationManager] Traductions chargées pour English")
+printer.action("[AppKernel] 10 widgets registered for translation.")
+printer.success("[FileMaker] Generated app_resources.py file. Ready for use.")
+printer.warning("[ThemeManager] Fichier de thème non trouvé")
+printer.error("[ConfigManager] Erreur lors de la lecture du fichier YAML")
+
+# Configuration display (verbose mode only)
+config_data = {"name": "MyApp", "theme": "dark", "width": 1280}
+printer.config_display(config_data)
+```
+
+**Output Example :**
+```
+~ [TranslationManager] Traductions chargées pour English
++ [AppKernel] 10 widgets registered for translation.
++ [AppKernel] Loaded Application settings.
+   ┌───────────────────────────────────────────────┐
+   |- name: MyApplication
+   |- description: This is an example description
+   |- theme: dark
+   |- app_width: 1280
+   └───────────────────────────────────────────────┘
+...
+```
+
+**Initialization Sequence Format :**
+
+The initialization sequence uses the standardized logging system for consistent output:
+
+```
+~ [InitializationSequence] Starting EzQt_App Initialization Sequence
+~ [InitializationSequence] Total steps: 10
+~
++ [InitializationSequence] [ 1/10] Configure Startup
+~     Configure UTF-8 encoding, locale, and environment variables
+✓ [InitializationSequence] Step completed successfully (0.00s)
+~
++ [InitializationSequence] [ 2/10] Check Requirements
+~     Verify that all required assets and dependencies are available
+✓ [InitializationSequence] Step completed successfully (0.21s)
+~
+...
+~ [InitializationSequence] Initialization Summary
+~ [InitializationSequence] Total Steps: 10
+✓ [InitializationSequence] Successful: 10
+✗ [InitializationSequence] Failed: 0
+⚠️ [InitializationSequence] Skipped: 0
+~ [InitializationSequence] Total Time: 0.24s
+✓ [InitializationSequence] Initialization completed successfully!
+```
+
+**Integration :**
+
+The standardized logging system is integrated throughout the framework:
+
+- **FileMaker** : Uses `[FileMaker]` prefix for file generation messages
+- **TranslationManager** : Uses `[TranslationManager]` prefix for translation messages
+- **SettingsManager** : Uses `[AppKernel]` prefix for configuration messages
+- **InitializationSequence** : Uses `[InitializationSequence]` prefix for initialization messages
+- **ThemeManager** : Uses `[ThemeManager]` prefix for theme-related messages
 ```python
 from ezqt_app.kernel import get_setting, set_setting
 

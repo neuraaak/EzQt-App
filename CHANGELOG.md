@@ -5,6 +5,77 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2025-01-27
+
+### 🎨 **Standardized Logging System**
+
+| Feature | Description | Impact |
+|---------|-------------|---------|
+| **Consistent Message Formatting** | All messages follow `[Subsystem] Message` pattern | Professional output |
+| **Color-Coded Messages** | 6 message types with distinct colors (info, action, success, warning, error, init) | Visual clarity |
+| **Subsystem Identification** | Clear identification with prefixes like `[TranslationManager]`, `[FileMaker]`, etc. | Easy debugging |
+| **Verbose Mode** | Optional detailed output for development and debugging | Flexible logging |
+| **Configuration Display** | ASCII art boxes for configuration data in verbose mode | Visual configuration |
+
+### 🔧 **System Integration**
+
+| Component | Change | Impact |
+|-----------|--------|---------|
+| **Printer Class** | New centralized logging system with 6 message types | Unified logging |
+| **Initialization Sequence** | Standardized format with `[InitializationSequence]` prefix | Consistent output |
+| **FileMaker** | Uses `[FileMaker]` prefix for file generation messages | Clear identification |
+| **TranslationManager** | Uses `[TranslationManager]` prefix for translation messages | Consistent formatting |
+| **SettingsManager** | Uses `[AppKernel]` prefix with configuration display | Professional output |
+| **ThemeManager** | Uses `[ThemeManager]` prefix for theme-related messages | Standardized logging |
+
+### 📚 **Documentation Updates**
+
+| Documentation | Update | Impact |
+|---------------|--------|---------|
+| **API Documentation** | Added comprehensive logging system section | Complete reference |
+| **LOGGING_SYSTEM.md** | New dedicated documentation file | Detailed guide |
+| **README.md** | Updated to mention standardized logging | Feature visibility |
+| **CHANGELOG.md** | Documented all logging improvements | Change tracking |
+
+### 🎯 **Message Types and Colors**
+
+| Type | Prefix | Color | Usage |
+|------|--------|-------|-------|
+| **Info** | `~` | White | General information messages |
+| **Action** | `+` | Blue | Actions being performed |
+| **Success** | `✓` | Green | Successful operations |
+| **Warning** | `!` | Orange | Warning messages |
+| **Error** | `✗` | Red | Error messages |
+| **Init** | `🚀` | Magenta | Initialization messages |
+
+### 📊 **Example Output**
+
+```
+~ [TranslationManager] Traductions chargées pour English
++ [AppKernel] 10 widgets registered for translation.
++ [AppKernel] Loaded Application settings.
+   ┌───────────────────────────────────────────────┐
+   |- name: MyApplication
+   |- description: This is an example description
+   |- theme: dark
+   |- app_width: 1280
+   └───────────────────────────────────────────────┘
+...
+~ [InitializationSequence] Starting EzQt_App Initialization Sequence
++ [InitializationSequence] [ 1/10] Configure Startup
+✓ [InitializationSequence] Step completed successfully (0.00s)
+```
+
+### 🐛 **Bug Fixes**
+
+| Issue | Fix | Impact |
+|-------|-----|---------|
+| **Inconsistent print() statements** | Replaced all non-standard print() with Printer system | Consistent output |
+| **Missing subsystem identification** | Added subsystem prefixes to all messages | Clear message sources |
+| **Verbose mode issues** | Fixed verbose mode handling in SettingsManager | Proper configuration display |
+
+---
+
 ## [3.1.0] - 2025-01-27
 
 ### 🚀 **CLI Modernization**

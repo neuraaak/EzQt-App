@@ -3,6 +3,8 @@
 ## 🎯 **Priority Tasks**
 
 ### **High Priority**
+- [ ] **Complete Logging System** - Finalize standardized logging implementation
+- [ ] **Update Unit Tests** - Retravailler les tests unitaires suite aux mises à jour
 - [ ] **Fix EzApplication Tests** - Resolve QApplication singleton conflicts
 - [ ] **Improve Test Coverage** - Target 90%+ coverage across all modules
 - [ ] **CLI Enhancement** - Add more project templates and utilities
@@ -22,6 +24,42 @@
 
 ---
 
+## 🎨 **Logging System Completion**
+
+### **✅ Accomplishments (Completed)**
+- [x] **Système de logging standardisé** - Implémentation complète du système Printer
+- [x] **6 types de messages** - info, action, success, warning, error, init avec couleurs
+- [x] **Format cohérent** - `[Subsystem] Message` dans tout le framework
+- [x] **Intégration complète** - FileMaker, TranslationManager, SettingsManager, InitializationSequence
+- [x] **Affichage de configuration** - Cadre ASCII art pour les données de configuration
+- [x] **Documentation complète** - API_DOCUMENTATION.md et LOGGING_SYSTEM.md
+- [x] **Mode verbose** - Gestion cohérente du mode verbose
+- [x] **Tests fonctionnels** - Système testé et validé
+
+### **Short-term Tasks (Priority)**
+- [ ] **Audit Remaining print() Statements** - Identifier et remplacer tous les `print()` restants
+  - [ ] `test_translation_apis.py` - 40+ print() statements à standardiser
+  - [ ] `test_libretranslate.py` - 30+ print() statements à standardiser
+  - [ ] `tests/run_tests.py` - Quelques print() à vérifier
+- [ ] **Standardize All Subsystems** - S'assurer que tous les composants utilisent le format `[Subsystem]`
+- [ ] **Add Missing Subsystem Prefixes** - Compléter les préfixes manquants dans certains modules
+- [ ] **Verbose Mode Consistency** - Vérifier la cohérence du mode verbose dans tous les composants
+- [ ] **Configuration Display Testing** - Tester l'affichage de configuration dans différents contextes
+
+### **Integration Tasks**
+- [ ] **CLI Integration** - Intégrer le système de logging dans les commandes CLI
+- [ ] **Test Framework Integration** - Utiliser le système de logging dans les tests
+- [ ] **Error Handling Enhancement** - Améliorer la gestion d'erreurs avec le nouveau système
+- [ ] **Performance Monitoring** - Ajouter des messages de performance au système de logging
+
+### **Documentation Tasks**
+- [ ] **Update All Examples** - Mettre à jour tous les exemples de code avec le nouveau système
+- [ ] **Migration Guide** - Créer un guide de migration complet
+- [ ] **Best Practices** - Documenter les meilleures pratiques pour le système de logging
+- [ ] **Troubleshooting Guide** - Guide de dépannage pour les problèmes courants
+
+---
+
 ## 🧪 **Testing Improvements**
 
 ### **Current Status**
@@ -30,10 +68,26 @@
 - **Skipped Tests**: 7 tests (EzApplication singleton issues)
 
 ### **Immediate Actions**
+- [ ] **Update Printer Tests** - Tester le nouveau système de logging standardisé
+- [ ] **Test InitializationSequence** - Vérifier les tests de la séquence d'initialisation mise à jour
+- [ ] **Test SettingsManager** - Tester l'affichage de configuration avec le nouveau format
+- [ ] **Test FileMaker Integration** - Vérifier l'intégration du système de logging dans FileMaker
 - [ ] **Research pytest-qt** - Evaluate as alternative to current mocking approach
 - [ ] **Implement Test Isolation** - Fix QApplication singleton conflicts
 - [ ] **Add Integration Tests** - Test complete application workflows
 - [ ] **Performance Tests** - Add benchmarks for critical operations
+
+### **Logging System Tests (Priority)**
+- [ ] **Printer Class Tests** - Tester toutes les méthodes du système de logging
+- [ ] **Message Format Tests** - Vérifier le formatage correct des messages
+- [ ] **Color Output Tests** - Tester l'affichage des couleurs
+- [ ] **Verbose Mode Tests** - Tester le mode verbose et l'affichage de configuration
+- [ ] **Subsystem Prefix Tests** - Vérifier l'utilisation correcte des préfixes
+- [ ] **Integration Tests** - Tester l'intégration dans tous les composants
+- [ ] **SettingsManager Tests** - Tester l'affichage de configuration
+- [ ] **InitializationSequence Tests** - Tester le nouveau format d'initialisation
+- [ ] **FileMaker Tests** - Tester l'intégration du logging dans FileMaker
+- [ ] **CLI Integration Tests** - Tester l'utilisation du logging dans les commandes CLI
 
 ### **Long-term Goals**
 - [ ] **100% Test Coverage** - Target for all public APIs

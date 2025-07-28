@@ -27,12 +27,14 @@ EzQt_App is a Python framework designed to facilitate the creation of modern Qt 
 - `ezqt_init` CLI command to quickly initialize a new project
 - Ready-to-use `main.py` example generated automatically
 - Modular and extensible structure
+- Standardized logging system with consistent formatting
 
 ### **Kernel Architecture**
 - **Modular Design**: Refactored into specialized packages
 - **Helper Functions**: Simplified API for common operations
 - **Resource Management**: Centralized asset and configuration handling
 - **Translation System**: Complete internationalization support
+- **Standardized Logging**: Consistent message formatting across all components
 
 ## 📖 **Documentation by Category**
 
@@ -43,6 +45,7 @@ EzQt_App is a Python framework designed to facilitate the creation of modern Qt 
 - [**api/README.md**](./api/README.md) - API overview
 - [**api/API_DOCUMENTATION.md**](./api/API_DOCUMENTATION.md) - Complete documentation of all components
 - [**api/STYLE_GUIDE.md**](./api/STYLE_GUIDE.md) - Style guide and QSS customization
+- [**api/LOGGING_SYSTEM.md**](./api/LOGGING_SYSTEM.md) - Standardized logging system documentation
 
 ### **🖥️ CLI Documentation**
 - [**cli/README.md**](./cli/README.md) - Command line interface and utilities

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "EzQt_App"
-version = "4.0.0"
+version = "4.0.1"
 description = "Lightweight framework based on PySide6 to quickly build modern desktop applications, with integrated resource, theme, and reusable component management."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Development Status :: 4 - Beta",
+    "Development Status :: 4 - Alpha",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Office/Business",
