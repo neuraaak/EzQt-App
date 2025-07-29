@@ -20,6 +20,7 @@ EzQt_App is a Python framework designed to facilitate the creation of modern Qt 
 ### **User Interface**
 - Dynamic themes (light/dark) with integrated switching
 - Global translation system with multi-language support
+- Automatic translation system with multi-provider support
 - Custom widgets with animations and themes
 - Advanced resource manager with automatic detection
 
@@ -33,7 +34,9 @@ EzQt_App is a Python framework designed to facilitate the creation of modern Qt 
 - **Modular Design**: Refactored into specialized packages
 - **Helper Functions**: Simplified API for common operations
 - **Resource Management**: Centralized asset and configuration handling
-- **Translation System**: Complete internationalization support
+- **Translation System**: Complete internationalization support with automatic translation
+- **Auto-Translation**: Multi-provider support (LibreTranslate, MyMemory, Google)
+- **String Collection**: Automatic string collection for translations
 - **Standardized Logging**: Consistent message formatting across all components
 
 ## 📖 **Documentation by Category**
@@ -145,7 +148,7 @@ python tests/run_tests.py --type unit --coverage
 
 ## 🌍 **Système de traduction**
 
-Le framework inclut un système de traduction complet :
+Le framework inclut un système de traduction complet avec traduction automatique :
 
 ```python
 from ezqt_app.kernel.translation_manager import get_translation_manager
@@ -158,7 +161,16 @@ tm.load_language_by_code("fr")
 
 # Traduire du texte
 translated_text = tm.translate("Hello World")
+
+# Traduction automatique (quand activée)
+from ezqt_app.kernel.translation.auto_translator import AutoTranslator
+translator = AutoTranslator()
+auto_translated = translator.translate_sync("Hello World", "fr")
 ```
+
+**Langues supportées :** English, Français, Español, Deutsch  
+**Fournisseurs de traduction :** LibreTranslate, MyMemory, Google Translate  
+**Note :** Le système de traduction automatique est temporairement désactivé pour le développement
 
 ## 🔧 **Structure du projet**
 

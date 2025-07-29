@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.3.post1] - 2025-01-27
+
+### 📝 **Documentation Update**
+
+| Documentation | Update | Impact |
+|---------------|--------|---------|
+| **README.md** | Updated with automatic translation system features | Better feature visibility |
+| **docs/README.md** | Enhanced with translation system documentation | Complete user guide |
+| **Translation System** | Added documentation for auto-translator and string collector | User understanding |
+| **Feature List** | Updated to include automatic translation capabilities | Feature completeness |
+
+### 🔧 **Version Update**
+
+| Component | Change | Impact |
+|-----------|--------|---------|
+| **pyproject.toml** | Updated version to 4.0.3.post1 | Correct PyPI release |
+| **__init__.py** | Updated __version__ to 4.0.3.post1 | Consistent versioning |
+
+---
+
 ## [4.0.3] - 2025-01-27
 
 ### 🌐 **Automatic Translation System**

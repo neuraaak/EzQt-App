@@ -67,6 +67,8 @@ app.exec()
 
 ### 🌍 **Translation Module (`ezqt_app.kernel.translation`)**
 - **TranslationManager** - Complete translation management
+- **Auto-Translator** - Multi-provider automatic translation system
+- **String Collector** - Automatic string collection for translations
 - **Translation Helpers** - Utility functions for translations
 - **Translation Config** - Configuration and setup
 
@@ -76,10 +78,12 @@ app.exec()
 - **✅ Automatic Generation** - Asset folders, QRC files, and resources
 - **✅ Dynamic Themes** - Light/dark themes with integrated toggle
 - **✅ Global Translation** - Multi-language support (EN, FR, ES, DE)
+- **✅ Automatic Translation System** - Multi-provider support (LibreTranslate, MyMemory, Google)
 - **✅ CLI Tools** - Project initialization and management
 - **✅ Template System** - Basic and advanced project templates
 - **✅ Type Annotations** - Complete type hint support
 - **✅ Tests** - Comprehensive test suite (~240+ tests)
+- **✅ Standardized Logging** - Consistent message formatting across all components
 
 ## 🧪 **Tests**
 
@@ -137,7 +141,7 @@ ezqt docs [--serve] [--port <port>]
 
 ## 🌍 **Translation System**
 
-The framework includes a complete translation system:
+The framework includes a complete translation system with automatic translation capabilities:
 
 ```python
 from ezqt_app.kernel import tr, set_tr
@@ -153,9 +157,16 @@ set_tr(label, "Hello World")  # Automatically retranslates on language change
 # Change language
 from ezqt_app.kernel import change_language
 change_language("Français")  # Automatically retranslates all registered widgets
+
+# Automatic translation (when enabled)
+from ezqt_app.kernel.translation.auto_translator import AutoTranslator
+translator = AutoTranslator()
+auto_translated = translator.translate_sync("Hello World", "fr")
 ```
 
-**Supported languages:** English, Français, Español, Deutsch
+**Supported languages:** English, Français, Español, Deutsch  
+**Translation providers:** LibreTranslate, MyMemory, Google Translate  
+**Note:** Automatic translation system is temporarily disabled for development
 
 ## 🎨 **Template System**
 

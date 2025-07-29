@@ -25,7 +25,7 @@ This directory contains the complete API documentation for the EzQt_App framewor
   - Simplified API for common operations
   - Configuration management helpers
   - UI operation helpers
-  - Translation helpers
+  - Translation helpers with automatic translation
   - Usage examples and best practices
 
 ## Quick Navigation
@@ -34,8 +34,10 @@ This directory contains the complete API documentation for the EzQt_App framewor
 - **Kernel Architecture** : Modular design with specialized packages
 - **App Functions Package** : Asset, config, resource, and settings management
 - **UI Functions Package** : Window, panel, menu, and theme management
+- **Initialization Package** : Structured initialization sequence
+- **Qt Configuration** : High DPI support and cross-platform configuration
 - **Resource Definitions** : Image and icon resource definitions
-- **Translation Package** : Complete internationalization system
+- **Translation Package** : Complete internationalization system with automatic translation
 - **Helper Functions** : Simplified API for common operations
 
 ### 🎨 Widget Components (`ezqt_app.widgets`)
@@ -51,6 +53,8 @@ This directory contains the complete API documentation for the EzQt_App framewor
 
 ### 🌍 Translation System (`ezqt_app.kernel.translation`)
 - **TranslationManager** : Complete translation management with .ts support
+- **Auto-Translator** : Multi-provider automatic translation system
+- **String Collector** : Automatic string collection for translations
 - **Translation Helpers** : Utility functions for translations
 - **Translation Config** : Language configuration and setup
 
@@ -65,6 +69,7 @@ This directory contains the complete API documentation for the EzQt_App framewor
 - **Beginners** : Overview → Basic setup → Simple examples
 - **Experienced users** : Specific component → Integration → Advanced features
 - **Developers** : Complete documentation → Advanced examples → Style guide
+- **Translation** : Translation system → Auto-translation → String collection
 
 ## Useful Links
 

@@ -33,7 +33,9 @@ Core application functions, resource management, and configuration with modular 
 - **Modular Design**: Refactored into specialized packages
 - **Helper Functions**: Simplified API for common operations
 - **Centralized Resources**: Unified resource management
-- **Translation System**: Complete internationalization support
+- **Translation System**: Complete internationalization support with automatic translation
+- **Qt Configuration**: High DPI support and cross-platform configuration
+- **Initialization System**: Structured initialization sequence
 
 ### 🎨 Widget Module (`ezqt_app.widgets`)
 Custom widgets and UI components for modern applications.
@@ -54,14 +56,17 @@ kernel/
 ├── __init__.py              # Main interface
 ├── common.py                # Common variables (APP_PATH)
 ├── globals.py               # Global UI state variables
+├── qt_config.py             # Qt configuration and High DPI support
 ├── app_functions/           # Application functions package
 │   ├── __init__.py         # Package interface
 │   ├── assets_manager.py   # Asset management
 │   ├── config_manager.py   # YAML configuration
+│   ├── file_maker.py       # File generation utilities
 │   ├── resource_manager.py # System resources
 │   ├── settings_manager.py # Application settings
 │   ├── kernel.py           # Main facade class
-│   └── helpers.py          # Helper functions
+│   ├── helpers.py          # Helper functions
+│   └── printer.py          # Standardized logging system
 ├── ui_functions/            # UI functions package
 │   ├── __init__.py         # Package interface
 │   ├── window_manager.py   # Window state management
@@ -71,6 +76,11 @@ kernel/
 │   ├── ui_definitions.py   # UI definitions
 │   ├── ui_functions.py     # Main facade class
 │   └── helpers.py          # Helper functions
+├── initialization/          # Initialization package
+│   ├── __init__.py         # Package interface
+│   ├── initializer.py      # Main initializer
+│   ├── sequence.py         # Initialization sequence
+│   └── startup_config.py   # Startup configuration
 ├── resource_definitions/    # Resource definitions package
 │   ├── __init__.py         # Package interface
 │   ├── images.py           # Image definitions
@@ -80,6 +90,8 @@ kernel/
 │   ├── __init__.py         # Package interface
 │   ├── config.py           # Language configuration
 │   ├── manager.py          # Translation manager
+│   ├── auto_translator.py  # Multi-provider automatic translation
+│   ├── string_collector.py # Automatic string collection
 │   └── helpers.py          # Translation helpers
 ├── app_resources.py         # Resource facade
 ├── app_settings.py          # Application settings
@@ -98,6 +110,9 @@ Core application functions and resource management with modular architecture.
 - File and directory management
 - Package resource handling
 - Modular design with specialized packages
+- Qt configuration and High DPI support
+- Structured initialization sequence
+- Automatic translation system
 - Helper functions for simplified API
 - Standardized logging system with consistent formatting
 
@@ -176,9 +191,22 @@ Core application functions and resource management with modular architecture.
 #### Translation Package
 **Package :** `kernel/translation/`
 
+**New Structure:**
+```
+translation/
+├── __init__.py              # Package interface
+├── manager.py               # Translation manager with .ts file support
+├── auto_translator.py       # Multi-provider automatic translation system
+├── string_collector.py      # Automatic string collection for translations
+├── config.py                # Language configuration and setup
+└── helpers.py               # Translation helper functions
+```
+
 **Components:**
 - **Config**: Language configuration and supported languages
 - **Manager**: Translation manager with .ts file support
+- **Auto-Translator**: Multi-provider automatic translation (LibreTranslate, MyMemory, Google)
+- **String Collector**: Automatic string collection for translations
 - **Helpers**: Translation helper functions
 
 **Translation Helper Functions:**
@@ -190,12 +218,83 @@ Core application functions and resource management with modular architecture.
 - `get_available_languages()` : Get available languages
 - `get_current_language()` : Get current language
 
+**Automatic Translation:**
+```python
+from ezqt_app.kernel.translation.auto_translator import AutoTranslator
+
+# Create auto-translator instance
+translator = AutoTranslator()
+
+# Translate text with specific provider
+translated = translator.translate_sync("Hello World", "fr", provider="libretranslate")
+
+# Available providers: libretranslate, mymemory, google
+# Note: Automatic translation system is temporarily disabled for development
+```
+
 #### Helper Functions
 **Package :** `kernel/`
 
 **Simplified API for common operations:**
 
 **Configuration Helpers:**
+
+#### Qt Configuration
+**File :** `kernel/qt_config.py`
+
+**Overview :**
+Qt environment configuration and High DPI support for cross-platform compatibility.
+
+**Features :**
+- **High DPI Support**: Automatic scaling for high-resolution displays
+- **Cross-Platform Configuration**: Platform-specific Qt settings
+- **Environment Variables**: Qt environment configuration
+- **Application Attributes**: Qt application attribute settings
+
+**Usage :**
+```python
+from ezqt_app.kernel import qt_config
+
+# Qt configuration is automatically applied during initialization
+# High DPI scaling is enabled by default
+# Platform-specific settings are configured automatically
+```
+
+#### Initialization System
+**Package :** `kernel/initialization/`
+
+**Overview :**
+Structured initialization sequence for the EzQt_App framework.
+
+**Components:**
+- **Initializer**: Main initialization controller
+- **Sequence**: Step-by-step initialization process
+- **Startup Config**: Startup configuration management
+
+**Initialization Steps:**
+1. **Configure Startup**: UTF-8 encoding, locale, environment variables
+2. **Check Requirements**: Verify assets and dependencies
+3. **Load Configuration**: Load application settings
+4. **Initialize Resources**: Load fonts, themes, and resources
+5. **Setup Translation**: Initialize translation system
+6. **Configure Qt**: Apply Qt configuration and High DPI settings
+7. **Initialize UI**: Setup UI components and themes
+8. **Load Assets**: Load and verify application assets
+9. **Setup Logging**: Initialize logging system
+10. **Finalize**: Complete initialization and verify system
+
+**Usage :**
+```python
+from ezqt_app.kernel.initialization import Initializer
+
+# Initialize the framework
+initializer = Initializer()
+initializer.initialize()
+
+# Or use the main interface
+from ezqt_app.kernel import initialize
+initialize()
+```
 
 #### Standardized Logging System
 **Package :** `kernel/app_functions/printer.py`
@@ -699,6 +798,32 @@ change_language("Français")  # Automatically retranslates all registered widget
 3. Run `ezqt convert` or `python -m ezqt_app.cli.create_qm_files`
 4. Translations will be automatically copied to new projects
 
+#### **4. Automatic Translation System**
+```python
+from ezqt_app.kernel.translation.auto_translator import AutoTranslator
+
+# Create auto-translator instance
+translator = AutoTranslator()
+
+# Translate text with specific provider
+translated = translator.translate_sync("Hello World", "fr", provider="libretranslate")
+
+# Available providers: libretranslate, mymemory, google
+# Note: Automatic translation system is temporarily disabled for development
+```
+
+#### **5. String Collection**
+```python
+from ezqt_app.kernel.translation.string_collector import StringCollector
+
+# Collect strings from widgets automatically
+collector = StringCollector()
+collector.collect_from_widget(widget)
+
+# Save collected strings to translation files
+collector.save_to_ts_file("ezqt_app_fr.ts")
+```
+
 ## 📋 Version Management Guide
 
 ### **Automatic Version Detection**
@@ -894,12 +1019,29 @@ Translations are stored in `ezqt_app/resources/translations/` and installed with
 - `ezqt_app_es.ts` / `ezqt_app_es.qm` - Spanish
 - `ezqt_app_de.ts` / `ezqt_app_de.qm` - German
 
+**New Translation System Structure:**
+```
+translation/
+├── manager.py               # Translation manager with .ts file support
+├── auto_translator.py       # Multi-provider automatic translation
+├── string_collector.py      # Automatic string collection
+├── config.py                # Language configuration
+└── helpers.py               # Translation helper functions
+```
+
 **Note:** The system uses a priority order to find translations:
 1. **User project** (`bin/translations/`) - Priority 1
 2. **Local development** (`ezqt_app/resources/translations/`) - Priority 2  
 3. **Installed package** - Priority 3
 
 Translations are automatically copied from the package to the user project during initialization.
+
+**Automatic Translation Providers:**
+- **LibreTranslate**: Open-source translation service
+- **MyMemory**: Free translation API
+- **Google Translate**: Google translation service (when available)
+
+**Note:** Automatic translation system is temporarily disabled for development.
 
 #### **Adding a New Language**
 1. Create `ezqt_app_xx.ts` in `resources/translations/`
@@ -992,6 +1134,10 @@ class MyWidget(QWidget):
 4. **Simple** : Clear and intuitive API
 5. **Performant** : No logic duplication
 6. **Maintainable** : Cleaner and more organized code
+7. **Multi-Provider** : Support for multiple translation services
+8. **String Collection** : Automatic collection of translatable strings
+9. **Cross-Platform** : Works on all supported platforms
+10. **Extensible** : Easy to add new translation providers
 
 ## Example Integrations
 
@@ -1039,6 +1185,16 @@ set_tr(label, "Hello World")
 
 # Translate text
 translated = tr("Hello World")
+
+# Automatic translation (when enabled)
+from ezqt_app.kernel.translation.auto_translator import AutoTranslator
+translator = AutoTranslator()
+auto_translated = translator.translate_sync("Hello World", "fr")
+
+# String collection
+from ezqt_app.kernel.translation.string_collector import StringCollector
+collector = StringCollector()
+collector.collect_from_widget(label)
 ```
 
 ### Advanced Configuration
