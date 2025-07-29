@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QStackedWidget,
 )
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Dict, Optional
 
 # UTILITY FUNCTIONS
@@ -25,10 +25,10 @@ from typing import Dict, Optional
 
 class PageContainer(QFrame):
     """
-    Conteneur de pages avec gestion des widgets empilés.
+    Page container with stacked widget management.
 
-    Cette classe fournit un conteneur pour gérer plusieurs pages
-    avec un système de navigation par onglets.
+    This class provides a container to manage multiple pages
+    with a tab-based navigation system.
     """
 
     # ////// CLASS VARIABLES
@@ -36,12 +36,12 @@ class PageContainer(QFrame):
 
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         """
-        Initialise le conteneur de pages.
+        Initialize the page container.
 
         Parameters
         ----------
         parent : QWidget, optional
-            Le widget parent (défaut: None).
+            The parent widget (default: None).
         """
         super().__init__(parent)
 
@@ -68,17 +68,17 @@ class PageContainer(QFrame):
 
     def add_page(self, name: str) -> QWidget:
         """
-        Ajoute une nouvelle page au conteneur.
+        Add a new page to the container.
 
         Parameters
         ----------
         name : str
-            Nom de la page à ajouter.
+            The name of the page to add.
 
         Returns
         -------
         QWidget
-            La page créée.
+            The created page widget.
         """
         page = QWidget()
         page.setObjectName(f"page_{name}")

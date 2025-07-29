@@ -31,11 +31,18 @@
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 from .assets_manager import AssetsManager
-from .config_manager import ConfigManager
+from .config_manager import (
+    get_config_manager,
+    load_config,
+    get_config_value,
+    save_config,
+    get_package_resource,
+    get_package_resource_content,
+)
 from .resource_manager import ResourceManager
 from .settings_manager import SettingsManager
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 ## ==> CLASSES
 # ///////////////////////////////////////////////////////////////
@@ -43,10 +50,10 @@ from .settings_manager import SettingsManager
 
 class Kernel:
     """
-    Classe principale du noyau de l'application.
+    Main application kernel class.
 
-    Cette classe gère les ressources, la configuration et l'initialisation
-    de l'application EzQt_App en utilisant des gestionnaires spécialisés.
+    This class manages resources, configuration and initialization
+    of the EzQt_App application using specialized managers.
     """
 
     # ASSETS MANAGEMENT
@@ -55,29 +62,29 @@ class Kernel:
     @staticmethod
     def checkAssetsRequirements() -> None:
         """
-        Vérifie et génère les ressources requises pour l'application.
+        Check and generate required resources for the application.
 
-        Cette méthode génère les binaires des assets, les fichiers QRC,
-        les fichiers RC Python et le module de ressources de l'application.
+        This method generates asset binaries, QRC files,
+        Python RC files and the application resources module.
         """
         AssetsManager.check_assets_requirements()
 
     @staticmethod
     def makeAppResourcesModule() -> None:
         """
-        Génère le module de ressources de l'application.
+        Generate the application resources module.
         """
         AssetsManager.make_app_resources_module()
 
     @staticmethod
     def makeRequiredFiles(mkTheme: bool = True) -> None:
         """
-        Génère les fichiers requis pour l'application.
+        Generate required files for the application.
 
         Parameters
         ----------
         mkTheme : bool, optional
-            Génère le fichier de thème (défaut: True).
+            Generate theme file (default: True).
         """
         AssetsManager.make_required_files(mkTheme)
 
@@ -85,78 +92,105 @@ class Kernel:
     # ///////////////////////////////////////////////////////////////
 
     @classmethod
-    def yamlFile(cls, yamlFile) -> None:
+    def setProjectRoot(cls, project_root) -> None:
         """
-        Définit le fichier YAML de configuration.
+        Set the project root directory.
 
         Parameters
         ----------
-        yamlFile : Path
-            Chemin vers le fichier YAML.
+        project_root : Path
+            Path to the project root directory.
         """
-        ConfigManager.set_yaml_file(yamlFile)
-
-    @classmethod
-    def getConfigPath(cls, config_name: str):
-        """
-        Obtient le chemin du fichier de configuration.
-
-        Parameters
-        ----------
-        config_name : str
-            Nom de la configuration.
-
-        Returns
-        -------
-        Path
-            Chemin vers le fichier de configuration.
-        """
-        return ConfigManager.get_config_path(config_name)
+        get_config_manager().set_project_root(project_root)
 
     @classmethod
     def loadKernelConfig(cls, config_name: str):
         """
-        Charge la configuration du noyau depuis le fichier YAML.
+        Load kernel configuration from YAML file.
 
         Parameters
         ----------
         config_name : str
-            Nom de la configuration à charger.
+            Name of the configuration to load.
 
         Returns
         -------
-        Dict[str, Union[str, int]]
-            Configuration chargée.
+        Dict[str, Any]
+            Loaded configuration.
         """
-        return ConfigManager.load_kernel_config(config_name)
+        return load_config(config_name)
+
+    @classmethod
+    def getConfigValue(cls, config_name: str, key_path: str, default=None):
+        """
+        Get a specific value from a configuration.
+
+        Parameters
+        ----------
+        config_name : str
+            Configuration name.
+        key_path : str
+            Key path (e.g., "app.name", "theme_palette.dark").
+        default : Any
+            Default value if key doesn't exist.
+
+        Returns
+        -------
+        Any
+            Found value or default value.
+        """
+        return get_config_value(config_name, key_path, default)
 
     @classmethod
     def saveKernelConfig(cls, config_name: str, data):
         """
-        Sauvegarde une configuration dans un fichier YAML.
+        Save a configuration to a YAML file.
 
         Parameters
         ----------
         config_name : str
-            Nom de la configuration.
+            Configuration name.
         data : Dict[str, Any]
-            Données à sauvegarder.
+            Data to save.
         """
-        ConfigManager.save_kernel_config(config_name, data)
+        return save_config(config_name, data)
+
+    @classmethod
+    def copyPackageConfigsToProject(cls):
+        """
+        Copy package configurations to child project.
+        """
+        return get_config_manager().copy_package_configs_to_project()
 
     @classmethod
     def writeYamlConfig(cls, keys, val):
         """
-        Écrit une configuration dans le fichier YAML.
+        Write configuration to YAML file (compatibility method).
 
         Parameters
         ----------
         keys : List[str]
-            Liste des clés pour accéder à la valeur.
+            List of keys to access the value.
         val : Union[str, int, Dict[str, str]]
-            Valeur à écrire.
+            Value to write.
         """
-        ConfigManager.write_yaml_config(keys, val)
+        # For compatibility, load current config and update
+        if keys:
+            config_name = keys[0]  # First element as config name
+            config = load_config(config_name)
+
+            # Navigate through structure
+            current = config
+            for key in keys[1:-1]:
+                if key not in current:
+                    current[key] = {}
+                current = current[key]
+
+            # Write the value
+            current[keys[-1]] = val
+
+            # Save
+            save_config(config_name, config)
 
     # RESOURCE MANAGEMENT
     # ///////////////////////////////////////////////////////////////
@@ -164,46 +198,46 @@ class Kernel:
     @staticmethod
     def getPackageResource(resource_path: str):
         """
-        Obtient le chemin d'une ressource du package.
+        Get the path of a package resource.
 
         Parameters
         ----------
         resource_path : str
-            Chemin de la ressource dans le package.
+            Resource path in the package.
 
         Returns
         -------
         Path
-            Chemin vers la ressource.
+            Path to the resource.
         """
-        return ConfigManager.get_package_resource(resource_path)
+        return get_package_resource(resource_path)
 
     @staticmethod
     def getPackageResourceContent(resource_path: str) -> str:
         """
-        Obtient le contenu d'une ressource du package.
+        Get the content of a package resource.
 
         Parameters
         ----------
         resource_path : str
-            Chemin de la ressource dans le package.
+            Resource path in the package.
 
         Returns
         -------
         str
-            Contenu de la ressource.
+            Resource content.
         """
-        return ConfigManager.get_package_resource_content(resource_path)
+        return get_package_resource_content(resource_path)
 
     @staticmethod
     def loadFontsResources(app: bool = False) -> None:
         """
-        Charge les ressources de polices de caractères.
+        Load font resources.
 
         Parameters
         ----------
         app : bool, optional
-            Charge depuis l'application si True, sinon depuis le package (défaut: False).
+            Load from application if True, otherwise from package (default: False).
         """
         ResourceManager.load_fonts_resources(app)
 
@@ -213,11 +247,11 @@ class Kernel:
     @staticmethod
     def loadAppSettings():
         """
-        Charge les paramètres de l'application.
+        Load application settings.
 
         Returns
         -------
         Dict[str, str]
-            Paramètres chargés.
+            Loaded settings.
         """
         return SettingsManager.load_app_settings()

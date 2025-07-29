@@ -52,11 +52,11 @@ class SettingsPanel(QFrame):
     """
 
     _widgets: List = []  # Type hint removed to avoid circular import
-    _settings: Dict[str, Any] = {}  # Stockage des paramètres
+    _settings: Dict[str, Any] = {}  # Settings storage
 
-    # Signal émis quand un paramètre change
+    # Signal emitted when a setting changes
     settingChanged = Signal(str, object)  # key, value
-    # Signal émis quand la langue change
+    # Signal emitted when language changes
     languageChanged = Signal()
 
     # ///////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ class SettingsPanel(QFrame):
 
         # ///////////////////////////////////////////////////////////////
 
-        # Créer le QScrollArea pour les paramètres
+        # Create QScrollArea for settings
         self.settingsScrollArea = QScrollArea(self)
         self.settingsScrollArea.setObjectName("settingsScrollArea")
         self.settingsScrollArea.setWidgetResizable(True)
@@ -106,7 +106,7 @@ class SettingsPanel(QFrame):
 
         # ///////////////////////////////////////////////////////////////
 
-        # Widget conteneur pour tous les paramètres
+        # Container widget for all settings
         self.contentSettings = QFrame()
         self.contentSettings.setObjectName("contentSettings")
         self.contentSettings.setFrameShape(QFrame.NoFrame)
@@ -139,7 +139,7 @@ class SettingsPanel(QFrame):
 
         # ///////////////////////////////////////////////////////////////
 
-        self.themeLabel = QLabel("Theme actif", self.themeSettingsContainer)
+        self.themeLabel = QLabel("Active Theme", self.themeSettingsContainer)
         self.themeLabel.setObjectName("themeLabel")
         self.themeLabel.setFont(Fonts.SEGOE_UI_10_SB)
         self.themeLabel.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
@@ -148,15 +148,15 @@ class SettingsPanel(QFrame):
 
         # ///////////////////////////////////////////////////////////////
 
-        # Créer le sélecteur de thème si OptionSelector est disponible
+        # Create theme selector if OptionSelector is available
         try:
             from ezqt_widgets import OptionSelector
 
-            # Créer le sélecteur de thème avec la bonne signature
-            # OptionSelector attend: items, default_id, min_width, min_height, orientation, animation_duration, parent
+            # Create theme selector with correct signature
+            # OptionSelector expects: items, default_id, min_width, min_height, orientation, animation_duration, parent
             self.themeToggleButton = OptionSelector(
-                items=["Light", "Dark"],  # Liste des options
-                default_id=1,  # 0 = Light, 1 = Dark (Dark par défaut)
+                items=["Light", "Dark"],  # List of options
+                default_id=1,  # 0 = Light, 1 = Dark (Dark by default)
                 min_width=None,
                 min_height=None,
                 orientation="horizontal",
@@ -170,10 +170,10 @@ class SettingsPanel(QFrame):
             self.themeToggleButton.setFixedHeight(40)
             self._widgets.append(self.themeToggleButton)
 
-            # Connecter le signal de changement du sélecteur de thème
+            # Connect theme selector change signal
             self._connect_theme_selector_signals()
 
-            # Ajouter au layout
+            # Add to layout
             self.VL_themeSettingsContainer.addWidget(self.themeToggleButton)
 
         except ImportError:
@@ -182,65 +182,82 @@ class SettingsPanel(QFrame):
             )
 
         # ///////////////////////////////////////////////////////////////
-        # Chargement automatique depuis YAML si demandé
+        # Automatic loading from YAML if requested
         if load_from_yaml:
             self.load_settings_from_yaml()
 
-        # Connecter les changements de paramètres
+        # Connect setting changes
         self.settingChanged.connect(self._on_setting_changed)
 
     # ///////////////////////////////////////////////////////////////
 
     def load_settings_from_yaml(self) -> None:
-        """Charge les paramètres depuis le fichier YAML."""
+        """Load settings from YAML file."""
         try:
-            # Import direct pour éviter l'import circulaire
-            from ...kernel.app_functions import Kernel
+            import yaml
+            from pathlib import Path
 
-            # Charger la configuration settings_panel depuis le YAML
-            settings_config = Kernel.loadKernelConfig("settings_panel")
+            # Try to load the full app.yaml file directly
+            # Try multiple possible paths
+            possible_paths = [
+                Path.cwd() / "bin" / "config" / "app.yaml",  # User project
+                Path(__file__).parent.parent.parent
+                / "resources"
+                / "config"
+                / "app.yaml",  # Package
+            ]
 
-            # Créer les widgets pour chaque paramètre
+            app_config = None
+            for path in possible_paths:
+                if path.exists():
+                    with open(path, "r", encoding="utf-8") as f:
+                        app_config = yaml.safe_load(f)
+                    break
+
+            if app_config is None:
+                get_printer().warning("Could not find app.yaml file")
+                return
+
+            # Extract settings_panel section
+            settings_config = app_config.get("settings_panel", {})
+
+            # Create widgets for each setting
             for key, config in settings_config.items():
-                # Exclure le thème car il est déjà géré manuellement par OptionSelector
+                # Exclude theme as it's already manually managed by OptionSelector
                 if key == "theme":
                     continue
 
-                if config.get("enabled", True):  # Vérifier si le paramètre est activé
+                if config.get("enabled", True):  # Check if setting is enabled
                     widget = self.add_setting_from_config(key, config)
 
-                    # Utiliser la valeur default du config (qui peut avoir été mise à jour)
+                    # Use default value from config (which may have been updated)
                     default_value = config.get("default")
                     if default_value is not None:
                         widget.set_value(default_value)
 
-        except KeyError:
-            get_printer().warning(
-                "Section 'settings_panel' not found in YAML configuration"
-            )
         except Exception as e:
             get_printer().warning(f"Error loading settings from YAML: {e}")
 
     def add_setting_from_config(self, key: str, config: dict) -> QWidget:
-        """Ajoute un paramètre basé sur sa configuration YAML."""
+        """Add a setting based on its YAML configuration."""
         setting_type = config.get("type", "text")
         label = config.get("label", key)
         description = config.get("description", "")
         default_value = config.get("default", None)
 
-        # Créer un container pour ce paramètre (comme themeSettingsContainer)
+        # Create container for this setting (like themeSettingsContainer)
         setting_container = QFrame(self.contentSettings)
         setting_container.setObjectName(f"settingContainer_{key}")
         setting_container.setFrameShape(QFrame.NoFrame)
         setting_container.setFrameShadow(QFrame.Raised)
 
-        # Layout du container avec marges
+        # Container layout with margins
         container_layout = QVBoxLayout(setting_container)
         container_layout.setSpacing(8)
         container_layout.setObjectName(f"VL_settingContainer_{key}")
         container_layout.setContentsMargins(10, 10, 10, 10)
 
-        # Créer le widget selon le type
+        # Create widget based on type
         if setting_type == "toggle":
             widget = self._create_toggle_widget(label, description, default_value, key)
         elif setting_type == "select":
@@ -259,16 +276,16 @@ class SettingsPanel(QFrame):
             widget = self._create_checkbox_widget(
                 label, description, default_value, key
             )
-        else:  # text par défaut
+        else:  # text by default
             widget = self._create_text_widget(label, description, default_value, key)
 
-        # Ajouter le widget au container
+        # Add widget to container
         container_layout.addWidget(widget)
 
-        # Ajouter le container au layout principal
+        # Add container to main layout
         self.VL_contentSettings.addWidget(setting_container)
 
-        # Stocker la référence
+        # Store reference
         self._settings[key] = widget
 
         return widget
@@ -276,7 +293,7 @@ class SettingsPanel(QFrame):
     def _create_toggle_widget(
         self, label: str, description: str, default: bool, key: Optional[str] = None
     ) -> QWidget:
-        """Crée un widget toggle avec label et description."""
+        """Create a toggle widget with label and description."""
         from ...widgets.extended.setting_widgets import SettingToggle
 
         widget = SettingToggle(label, description, default)
@@ -293,7 +310,7 @@ class SettingsPanel(QFrame):
         default: str,
         key: Optional[str] = None,
     ) -> QWidget:
-        """Crée un widget select avec label et description."""
+        """Create a select widget with label and description."""
         from ...widgets.extended.setting_widgets import SettingSelect
 
         widget = SettingSelect(label, description, options, default)
@@ -312,7 +329,7 @@ class SettingsPanel(QFrame):
         unit: str,
         key: Optional[str] = None,
     ) -> QWidget:
-        """Crée un widget slider avec label et description."""
+        """Create a slider widget with label and description."""
         from ...widgets.extended.setting_widgets import SettingSlider
 
         widget = SettingSlider(label, description, min_val, max_val, default, unit)
@@ -324,7 +341,7 @@ class SettingsPanel(QFrame):
     def _create_checkbox_widget(
         self, label: str, description: str, default: bool, key: Optional[str] = None
     ) -> QWidget:
-        """Crée un widget checkbox avec label et description."""
+        """Create a checkbox widget with label and description."""
         from ...widgets.extended.setting_widgets import SettingCheckbox
 
         widget = SettingCheckbox(label, description, default)
@@ -336,7 +353,7 @@ class SettingsPanel(QFrame):
     def _create_text_widget(
         self, label: str, description: str, default: str, key: Optional[str] = None
     ) -> QWidget:
-        """Crée un widget text avec label et description."""
+        """Create a text widget with label and description."""
         from ...widgets.extended.setting_widgets import SettingText
 
         widget = SettingText(label, description, default)
@@ -346,7 +363,7 @@ class SettingsPanel(QFrame):
         return widget
 
     # ///////////////////////////////////////////////////////////////
-    # Méthodes simplifiées pour ajout manuel de paramètres
+    # Simplified methods for manual setting addition
 
     def add_toggle_setting(
         self,
@@ -356,11 +373,11 @@ class SettingsPanel(QFrame):
         description: str = "",
         enabled: bool = True,
     ):
-        """Ajoute un paramètre toggle."""
+        """Add a toggle setting."""
         from ...widgets.extended.setting_widgets import SettingToggle
 
         widget = SettingToggle(label, description, default)
-        widget._key = key  # Définir la clé
+        widget._key = key  # Set the key
         widget.valueChanged.connect(self._on_setting_changed)
 
         self._settings[key] = widget
@@ -376,11 +393,11 @@ class SettingsPanel(QFrame):
         description: str = "",
         enabled: bool = True,
     ):
-        """Ajoute un paramètre de sélection."""
+        """Add a selection setting."""
         from ...widgets.extended.setting_widgets import SettingSelect
 
         widget = SettingSelect(label, description, options, default)
-        widget._key = key  # Définir la clé
+        widget._key = key  # Set the key
         widget.valueChanged.connect(self._on_setting_changed)
 
         self._settings[key] = widget
@@ -398,11 +415,11 @@ class SettingsPanel(QFrame):
         description: str = "",
         enabled: bool = True,
     ):
-        """Ajoute un paramètre slider."""
+        """Add a slider setting."""
         from ...widgets.extended.setting_widgets import SettingSlider
 
         widget = SettingSlider(label, description, min_val, max_val, default, unit)
-        widget._key = key  # Définir la clé
+        widget._key = key  # Set the key
         widget.valueChanged.connect(self._on_setting_changed)
 
         self._settings[key] = widget
@@ -417,11 +434,11 @@ class SettingsPanel(QFrame):
         description: str = "",
         enabled: bool = True,
     ):
-        """Ajoute un paramètre texte."""
+        """Add a text setting."""
         from ...widgets.extended.setting_widgets import SettingText
 
         widget = SettingText(label, description, default)
-        widget._key = key  # Définir la clé
+        widget._key = key  # Set the key
         widget.valueChanged.connect(self._on_setting_changed)
 
         self._settings[key] = widget
@@ -436,11 +453,11 @@ class SettingsPanel(QFrame):
         description: str = "",
         enabled: bool = True,
     ):
-        """Ajoute un paramètre checkbox."""
+        """Add a checkbox setting."""
         from ...widgets.extended.setting_widgets import SettingCheckbox
 
         widget = SettingCheckbox(label, description, default)
-        widget._key = key  # Définir la clé
+        widget._key = key  # Set the key
         widget.valueChanged.connect(self._on_setting_changed)
 
         self._settings[key] = widget
@@ -448,68 +465,68 @@ class SettingsPanel(QFrame):
         return widget
 
     def _on_setting_changed(self, key: str, value):
-        """Appelé quand un paramètre change."""
-        # Protection contre la récursion
+        """Called when a setting changes."""
+        # Protection against recursion
         if not hasattr(self, "_processing_setting_change"):
             self._processing_setting_change = False
 
         if self._processing_setting_change:
-            return  # Éviter la récursion
+            return  # Avoid recursion
 
         self._processing_setting_change = True
 
         try:
-            # Sauvegarder dans YAML
+            # Save to YAML
             try:
-                # Import direct pour éviter l'import circulaire
+                # Direct import to avoid circular import
                 from ...kernel.app_functions import Kernel
 
-                # Sauvegarder directement dans settings_panel[key].default
+                # Save directly to settings_panel[key].default
                 Kernel.writeYamlConfig(["settings_panel", key, "default"], value)
             except Exception as e:
                 get_printer().warning(f"Could not save setting '{key}' to YAML: {e}")
 
-            # Gestion spéciale pour les changements de langue
+            # Special handling for language changes
             if key == "language":
                 try:
                     from ...kernel.translation import get_translation_manager
 
                     translation_manager = get_translation_manager()
-                    # Vérifier si la langue change vraiment
+                    # Check if language really changes
                     current_lang = translation_manager.get_current_language_name()
                     if current_lang != str(value):
                         translation_manager.load_language(str(value))
-                        # Émettre le signal de changement de langue
+                        # Emit language change signal
                         self.languageChanged.emit()
                 except Exception as e:
                     get_printer().warning(f"Could not change language: {e}")
 
-            # Émettre un signal pour l'application
+            # Emit signal for application
             self.settingChanged.emit(key, value)
         finally:
             self._processing_setting_change = False
 
     # ///////////////////////////////////////////////////////////////
-    # Méthodes utilitaires
+    # Utility methods
 
     def get_setting_value(self, key: str) -> Any:
-        """Récupère la valeur d'un paramètre."""
+        """Get the value of a setting."""
         if key in self._settings:
             return self._settings[key].get_value()
         return None
 
     def set_setting_value(self, key: str, value: Any) -> None:
-        """Définit la valeur d'un paramètre."""
+        """Set the value of a setting."""
         if key in self._settings:
             self._settings[key].set_value(value)
 
     def get_all_settings(self) -> Dict[str, Any]:
-        """Récupère tous les paramètres et leurs valeurs."""
+        """Get all settings and their values."""
         return {key: widget.get_value() for key, widget in self._settings.items()}
 
     def save_all_settings_to_yaml(self) -> None:
-        """Sauvegarde tous les paramètres dans le YAML."""
-        # Import direct pour éviter l'import circulaire
+        """Save all settings to YAML file."""
+        # Direct import to avoid circular import
         from ...kernel.app_functions import Kernel
 
         for key, widget in self._settings.items():
@@ -521,14 +538,14 @@ class SettingsPanel(QFrame):
                 get_printer().warning(f"Could not save setting '{key}' to YAML: {e}")
 
     # ///////////////////////////////////////////////////////////////
-    # Méthodes existantes (conservées pour compatibilité)
+    # Panel management methods
 
     def get_width(self) -> int:
-        """Get the configured width."""
+        """Get panel width."""
         return self._width
 
     def set_width(self, width: int) -> None:
-        """Set the configured width."""
+        """Set panel width."""
         self._width = width
 
     def get_theme_toggle_button(self):
@@ -543,20 +560,20 @@ class SettingsPanel(QFrame):
             if hasattr(widget, "update_theme_icon"):
                 widget.update_theme_icon()
 
-        # Forcer le rafraîchissement du style du panneau de paramètres
+        # Force refresh of settings panel style
         self.style().unpolish(self)
         self.style().polish(self)
 
-        # Rafraîchir aussi tous les widgets enfants
+        # Also refresh all child widgets
         for child in self.findChildren(QWidget):
             child.style().unpolish(child)
             child.style().polish(child)
 
     def _connect_theme_selector_signals(self) -> None:
-        """Connecte les signaux du sélecteur de thème."""
+        """Connect theme selector signals."""
         try:
             if hasattr(self, "themeToggleButton"):
-                # Connecter le signal valueChanged du OptionSelector
+                # Connect OptionSelector valueChanged signal
                 theme_button = self.themeToggleButton
 
                 if hasattr(theme_button, "valueChanged"):
@@ -567,60 +584,60 @@ class SettingsPanel(QFrame):
             pass
 
     def _on_theme_selector_changed(self, value):
-        """Appelé quand le sélecteur de thème change."""
+        """Called when theme selector value changes."""
         try:
-            # OptionSelector.value retourne déjà "Light" ou "Dark"
+            # OptionSelector.value already returns "Light" or "Dark"
             english_value = value.lower()
 
-            # Sauvegarder la valeur anglaise dans le YAML
+            # Save English value to YAML
             from ...kernel.app_functions import Kernel
 
             Kernel.writeYamlConfig(
                 ["settings_panel", "theme", "default"], english_value
             )
 
-            # Émettre le signal avec la valeur anglaise
+            # Emit signal with English value
             self.settingChanged.emit("theme", english_value)
 
         except Exception as e:
             get_printer().warning(f"Could not handle theme selector change: {e}")
 
     def _on_theme_selector_clicked(self):
-        """Appelé quand le sélecteur de thème est cliqué."""
+        """Called when theme selector is clicked."""
         try:
             if hasattr(self, "themeToggleButton"):
-                # Récupérer directement la valeur textuelle
+                # Get text value directly
                 current_value = self.themeToggleButton.value.lower()
 
-                # Sauvegarder la valeur anglaise dans le YAML
+                # Save English value to YAML
                 from ...kernel.app_functions import Kernel
 
                 Kernel.writeYamlConfig(
                     ["settings_panel", "theme", "default"], current_value
                 )
 
-                # Émettre le signal avec la valeur anglaise
+                # Emit signal with English value
                 self.settingChanged.emit("theme", current_value)
 
         except Exception as e:
             get_printer().warning(f"Could not handle theme selector click: {e}")
 
     def update_theme_selector_items(self) -> None:
-        """Met à jour les items du sélecteur de thème avec les traductions."""
+        """Update theme selector items with translations."""
         try:
             if hasattr(self, "themeToggleButton"):
                 from ...kernel.translation import tr
 
-                # Traduire les items pour l'affichage
+                # Translate items for display
                 translated_items = [tr("Light"), tr("Dark")]
 
-                # Sauvegarder la valeur actuelle (ID)
+                # Save current value (ID)
                 theme_button = self.themeToggleButton
                 current_id = (
                     theme_button.value_id if hasattr(theme_button, "value_id") else 0
                 )
 
-                # Mettre à jour directement les textes des widgets
+                # Update widget texts directly
                 if hasattr(theme_button, "_options"):
                     for i, (option_id, option_widget) in enumerate(
                         theme_button._options.items()
@@ -633,38 +650,38 @@ class SettingsPanel(QFrame):
                             elif hasattr(option_widget, "setText"):
                                 option_widget.setText(translated_items[i].capitalize())
 
-                # Réappliquer l'ID courant pour maintenir la sélection
+                # Reapply current ID to maintain selection
                 if hasattr(theme_button, "value_id"):
-                    # Forcer la mise à jour du sélecteur sans passer par le setter
+                    # Force selector update without going through setter
                     if hasattr(theme_button, "_value_id"):
                         theme_button._value_id = current_id
-                        # Forcer le déplacement du sélecteur
+                        # Force selector movement
                         if current_id in theme_button._options:
                             theme_button.move_selector(
                                 theme_button._options[current_id]
                             )
 
         except Exception as e:
-            # Ignorer les erreurs
+            # Ignore errors
             pass
 
     def add_setting_widget(self, widget: QWidget) -> None:
         """Add a new setting widget to the settings panel."""
-        # Créer un container pour le paramètre (comme themeSettingsContainer)
+        # Create container for setting (like themeSettingsContainer)
         setting_container = QFrame(self.contentSettings)
         setting_container.setObjectName(f"settingContainer_{widget.objectName()}")
         setting_container.setFrameShape(QFrame.NoFrame)
         setting_container.setFrameShadow(QFrame.Raised)
 
-        # Layout du container avec marges (comme VL_themeSettingsContainer)
+        # Container layout with margins (like VL_themeSettingsContainer)
         container_layout = QVBoxLayout(setting_container)
         container_layout.setSpacing(8)
         container_layout.setContentsMargins(10, 10, 10, 10)
 
-        # Ajouter le widget au container
+        # Add widget to container
         container_layout.addWidget(widget)
 
-        # Ajouter le container au layout principal
+        # Add container to main layout
         self.VL_contentSettings.addWidget(setting_container)
         self._widgets.append(widget)
 
@@ -689,24 +706,24 @@ class SettingsPanel(QFrame):
         return section
 
     def scroll_to_top(self) -> None:
-        """Scroll vers le haut du panel de paramètres."""
+        """Scroll to top of settings panel."""
         if hasattr(self, "settingsScrollArea"):
             self.settingsScrollArea.verticalScrollBar().setValue(0)
 
     def scroll_to_bottom(self) -> None:
-        """Scroll vers le bas du panel de paramètres."""
+        """Scroll to bottom of settings panel."""
         if hasattr(self, "settingsScrollArea"):
             scrollbar = self.settingsScrollArea.verticalScrollBar()
             scrollbar.setValue(scrollbar.maximum())
 
     def scroll_to_widget(self, widget: QWidget) -> None:
         """
-        Scroll vers un widget spécifique dans le panel de paramètres.
+        Scroll to a specific widget in the settings panel.
 
         Args:
-            widget: Le widget vers lequel scroll
+            widget: The widget to scroll to
         """
         if hasattr(self, "settingsScrollArea") and widget:
-            # Calculer la position du widget dans le scroll area
+            # Calculate widget position in scroll area
             widget_pos = widget.mapTo(self.contentSettings, widget.rect().topLeft())
             self.settingsScrollArea.verticalScrollBar().setValue(widget_pos.y())

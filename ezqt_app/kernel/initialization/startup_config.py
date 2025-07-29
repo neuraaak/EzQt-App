@@ -42,7 +42,7 @@ import os
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Optional
 
 ## ==> CLASSES
@@ -73,6 +73,7 @@ class StartupConfig:
         - Environment variables
         - Locale settings
         - System compatibility
+        - Project root configuration
         """
         if self._configured:
             return
@@ -81,6 +82,7 @@ class StartupConfig:
         self._configure_environment()
         self._configure_locale()
         self._configure_system()
+        self._configure_project_root()
 
         self._configured = True
 
@@ -138,6 +140,33 @@ class StartupConfig:
         """Configure macOS-specific settings."""
         # macOS-specific environment variables
         os.environ["QT_QPA_PLATFORM"] = "cocoa"
+
+    def _configure_project_root(self) -> None:
+        """Configure project root for configuration management."""
+        from pathlib import Path
+        from ..app_functions import Kernel
+
+        # Determine project root directory
+        # Priority: current directory, then parent directory if in bin/
+        project_root = Path.cwd()
+
+        # If in bin/ subfolder, go up to parent
+        if project_root.name == "bin" and (project_root.parent / "main.py").exists():
+            project_root = project_root.parent
+        elif (project_root / "main.py").exists():
+            # Already at project root
+            pass
+        else:
+            # Search for main.py in parent directories
+            current = project_root
+            while current.parent != current:  # While not at system root
+                if (current.parent / "main.py").exists():
+                    project_root = current.parent
+                    break
+                current = current.parent
+
+        # Set project root in Kernel
+        Kernel.setProjectRoot(project_root)
 
     def get_encoding(self) -> str:
         """Get current encoding configuration."""

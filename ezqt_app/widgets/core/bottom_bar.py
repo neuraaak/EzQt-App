@@ -44,7 +44,7 @@ from PySide6.QtWidgets import (
 from ...kernel.app_components import Fonts
 from ...kernel.translation import set_tr
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Union, Dict, Optional
 
 # UTILITY FUNCTIONS
@@ -56,21 +56,21 @@ from typing import Union, Dict, Optional
 
 class BottomBar(QFrame):
     """
-    Barre de bas de page pour la fenêtre principale.
+    Bottom bar for the main window.
 
-    Cette classe fournit une barre de bas de page avec des crédits,
-    une version et une zone de redimensionnement. Les crédits peuvent
-    être cliquables et ouvrir un client email.
+    This class provides a bottom bar with credits,
+    version and resize area. Credits can be clickable
+    and open an email client.
     """
 
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         """
-        Initialise la barre de bas de page.
+        Initialize the bottom bar.
 
         Parameters
         ----------
         parent : Any, optional
-            Le widget parent (défaut: None).
+            The parent widget (default: None).
         """
         super().__init__(parent)
 
@@ -119,45 +119,45 @@ class BottomBar(QFrame):
 
     def set_credits(self, credits: Union[str, Dict[str, str]]) -> None:
         """
-        Définit les crédits avec support pour texte simple ou dictionnaire.
+        Set credits with support for simple text or dictionary.
 
         Parameters
         ----------
         credits : str or Dict[str, str]
-            Crédits sous forme de texte simple ou dictionnaire avec 'name' et 'email'.
+            Credits as simple text or dictionary with 'name' and 'email'.
         """
         try:
             if isinstance(credits, dict):
-                # Crédits avec nom et email
+                # Credits with name and email
                 self._create_clickable_credits(credits)
             else:
-                # Texte simple avec traduction
+                # Simple text with translation
                 set_tr(self.creditsLabel, credits)
 
         except Exception as e:
-            # En cas d'erreur, utiliser le texte par défaut
+            # In case of error, use default text
             set_tr(self.creditsLabel, "Made with ❤️ by EzQt_App")
 
     def _create_clickable_credits(self, credits_data: Dict[str, str]) -> None:
         """
-        Crée un lien cliquable pour les crédits avec nom et email.
+        Create a clickable link for credits with name and email.
 
         Parameters
         ----------
         credits_data : Dict[str, str]
-            Dictionnaire avec 'name' et 'email'.
+            Dictionary with 'name' and 'email'.
         """
         try:
             name = credits_data.get("name", "Unknown")
             email = credits_data.get("email", "")
 
-            # Créer le texte avec le nom en gras et cliquable
+            # Create text with bold name and clickable
             credits_text = f"Made with ❤️ by {name}"
 
-            # Définir le texte avec traduction
+            # Set text with translation
             set_tr(self.creditsLabel, credits_text)
 
-            # Rendre le label cliquable si un email est fourni
+            # Make label clickable if email is provided
             if email:
                 self.creditsLabel.setCursor(Qt.PointingHandCursor)
                 self.creditsLabel.mousePressEvent = lambda event: self._open_email(
@@ -171,75 +171,75 @@ class BottomBar(QFrame):
                 self.creditsLabel.setStyleSheet("")
 
         except Exception as e:
-            # En cas d'erreur, utiliser le texte par défaut
+            # In case of error, use default text
             set_tr(self.creditsLabel, "Made with ❤️ by EzQt_App")
 
     def _open_email(self, email: str) -> None:
         """
-        Ouvre le client email par défaut avec l'adresse spécifiée.
+        Open default email client with specified address.
 
         Parameters
         ----------
         email : str
-            Adresse email à ouvrir.
+            Email address to open.
         """
         try:
             QDesktopServices.openUrl(QUrl(f"mailto:{email}"))
         except Exception as e:
-            # En cas d'erreur, ignorer
+            # In case of error, ignore
             pass
 
     def set_version_auto(self) -> None:
         """
-        Détecte automatiquement la version du projet utilisateur.
+        Automatically detect user project version.
 
-        Cherche d'abord __version__ dans le module principal,
-        sinon utilise la valeur par défaut.
+        First look for __version__ in main module,
+        otherwise use default value.
         """
         detected_version = self._detect_project_version()
         if detected_version:
             self.set_version(detected_version)
         else:
-            # Fallback vers la version d'EzQt_App si aucune version n'est trouvée
+            # Fallback to EzQt_App version if no version found
             try:
                 import ezqt_app
 
                 if hasattr(ezqt_app, "__version__"):
                     self.set_version(f"v{ezqt_app.__version__}")
                 else:
-                    self.set_version("")  # Version par défaut
+                    self.set_version("")  # Default version
             except ImportError:
-                self.set_version("")  # Version par défaut
+                self.set_version("")  # Default version
 
     def set_version_forced(self, version: str) -> None:
         """
-        Force la version affichée (ignore la détection automatique).
+        Force displayed version (ignore automatic detection).
 
         Parameters
         ----------
         version : str
-            Version à afficher (ex: "v1.0.0" ou "1.0.0").
+            Version to display (ex: "v1.0.0" or "1.0.0").
         """
         self.set_version(version)
 
     def _detect_project_version(self) -> Optional[str]:
         """
-        Détecte la version du projet utilisateur en cherchant __version__ dans main.py.
+        Detect user project version by looking for __version__ in main.py.
 
         Returns
         -------
         str or None
-            Version détectée ou None si non trouvée.
+            Detected version or None if not found.
         """
         try:
-            # Méthode 1: Chercher dans le répertoire courant
+            # Method 1: Look in current directory
             main_py_path = Path.cwd() / "main.py"
             if main_py_path.exists():
                 version = self._extract_version_from_file(main_py_path)
                 if version:
                     return version
 
-            # Méthode 2: Chercher dans le répertoire du script principal
+            # Method 2: Look in main script directory
             script_dir = Path(sys.argv[0]).parent if sys.argv else Path.cwd()
             main_py_path = script_dir / "main.py"
             if main_py_path.exists():
@@ -247,7 +247,7 @@ class BottomBar(QFrame):
                 if version:
                     return version
 
-            # Méthode 3: Chercher dans le répertoire parent (cas où l'exe est dans un sous-dossier)
+            # Method 3: Look in parent directory (case where exe is in subfolder)
             parent_dir = Path.cwd().parent
             main_py_path = parent_dir / "main.py"
             if main_py_path.exists():
@@ -255,7 +255,7 @@ class BottomBar(QFrame):
                 if version:
                     return version
 
-            # Méthode 4: Essayer d'importer le module principal
+            # Method 4: Try to import main module
             try:
                 import main
 
@@ -264,7 +264,7 @@ class BottomBar(QFrame):
             except ImportError:
                 pass
 
-            # Méthode 5: Fallback vers la version d'EzQt_App
+            # Method 5: Fallback to EzQt_App version
             try:
                 import ezqt_app
 
@@ -276,34 +276,34 @@ class BottomBar(QFrame):
             return None
 
         except Exception as e:
-            # En cas d'erreur, retourner None
+            # In case of error, return None
             return None
 
     def _extract_version_from_file(self, file_path: Path) -> Optional[str]:
         """
-        Extrait la version d'un fichier Python.
+        Extract version from a Python file.
 
         Parameters
         ----------
         file_path : Path
-            Chemin vers le fichier Python.
+            Path to Python file.
 
         Returns
         -------
         str or None
-            Version extraite ou None si non trouvée.
+            Extracted version or None if not found.
         """
         try:
-            # Lire le contenu du fichier
+            # Read file content
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            # Chercher __version__ = "..." dans le contenu
+            # Look for __version__ = "..." in content
             version_match = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', content)
             if version_match:
                 return f"v{version_match.group(1)}"
 
-            # Si pas trouvé avec regex, essayer d'importer le module
+            # If not found with regex, try to import module
             try:
                 spec = importlib.util.spec_from_file_location("main", file_path)
                 if spec and spec.loader:
@@ -322,14 +322,14 @@ class BottomBar(QFrame):
 
     def set_version(self, text: str) -> None:
         """
-        Définit le texte de version avec support du système de traduction.
+        Set version text with translation system support.
 
         Parameters
         ----------
         text : str
-            Texte de la version (peut être "v1.0.0" ou juste "1.0.0").
+            Version text (can be "v1.0.0" or just "1.0.0").
         """
-        # S'assurer que la version commence par "v"
+        # Ensure version starts with "v"
         if not text.startswith("v"):
             text = f"v{text}"
 

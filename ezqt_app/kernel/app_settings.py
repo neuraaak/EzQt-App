@@ -34,7 +34,7 @@ from PySide6.QtCore import (
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 # UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
@@ -45,23 +45,23 @@ from PySide6.QtCore import (
 
 class Settings:
     """
-    Classe de configuration principale pour l'application.
+    Main configuration class for the application.
 
-    Cette classe contient toutes les configurations de l'application
-    organisées en sous-classes thématiques.
+    This class contains all application configurations
+    organized in thematic subclasses.
     """
 
     # KERNEL SETTINGS
     # ///////////////////////////////////////////////////////////////
     class Kernel:
-        """Configuration du noyau de l'application."""
+        """Application kernel configuration."""
 
         pass
 
     # APP SETTINGS
     # ///////////////////////////////////////////////////////////////
     class App:
-        """Configuration générale de l'application."""
+        """General application configuration."""
 
         # ////// APP INFO
         NAME: str = "MyApplication"
@@ -78,7 +78,7 @@ class Settings:
     # GUI SETTINGS
     # ///////////////////////////////////////////////////////////////
     class Gui:
-        """Configuration de l'interface graphique."""
+        """Graphical interface configuration."""
 
         # ////// THEME SETTINGS
         THEME: str = "dark"
@@ -94,8 +94,8 @@ class Settings:
     # THEME SETTINGS
     # ///////////////////////////////////////////////////////////////
     class Theme:
-        """Configuration des thèmes."""
+        """Theme configuration."""
 
         def __init__(self) -> None:
-            """Initialise la configuration des thèmes."""
+            """Initialize theme configuration."""
             pass

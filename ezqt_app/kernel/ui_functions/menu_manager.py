@@ -35,7 +35,7 @@ from PySide6.QtWidgets import (
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 ## ==> CLASSES
 # ///////////////////////////////////////////////////////////////
@@ -43,10 +43,10 @@ from PySide6.QtWidgets import (
 
 class MenuManager:
     """
-    Gestionnaire des menus de l'interface.
+    Interface menu manager.
 
-    Cette classe gère la sélection et la désélection des éléments
-    de menu dans l'application.
+    This class manages the selection and deselection of menu
+    items in the application.
     """
 
     # MENU MANAGEMENT
@@ -55,12 +55,12 @@ class MenuManager:
     @staticmethod
     def selectMenu(self, widget) -> None:
         """
-        Sélectionne un élément de menu.
+        Select a menu item.
 
         Parameters
         ----------
         widget : str
-            Nom de l'élément de menu à sélectionner.
+            Name of menu item to select.
         """
         for w in self.ui.menuContainer.topMenu.findChildren(QToolButton):
             if w.objectName() == widget and isinstance(w, QToolButton):
@@ -70,12 +70,12 @@ class MenuManager:
     @staticmethod
     def deselectMenu(self, widget) -> None:
         """
-        Désélectionne un élément de menu.
+        Deselect a menu item.
 
         Parameters
         ----------
         widget : str
-            Nom de l'élément de menu à désélectionner.
+            Name of menu item to deselect.
         """
         for w in self.ui.menuContainer.topMenu.findChildren(QToolButton):
             if w.objectName() != widget and isinstance(w, QToolButton):
@@ -85,12 +85,12 @@ class MenuManager:
     @staticmethod
     def refreshStyle(w: QWidget) -> None:
         """
-        Rafraîchit le style d'un widget.
+        Refresh widget style.
 
         Parameters
         ----------
         w : QWidget
-            Widget dont le style doit être rafraîchi.
+            Widget whose style should be refreshed.
         """
         w.style().unpolish(w)
         w.style().polish(w)

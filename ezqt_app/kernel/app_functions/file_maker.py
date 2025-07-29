@@ -47,7 +47,7 @@ from pathlib import Path
 from ..common import APP_PATH
 from .printer import get_printer
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Optional, List
 
 ## ==> CLASSES
@@ -179,7 +179,7 @@ class FileMaker:
             Path to copied YAML file.
         """
         if yaml_package is None:
-            # Utiliser pkg_resources pour accéder aux ressources du package installé
+            # Use pkg_resources to access installed package resources
             import pkg_resources
 
             yaml_package = Path(pkg_resources.resource_filename("ezqt_app", "app.yaml"))
@@ -190,7 +190,7 @@ class FileMaker:
 
         target_path = self._bin / "config" / "app.yaml"
 
-        # Créer le répertoire de destination s'il n'existe pas
+        # Create destination directory if it doesn't exist
         target_path.parent.mkdir(parents=True, exist_ok=True)
 
         shutil.copy2(yaml_package, target_path)
@@ -214,7 +214,7 @@ class FileMaker:
         """
 
         if theme_package is None:
-            # Utiliser pkg_resources pour accéder aux ressources du package installé
+            # Use pkg_resources to access installed package resources
             import pkg_resources
 
             theme_package = Path(
@@ -228,14 +228,14 @@ class FileMaker:
         target_path = self._bin / "themes"
 
         try:
-            # Créer le répertoire de destination s'il n'existe pas
+            # Create destination directory if it doesn't exist
             target_path.mkdir(parents=True, exist_ok=True)
 
-            # Déterminer si theme_package est un fichier ou un dossier
+            # Determine if theme_package is a file or directory
             if theme_package.is_file():
-                # Cas 1: theme_package est un fichier spécifique
+                # Case 1: theme_package is a specific file
 
-                # Ignorer qtstrap.qss car il n'est pas nécessaire
+                # Ignore qtstrap.qss as it's not necessary
                 if theme_package.name == "qtstrap.qss":
                     self.printer.verbose_msg(
                         f"Skipping unnecessary theme file: {theme_package.name}"
@@ -245,7 +245,7 @@ class FileMaker:
                 try:
                     target_file = target_path / theme_package.name
 
-                    # Copier le fichier même s'il existe déjà (comme dans l'ancien code)
+                    # Copy file even if it already exists (as in old code)
                     shutil.copy2(theme_package, target_file)
                     self.printer.verbose_msg(f"Copied theme file: {theme_package.name}")
 
@@ -259,12 +259,12 @@ class FileMaker:
                     return False
 
             else:
-                # Cas 2: theme_package est un dossier
+                # Case 2: theme_package is a directory
 
-                # Copier les fichiers individuellement pour éviter les problèmes de chemins Windows
+                # Copy files individually to avoid Windows path issues
                 copied_files = []
                 for theme_file in theme_package.glob("*.qss"):
-                    # Ignorer qtstrap.qss car il n'est pas nécessaire
+                    # Ignore qtstrap.qss as it's not necessary
                     if theme_file.name == "qtstrap.qss":
                         self.printer.verbose_msg(
                             f"Skipping unnecessary theme file: {theme_file.name}"
@@ -274,7 +274,7 @@ class FileMaker:
                     try:
                         target_file = target_path / theme_file.name
 
-                        # Copier le fichier même s'il existe déjà (comme dans l'ancien code)
+                        # Copy file even if it already exists (as in old code)
                         shutil.copy2(theme_file, target_file)
                         copied_files.append(theme_file.name)
                         self.printer.verbose_msg(
@@ -287,12 +287,12 @@ class FileMaker:
                         )
                         continue
 
-                # Vérifier qu'au moins un fichier a été copié
+                # Check if at least one file was copied
                 if copied_files:
                     self.printer.info("[FileMaker] Generated QSS theme files.")
                     return True
                 else:
-                    # Vérifier si des fichiers QSS existent déjà dans le dossier de destination
+                    # Check if QSS files already exist in the destination directory
                     existing_files = list(target_path.glob("*.qss"))
 
                     if existing_files:
@@ -325,7 +325,7 @@ class FileMaker:
             True if successful.
         """
         if translations_package is None:
-            # Utiliser pkg_resources pour accéder aux ressources du package installé
+            # Use pkg_resources to access installed package resources
             import pkg_resources
 
             translations_package = Path(
@@ -341,10 +341,10 @@ class FileMaker:
         target_path = self._bin / "translations"
 
         try:
-            # Créer le répertoire de destination s'il n'existe pas
+            # Create destination directory if it doesn't exist
             target_path.mkdir(parents=True, exist_ok=True)
 
-            # Copier les fichiers individuellement pour éviter les problèmes de chemins Windows
+            # Copy files individually to avoid Windows path issues
             for translation_file in translations_package.glob("*.ts"):
                 try:
                     target_file = target_path / translation_file.name
@@ -358,7 +358,7 @@ class FileMaker:
                     )
                     continue
 
-            # Vérifier qu'au moins un fichier a été copié
+            # Check if at least one file was copied
             if any(target_path.glob("*.ts")):
                 self.printer.info("[FileMaker] Generated translation files.")
                 return True
@@ -453,27 +453,27 @@ class FileMaker:
 
     def make_app_resources_module(self) -> None:
         """
-        Génère le module app_resources.py avec les ressources de l'application.
+        Generates the app_resources.py module with application resources.
 
-        Ce module contient les classes AppImages et AppIcons avec les chemins
-        vers les ressources de l'application.
+        This module contains the AppImages and AppIcons classes with paths
+        to application resources.
         """
 
         def _get_resources_from_directory(directory: Path, resource_type: str) -> list:
             """
-            Récupère les ressources d'un répertoire.
+            Retrieves resources from a directory.
 
             Parameters
             ----------
             directory : Path
-                Répertoire contenant les ressources.
+                Directory containing resources.
             resource_type : str
-                Type de ressource (images ou icons).
+                Resource type (images or icons).
 
             Returns
             -------
             list
-                Liste des fichiers de ressources trouvés.
+                List of found resource files.
             """
             if not directory.exists():
                 return []
@@ -488,19 +488,19 @@ class FileMaker:
 
         def _generate_class_content(resources: list, resource_type: str) -> str:
             """
-            Génère le contenu d'une classe de ressources.
+            Generates the content of a resource class.
 
             Parameters
             ----------
             resources : list
-                Liste des fichiers de ressources.
+                List of resource files.
             resource_type : str
-                Type de ressource (images ou icons).
+                Resource type (images or icons).
 
             Returns
             -------
             str
-                Contenu de la classe.
+                Class content.
             """
             class_name = f"App{resource_type.capitalize()}"
             parent_class = resource_type.capitalize()
@@ -508,16 +508,16 @@ class FileMaker:
             content = f"class {class_name}({parent_class}):\n"
 
             if resources:
-                # Ajouter un docstring descriptif
+                # Add a descriptive docstring
                 content += f'    """{resource_type.capitalize()} resources for the application."""\n\n'
 
-                # Ajouter les attributs
+                # Add attributes
                 for resource in resources:
                     attr_name = resource.stem.replace("-", "_").replace(" ", "_")
                     resource_path = f":/{resource_type}/{resource_type}/{resource.name}"
                     content += f"    {attr_name} = '{resource_path}'\n"
             else:
-                # Classe vide avec docstring explicative
+                # Empty class with explanatory docstring
                 content += (
                     f'    """No {resource_type} resources found in the project."""\n'
                 )
@@ -525,11 +525,11 @@ class FileMaker:
 
             return content
 
-        # Récupérer les ressources
+        # Get resources
         images = _get_resources_from_directory(self._bin / "images", "images")
         icons = _get_resources_from_directory(self._bin / "icons", "icons")
 
-        # Générer le contenu du fichier
+        # Generate file content
         content_parts = []
 
         # Imports
@@ -549,25 +549,25 @@ class FileMaker:
         content_parts.append("from ezqt_app.kernel.app_resources import Icons, Images")
         content_parts.append("")
 
-        # Import des ressources Qt si nécessaire
+        # Import Qt resources if necessary
         if images or icons:
             content_parts.append("from .resources_rc import *")
             content_parts.append("")
 
-        # Classes de ressources
+        # Resource classes
         content_parts.append(_generate_class_content(images, "images"))
         content_parts.append("")
         content_parts.append(_generate_class_content(icons, "icons"))
         content_parts.append("")
 
-        # Joindre le contenu
+        # Join content
         self._resources_module_file = "\n".join(content_parts)
 
-        # Écrire le fichier
+        # Write file
         with open(self._modules / "app_resources.py", mode="w", encoding="utf-8") as f:
             f.write(self._resources_module_file)
 
-        # Message de statut
+        # Status message
         total_resources = len(images) + len(icons)
         if total_resources > 0:
             self.printer.info(

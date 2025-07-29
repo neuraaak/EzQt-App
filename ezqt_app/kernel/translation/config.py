@@ -31,7 +31,7 @@
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Dict
 
 # UTILITY FUNCTIONS
@@ -43,7 +43,7 @@ from typing import Dict
 # SUPPORTED LANGUAGES
 # ///////////////////////////////////////////////////////////////
 
-# Langues supportées
+# Supported languages
 SUPPORTED_LANGUAGES: Dict[str, Dict[str, str]] = {
     "en": {"name": "English", "native_name": "English", "file": "ezqt_app_en.ts"},
     "fr": {"name": "Français", "native_name": "Français", "file": "ezqt_app_fr.ts"},
@@ -54,8 +54,8 @@ SUPPORTED_LANGUAGES: Dict[str, Dict[str, str]] = {
 # DEFAULT SETTINGS
 # ///////////////////////////////////////////////////////////////
 
-# Langue par défaut
+# Default language
 DEFAULT_LANGUAGE: str = "en"
 
-# Dossier des traductions
+# Translations directory
 TRANSLATIONS_DIR: str = "resources/translations"

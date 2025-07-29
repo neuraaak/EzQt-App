@@ -38,7 +38,7 @@ from PySide6.QtWidgets import (
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Any
 
 # UTILITY FUNCTIONS
@@ -50,27 +50,27 @@ from typing import Any
 
 class CustomGrip(QWidget):
     """
-    Widget de redimensionnement personnalisé pour les fenêtres.
+    Custom resize widget for windows.
 
-    Cette classe fournit des poignées de redimensionnement personnalisées
-    pour les différents bords d'une fenêtre (haut, bas, gauche, droite).
-    Chaque poignée permet de redimensionner la fenêtre parente.
+    This class provides custom resize handles
+    for different window edges (top, bottom, left, right).
+    Each handle allows resizing the parent window.
     """
 
     def __init__(
         self, parent: QWidget, position: Qt.Edge, disable_color: bool = False
     ) -> None:
         """
-        Initialise la poignée de redimensionnement.
+        Initialize the resize handle.
 
         Parameters
         ----------
         parent : QWidget
-            Le widget parent à redimensionner.
+            The parent widget to resize.
         position : Qt.Edge
-            La position de la poignée (Qt.TopEdge, Qt.BottomEdge, etc.).
+            The position of the handle (Qt.TopEdge, Qt.BottomEdge, etc.).
         disable_color : bool, optional
-            Désactive les couleurs de la poignée (défaut: False).
+            Disable handle colors (default: False).
         """
         # ////// SETUP UI
         super().__init__()
@@ -185,13 +185,13 @@ class CustomGrip(QWidget):
     # ///////////////////////////////////////////////////////////////
 
     def mouseReleaseEvent(self, event: Any) -> None:
-        """Gère l'événement de relâchement de souris."""
+        """Handle mouse release event."""
         self.mousePos = None
 
     # ///////////////////////////////////////////////////////////////
 
     def resizeEvent(self, event: Any) -> None:
-        """Gère l'événement de redimensionnement du widget."""
+        """Handle resize event."""
         if hasattr(self.wi, "container_top"):
             self.wi.container_top.setGeometry(0, 0, self.width(), 10)
 
@@ -211,20 +211,20 @@ class CustomGrip(QWidget):
 
 class Widgets:
     """
-    Classe utilitaire pour créer les widgets de poignées de redimensionnement.
+    Utility class for creating resize handle widgets.
 
-    Cette classe fournit des méthodes pour créer les différents types
-    de poignées (haut, bas, gauche, droite) avec leurs layouts et styles.
+    This class provides methods to create different types
+    of handles (top, bottom, left, right) with their layouts and styles.
     """
 
     def top(self, Form: QWidget) -> None:
         """
-        Crée une poignée de redimensionnement pour le bord supérieur.
+        Create a resize handle for the top edge.
 
         Parameters
         ----------
         Form : QWidget
-            Le widget parent pour la poignée.
+            The parent widget for the handle.
         """
         if not Form.objectName():
             Form.setObjectName("Form")
@@ -279,12 +279,12 @@ class Widgets:
 
     def bottom(self, Form: QWidget) -> None:
         """
-        Crée une poignée de redimensionnement pour le bord inférieur.
+        Create a resize handle for the bottom edge.
 
         Parameters
         ----------
         Form : QWidget
-            Le widget parent pour la poignée.
+            The parent widget for the handle.
         """
         if not Form.objectName():
             Form.setObjectName("Form")
@@ -339,12 +339,12 @@ class Widgets:
 
     def left(self, Form: QWidget) -> None:
         """
-        Crée une poignée de redimensionnement pour le bord gauche.
+        Create a resize handle for the left edge.
 
         Parameters
         ----------
         Form : QWidget
-            Le widget parent pour la poignée.
+            The parent widget for the handle.
         """
         if not Form.objectName():
             Form.setObjectName("Form")
@@ -363,12 +363,12 @@ class Widgets:
 
     def right(self, Form: QWidget) -> None:
         """
-        Crée une poignée de redimensionnement pour le bord droit.
+        Create a resize handle for the right edge.
 
         Parameters
         ----------
         Form : QWidget
-            Le widget parent pour la poignée.
+            The parent widget for the handle.
         """
         if not Form.objectName():
             Form.setObjectName("Form")

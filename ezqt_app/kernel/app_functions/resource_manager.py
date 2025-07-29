@@ -34,7 +34,7 @@ from PySide6.QtGui import QFontDatabase
 from ..common import APP_PATH
 from .printer import get_printer
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 ## ==> CLASSES
 # ///////////////////////////////////////////////////////////////
@@ -42,10 +42,10 @@ from .printer import get_printer
 
 class ResourceManager:
     """
-    Gestionnaire des ressources système.
+    System resource manager.
 
-    Cette classe gère le chargement des polices de caractères et autres
-    ressources système nécessaires à l'application.
+    This class manages the loading of fonts and other
+    system resources required by the application.
     """
 
     # RESOURCE MANAGEMENT
@@ -54,18 +54,18 @@ class ResourceManager:
     @staticmethod
     def load_fonts_resources(app: bool = False) -> None:
         """
-        Charge les ressources de polices de caractères.
+        Load font resources.
 
         Parameters
         ----------
         app : bool, optional
-            Charge depuis l'application si True, sinon depuis le package (défaut: False).
+            Load from application if True, otherwise from package (default: False).
         """
-        from .config_manager import ConfigManager
+        from .config_manager import get_package_resource
 
         # DETERMINE FONT SOURCE
         if not app:
-            fonts = ConfigManager.get_package_resource("resources/fonts")
+            fonts = get_package_resource("resources/fonts")
             source = "Package"
         else:
             fonts = APP_PATH / r"bin\fonts"

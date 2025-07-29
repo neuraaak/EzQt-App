@@ -41,10 +41,10 @@ from ..app_functions import Kernel
 
 class ThemeManager:
     """
-    Gestionnaire des thèmes de l'interface.
+    Interface theme manager.
 
-    Cette classe gère le chargement et l'application des thèmes
-    QSS/CSS de l'application.
+    This class manages the loading and application of QSS/CSS
+    themes in the application.
     """
 
     # THEME MANAGEMENT
@@ -53,73 +53,63 @@ class ThemeManager:
     @staticmethod
     def theme(self, customThemeFile: str = None) -> None:
         """
-        Charge et applique un thème à l'interface.
+        Load and apply theme to interface.
 
         Parameters
         ----------
         customThemeFile : str, optional
-            Fichier de thème personnalisé à utiliser.
+            Custom theme file to use.
         """
         _style = ""
-        # Utiliser Settings.Gui.THEME qui a été mis à jour par loadAppSettings
+        # Use Settings.Gui.THEME which has been updated by loadAppSettings
         _theme = Settings.Gui.THEME
-        _colors = Kernel.loadKernelConfig("theme_palette")[_theme]
+        # Load palette from palette.yaml file
+        palette_config = Kernel.loadKernelConfig("palette")
+        _colors = palette_config.get("theme_palette", {}).get(_theme, {})
 
         # Main Theme
         # ///////////////////////////////////////////////////////////////
         if customThemeFile:
-            # Utiliser Path pour gérer les chemins Windows correctement
+            # Use Path to handle Windows paths correctly
             main_qss = APP_PATH / "bin" / "themes" / customThemeFile
             try:
                 if main_qss.exists():
                     with open(main_qss, "r", encoding="utf-8") as f:
                         main_style = f.read()
-                    get_printer().verbose_msg(
-                        f"Fichier de thème personnalisé chargé: {main_qss}"
-                    )
+                    get_printer().verbose_msg(f"Custom theme file loaded: {main_qss}")
                 else:
-                    get_printer().warning(
-                        f"Fichier de thème personnalisé non trouvé: {main_qss}"
-                    )
+                    get_printer().warning(f"Custom theme file not found: {main_qss}")
                     return
             except Exception as e:
-                get_printer().error(
-                    f"Erreur lors de la lecture du fichier de thème personnalisé {main_qss}: {e}"
-                )
+                get_printer().error(f"Error reading custom theme file {main_qss}: {e}")
                 return
         else:
-            # Essayer d'abord le répertoire local, puis le package
+            # Try local directory first, then package
             local_qss = APP_PATH / "bin" / "themes" / "main_theme.qss"
 
-            get_printer().verbose_msg(f"Recherche du fichier de thème:")
+            get_printer().verbose_msg(f"Searching for theme file:")
             get_printer().verbose_msg(f"  - Local: {local_qss}")
 
             if local_qss.exists():
-                # Utiliser le fichier local
+                # Use local file
                 try:
                     with open(local_qss, "r", encoding="utf-8") as f:
                         main_style = f.read()
-                    get_printer().verbose_msg(
-                        f"Fichier de thème local chargé: {local_qss}"
-                    )
+                    get_printer().verbose_msg(f"Local theme file loaded: {local_qss}")
                 except Exception as e:
-                    get_printer().error(
-                        f"Erreur lors de la lecture du fichier local {local_qss}: {e}"
-                    )
+                    get_printer().error(f"Error reading local file {local_qss}: {e}")
                     return
             else:
-                # Utiliser la ressource embarquée du package
+                # Use embedded package resource
                 try:
                     main_style = Kernel.getPackageResourceContent(
                         "resources/themes/main_theme.qss"
                     )
                     get_printer().verbose_msg(
-                        "Fichier de thème package chargé depuis les ressources embarquées"
+                        "Package theme file loaded from embedded resources"
                     )
                 except Exception as e:
-                    get_printer().error(
-                        f"Erreur lors de la lecture de la ressource embarquée: {e}"
-                    )
+                    get_printer().error(f"Error reading embedded resource: {e}")
                     return
 
         # //////

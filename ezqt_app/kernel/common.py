@@ -27,7 +27,7 @@
 import sys
 from pathlib import Path
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Final
 
 ## ==> VARIABLES

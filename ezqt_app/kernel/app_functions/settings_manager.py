@@ -36,7 +36,7 @@ from PySide6.QtCore import QSize
 from ..common import Path
 from ..app_settings import Settings
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Dict, Optional
 
 ## ==> CLASSES
@@ -45,10 +45,10 @@ from typing import Dict, Optional
 
 class SettingsManager:
     """
-    Gestionnaire des paramètres de l'application.
+    Application settings manager.
 
-    Cette classe gère le chargement et la configuration des paramètres
-    de l'application depuis les fichiers de configuration.
+    This class manages the loading and configuration of application
+    settings from configuration files.
     """
 
     # SETTINGS MANAGEMENT
@@ -57,23 +57,23 @@ class SettingsManager:
     @staticmethod
     def load_app_settings(yaml_file: Optional[Path] = None) -> Dict[str, str]:
         """
-        Charge les paramètres de l'application.
+        Load application settings.
 
         Parameters
         ----------
         yaml_file : Optional[Path], optional
-            Fichier YAML à utiliser (défaut: utilise le fichier par défaut).
+            YAML file to use (default: uses default file).
 
         Returns
         -------
         Dict[str, str]
-            Paramètres chargés.
+            Loaded settings.
         """
-        from .config_manager import ConfigManager
+        from .config_manager import get_package_resource
 
         # LOAD APP DATA
         if not yaml_file:
-            yaml_file = ConfigManager.get_package_resource("app.yaml")
+            yaml_file = get_package_resource("app.yaml")
 
         with open(yaml_file, "r", encoding="utf-8") as file:
             data = yaml.safe_load(file)
@@ -92,7 +92,7 @@ class SettingsManager:
         Settings.App.APP_HEIGHT = app_data["app_height"]
 
         # SET GUI SETTINGS
-        # Charger le thème depuis settings_panel s'il existe, sinon depuis app
+        # Load theme from settings_panel if it exists, otherwise from app
         try:
             settings_panel = data.get("settings_panel", {})
             Settings.Gui.THEME = settings_panel.get("theme", {}).get(
@@ -109,9 +109,7 @@ class SettingsManager:
         # PRINT STATUS AND CONFIGURATION
         from .printer import Printer
 
-        printer = Printer(
-            verbose=True
-        )  # Forcer le mode verbose pour afficher le cadre ASCII
+        printer = Printer(verbose=True)  # Force verbose mode to display ASCII frame
         printer.config_display(app_data)
 
         return app_data

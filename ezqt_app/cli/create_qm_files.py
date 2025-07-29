@@ -16,6 +16,7 @@ import pkg_resources
 # ///////////////////////////////////////////////////////////////
 from ..kernel.common import Path
 from ..kernel.app_functions.printer import get_printer
+from ezqt_app.kernel.translation.helpers import extract_translations_from_ts
 
 # TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
 
@@ -33,71 +34,71 @@ from ..kernel.app_functions.printer import get_printer
 
 
 def create_proper_qm_from_ts(ts_file_path: Path, qm_file_path: Path) -> bool:
-    """Crée un fichier .qm dans le bon format Qt"""
+    """Creates a .qm file in the correct Qt format"""
 
     printer = get_printer()
-    printer.info(f"Conversion de {ts_file_path.name} vers {qm_file_path.name}...")
+    printer.info(f"Converting {ts_file_path.name} to {qm_file_path.name}...")
 
     try:
-        # Extraire les traductions du fichier .ts
+        # Extract translations from .ts file
         translations = extract_translations_from_ts(ts_file_path)
 
-        # Créer le fichier .qm
+        # Create .qm file
         create_qt_qm_file(qm_file_path, translations)
 
-        printer.success(f"{len(translations)} traductions converties")
+        printer.success(f"{len(translations)} translations converted")
         return True
 
     except Exception as e:
-        printer.error(f"Erreur lors de la conversion: {e}")
+        printer.error(f"Error during conversion: {e}")
         return False
 
 
 def create_qt_qm_file(qm_file_path: Path, translations: dict):
-    """Crée un fichier .qm dans le format Qt approprié"""
+    """Creates a .qm file in the appropriate Qt format"""
 
-    # Format Qt .qm basé sur la documentation et les exemples
+    # Qt .qm format based on documentation and examples
     with open(qm_file_path, "wb") as f:
-        # En-tête Qt .qm
-        # Magic number: "qm" suivi de 2 octets nuls
+        # Qt .qm header
+        # Magic number: "qm" followed by 2 null bytes
         f.write(b"qm\x00\x00")
 
-        # Version (4 octets little-endian)
+        # Version (4 bytes little-endian)
         f.write(struct.pack("<I", 0x01))
 
-        # Nombre de traductions (4 octets little-endian)
+        # Number of translations (4 bytes little-endian)
         f.write(struct.pack("<I", len(translations)))
 
-        # Écrire les traductions
+        # Write translations
         for source, translation in translations.items():
-            # Encoder en UTF-8
+            # Encode in UTF-8
             source_bytes = source.encode("utf-8")
             translation_bytes = translation.encode("utf-8")
 
-            # Longueur de la source (4 octets little-endian)
+            # Source length (4 bytes little-endian)
             f.write(struct.pack("<I", len(source_bytes)))
 
             # Source
             f.write(source_bytes)
 
-            # Longueur de la traduction (4 octets little-endian)
+            # Translation length (4 bytes little-endian)
             f.write(struct.pack("<I", len(translation_bytes)))
 
-            # Traduction
+            # Translation
             f.write(translation_bytes)
 
-        # Checksum (optionnel, mais souvent présent)
+        # Checksum (optional, but often present)
         f.write(struct.pack("<I", 0))
 
 
 def main():
-    """Fonction principale"""
+    """Main function"""
     printer = get_printer()
-    printer.section("Création de fichiers .qm dans le bon format Qt")
+    printer.section("Creating .qm files in the correct Qt format")
 
-    # Priorité 1: Chercher dans le projet utilisateur (bin/translations)
+    # Priority 1: Look in user project (bin/translations)
     current_project_translations = Path.cwd() / "bin" / "translations"
-    # Priorité 2: Chercher dans le package installé
+    # Priority 2: Look in installed package
     try:
         package_translations = Path(
             pkg_resources.resource_filename("ezqt_app", "resources/translations")
@@ -107,43 +108,41 @@ def main():
             Path(__file__).parent.parent / "resources" / "translations"
         )
 
-    # Choisir le dossier de traductions
+    # Choose translations directory
     if current_project_translations.exists():
         translations_dir = current_project_translations
-        printer.info(f"Utilisation du dossier projet: {translations_dir}")
+        printer.info(f"Using project directory: {translations_dir}")
     elif package_translations.exists():
         translations_dir = package_translations
-        printer.info(f"Utilisation du dossier package (fallback): {translations_dir}")
+        printer.info(f"Using package directory (fallback): {translations_dir}")
     else:
-        printer.error("Aucun dossier de traductions trouvé")
-        printer.verbose_msg(f"   Projet: {current_project_translations}")
+        printer.error("No translations directory found")
+        printer.verbose_msg(f"   Project: {current_project_translations}")
         printer.verbose_msg(f"   Package: {package_translations}")
-        printer.info(
-            "Assurez-vous d'être dans un projet EzQt_App ou lancez 'ezqt init'"
-        )
+        printer.info("Make sure you are in an EzQt_App project or run 'ezqt init'")
         return
 
-    # Chercher les fichiers .ts
+    # Look for .ts files
     ts_files = list(translations_dir.glob("*.ts"))
 
     if not ts_files:
-        printer.error("Aucun fichier .ts trouvé")
+        printer.error("No .ts files found")
         return
 
-    printer.info(f"Fichiers .ts trouvés: {len(ts_files)}")
+    printer.info(f".ts files found: {len(ts_files)}")
 
-    # Convertir chaque fichier .ts
+    # Convert each .ts file
     for ts_file in ts_files:
         qm_file = ts_file.with_suffix(".qm")
         if create_proper_qm_from_ts(ts_file, qm_file):
-            printer.success(f"{qm_file.name} créé")
+            printer.success(f"{qm_file.name} created")
         else:
-            printer.error(f"Échec de création de {qm_file.name}")
+            printer.error(f"Failed to create {qm_file.name}")
 
-    printer.success("Processus terminé !")
-    printer.info("Prochaines étapes:")
-    printer.verbose_msg("   1. Testez les nouveaux fichiers .qm")
-    printer.verbose_msg("   2. Si ça ne fonctionne toujours pas, utilisez les .ts")
+    printer.success("Process completed!")
+    printer.info("Next steps:")
+    printer.verbose_msg("   1. Test the new .qm files")
+    printer.verbose_msg("   2. If it still doesn't work, use the .ts files")
 
 
 if __name__ == "__main__":

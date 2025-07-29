@@ -34,7 +34,7 @@ from ..common import Path
 from .printer import get_printer
 from .file_maker import FileMaker
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 ## ==> CLASSES
 # ///////////////////////////////////////////////////////////////
@@ -42,10 +42,10 @@ from .file_maker import FileMaker
 
 class AssetsManager:
     """
-    Gestionnaire des assets de l'application.
+    Application assets manager.
 
-    Cette classe gère la génération et la vérification des ressources
-    requises pour l'application EzQt_App.
+    This class manages the generation and verification of resources
+    required for the EzQt_App application.
     """
 
     # ASSETS MANAGEMENT
@@ -54,12 +54,12 @@ class AssetsManager:
     @staticmethod
     def check_assets_requirements() -> None:
         """
-        Vérifie et génère les ressources requises pour l'application.
+        Check and generate required resources for the application.
 
-        Cette méthode génère les binaires des assets, les fichiers QRC,
-        les fichiers RC Python et le module de ressources de l'application.
+        This method generates asset binaries, QRC files,
+        Python RC files and the application resources module.
         """
-        maker = FileMaker()  # Utilise APP_PATH par défaut
+        maker = FileMaker()  # Uses APP_PATH by default
         maker.make_assets_binaries()
         res = maker.make_qrc()
         maker.make_rc_py() if res else maker.purge_rc_py()
@@ -68,40 +68,35 @@ class AssetsManager:
     @staticmethod
     def make_app_resources_module() -> None:
         """
-        Génère le module de ressources de l'application.
+        Generate the application resources module.
         """
-        maker = FileMaker()  # Utilise APP_PATH par défaut
+        maker = FileMaker()  # Uses APP_PATH by default
         maker.make_app_resources_module()
 
     @staticmethod
     def make_required_files(mk_theme: bool = True) -> None:
         """
-        Génère les fichiers requis pour l'application.
+        Generate required files for the application.
 
         Parameters
         ----------
         mk_theme : bool, optional
-            Génère le fichier de thème (défaut: True).
+            Generate theme file (default: True).
         """
-        from .config_manager import ConfigManager
+        from .config_manager import get_package_resource
 
         # GENERATE YAML FILE
-        yaml_package = ConfigManager.get_package_resource("app.yaml")
+        yaml_package = get_package_resource("app.yaml")
         yaml_application = FileMaker(Path.cwd()).make_yaml_from_package(yaml_package)
-        ConfigManager.set_yaml_file(yaml_application)
 
         # GENERATE THEME FILE
         res = None
         if mk_theme:
-            theme_package = ConfigManager.get_package_resource(
-                "resources/themes/main_theme.qss"
-            )
+            theme_package = get_package_resource("resources/themes/main_theme.qss")
             res = FileMaker(Path.cwd()).make_qss_from_package(theme_package)
 
         # COPY TRANSLATION FILES
-        translations_package = ConfigManager.get_package_resource(
-            "resources/translations"
-        )
+        translations_package = get_package_resource("resources/translations")
         translations_res = FileMaker(Path.cwd()).make_translations_from_package(
             translations_package
         )

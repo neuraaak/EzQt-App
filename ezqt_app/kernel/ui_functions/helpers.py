@@ -23,23 +23,23 @@
 # ///////////////////////////////////////////////////////////////
 
 """
-Helpers pour ui_functions
-==========================
+UI Functions Helpers
+====================
 
-Ce module contient des fonctions utilitaires pour simplifier l'utilisation
-des ui_functions dans le code client.
+This module contains utility functions to simplify the use
+of ui_functions in client code.
 
-Fonctions disponibles:
-- maximize_window: Maximise la fenêtre
-- restore_window: Restaure la fenêtre
-- toggle_window_state: Bascule l'état de la fenêtre
-- load_theme: Charge un thème QSS
-- apply_theme: Applique un thème à un widget
-- animate_panel: Anime un panneau
-- select_menu_item: Sélectionne un élément de menu
-- refresh_menu_style: Rafraîchit le style du menu
-- setup_custom_grips: Configure les grips personnalisés
-- connect_window_events: Connecte les événements de fenêtre
+Available functions:
+- maximize_window: Maximize window
+- restore_window: Restore window
+- toggle_window_state: Toggle window state
+- load_theme: Load QSS theme
+- apply_theme: Apply theme to widget
+- animate_panel: Animate panel
+- select_menu_item: Select menu item
+- refresh_menu_style: Refresh menu style
+- setup_custom_grips: Setup custom grips
+- connect_window_events: Connect window events
 """
 
 # IMPORT BASE
@@ -62,7 +62,7 @@ from .menu_manager import MenuManager
 from .ui_definitions import UIDefinitions
 from .ui_functions import UIFunctions
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Optional
 
 # ///////////////////////////////////////////////////////////////
@@ -72,13 +72,13 @@ from typing import Optional
 
 def maximize_window(window: QMainWindow) -> bool:
     """
-    Maximise la fenêtre principale.
+    Maximize the main window.
 
     Args:
-        window: Fenêtre principale à maximiser
+        window: Main window to maximize
 
     Returns:
-        True si la maximisation a réussi
+        True if maximization succeeded
 
     Example:
         >>> success = maximize_window(main_window)
@@ -92,13 +92,13 @@ def maximize_window(window: QMainWindow) -> bool:
 
 def restore_window(window: QMainWindow) -> bool:
     """
-    Restaure la fenêtre principale.
+    Restore the main window.
 
     Args:
-        window: Fenêtre principale à restaurer
+        window: Main window to restore
 
     Returns:
-        True si la restauration a réussi
+        True if restoration succeeded
 
     Example:
         >>> success = restore_window(main_window)
@@ -112,13 +112,13 @@ def restore_window(window: QMainWindow) -> bool:
 
 def toggle_window_state(window: QMainWindow) -> bool:
     """
-    Bascule l'état de la fenêtre (maximisé/restauré).
+    Toggle window state (maximized/restored).
 
     Args:
-        window: Fenêtre principale
+        window: Main window
 
     Returns:
-        True si le basculement a réussi
+        True if toggle succeeded
 
     Example:
         >>> success = toggle_window_state(main_window)
@@ -132,13 +132,13 @@ def toggle_window_state(window: QMainWindow) -> bool:
 
 def load_theme(theme_name: str) -> Optional[str]:
     """
-    Charge un thème QSS depuis les ressources.
+    Load a QSS theme from resources.
 
     Args:
-        theme_name: Nom du thème à charger
+        theme_name: Theme name to load
 
     Returns:
-        Contenu du thème QSS ou None si échec
+        QSS theme content or None if failed
 
     Example:
         >>> theme_content = load_theme("dark_theme")
@@ -154,14 +154,14 @@ def load_theme(theme_name: str) -> Optional[str]:
 
 def apply_theme(widget: QWidget, theme_content: str) -> bool:
     """
-    Applique un thème QSS à un widget.
+    Apply a QSS theme to a widget.
 
     Args:
-        widget: Widget à styliser
-        theme_content: Contenu du thème QSS
+        widget: Widget to style
+        theme_content: QSS theme content
 
     Returns:
-        True si l'application a réussi
+        True if application succeeded
 
     Example:
         >>> success = apply_theme(widget, theme_content)
@@ -175,15 +175,15 @@ def apply_theme(widget: QWidget, theme_content: str) -> bool:
 
 def animate_panel(panel: QFrame, direction: str = "left", duration: int = 300) -> bool:
     """
-    Anime un panneau (menu ou paramètres).
+    Animate a panel (menu or settings).
 
     Args:
-        panel: Panneau à animer
-        direction: Direction de l'animation ("left", "right", "top", "bottom")
-        duration: Durée de l'animation en ms
+        panel: Panel to animate
+        direction: Animation direction ("left", "right", "top", "bottom")
+        duration: Animation duration in ms
 
     Returns:
-        True si l'animation a réussi
+        True if animation succeeded
 
     Example:
         >>> success = animate_panel(menu_panel, "left", 500)
@@ -205,14 +205,14 @@ def animate_panel(panel: QFrame, direction: str = "left", duration: int = 300) -
 
 def select_menu_item(button: QWidget, enable: bool = True) -> bool:
     """
-    Sélectionne un élément de menu.
+    Select a menu item.
 
     Args:
-        button: Bouton de menu à sélectionner
-        enable: True pour sélectionner, False pour désélectionner
+        button: Menu button to select
+        enable: True to select, False to deselect
 
     Returns:
-        True si la sélection a réussi
+        True if selection succeeded
 
     Example:
         >>> success = select_menu_item(menu_button, True)
@@ -226,10 +226,10 @@ def select_menu_item(button: QWidget, enable: bool = True) -> bool:
 
 def refresh_menu_style() -> bool:
     """
-    Rafraîchit le style du menu.
+    Refresh menu style.
 
     Returns:
-        True si le rafraîchissement a réussi
+        True if refresh succeeded
 
     Example:
         >>> success = refresh_menu_style()
@@ -243,13 +243,13 @@ def refresh_menu_style() -> bool:
 
 def setup_custom_grips(window: QMainWindow) -> bool:
     """
-    Configure les grips personnalisés pour une fenêtre.
+    Setup custom grips for a window.
 
     Args:
-        window: Fenêtre principale
+        window: Main window
 
     Returns:
-        True si la configuration a réussi
+        True if setup succeeded
 
     Example:
         >>> success = setup_custom_grips(main_window)
@@ -263,13 +263,13 @@ def setup_custom_grips(window: QMainWindow) -> bool:
 
 def connect_window_events(window: QMainWindow) -> bool:
     """
-    Connecte les événements de fenêtre.
+    Connect window events.
 
     Args:
-        window: Fenêtre principale
+        window: Main window
 
     Returns:
-        True si la connexion a réussi
+        True if connection succeeded
 
     Example:
         >>> success = connect_window_events(main_window)
@@ -283,10 +283,10 @@ def connect_window_events(window: QMainWindow) -> bool:
 
 def get_ui_functions_instance() -> UIFunctions:
     """
-    Obtient une instance des UIFunctions.
+    Get a UIFunctions instance.
 
     Returns:
-        Instance des UIFunctions
+        UIFunctions instance
 
     Example:
         >>> ui = get_ui_functions_instance()
@@ -297,13 +297,13 @@ def get_ui_functions_instance() -> UIFunctions:
 
 def is_window_maximized(window: QMainWindow) -> bool:
     """
-    Vérifie si une fenêtre est maximisée.
+    Check if a window is maximized.
 
     Args:
-        window: Fenêtre à vérifier
+        window: Window to check
 
     Returns:
-        True si la fenêtre est maximisée
+        True if window is maximized
 
     Example:
         >>> if is_window_maximized(main_window):
@@ -318,17 +318,17 @@ def is_window_maximized(window: QMainWindow) -> bool:
 
 def get_window_status(window: QMainWindow) -> str:
     """
-    Obtient le statut d'une fenêtre.
+    Get window status.
 
     Args:
-        window: Fenêtre à vérifier
+        window: Window to check
 
     Returns:
-        Statut de la fenêtre ("maximized", "normal", "minimized")
+        Window status ("maximized", "normal", "minimized")
 
     Example:
         >>> status = get_window_status(main_window)
-        >>> print(f"Statut: {status}")
+        >>> print(f"Status: {status}")
     """
     try:
         window_manager = WindowManager()
@@ -339,13 +339,13 @@ def get_window_status(window: QMainWindow) -> str:
 
 def apply_default_theme(widget: QWidget) -> bool:
     """
-    Applique le thème par défaut à un widget.
+    Apply default theme to a widget.
 
     Args:
-        widget: Widget à styliser
+        widget: Widget to style
 
     Returns:
-        True si l'application a réussi
+        True if application succeeded
 
     Example:
         >>> success = apply_default_theme(widget)
@@ -359,14 +359,14 @@ def apply_default_theme(widget: QWidget) -> bool:
 
 def setup_window_title_bar(window: QMainWindow, title_bar: QWidget) -> bool:
     """
-    Configure la barre de titre personnalisée.
+    Setup custom title bar.
 
     Args:
-        window: Fenêtre principale
-        title_bar: Widget de la barre de titre
+        window: Main window
+        title_bar: Title bar widget
 
     Returns:
-        True si la configuration a réussi
+        True if setup succeeded
 
     Example:
         >>> success = setup_window_title_bar(main_window, title_bar)

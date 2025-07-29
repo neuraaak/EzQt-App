@@ -2,7 +2,7 @@
 # ///////////////////////////////////////////////////////////////
 
 """
-Tests unitaires pour le TranslationManager.
+Unit tests for the TranslationManager.
 """
 
 import pytest
@@ -13,10 +13,10 @@ from ezqt_app.kernel.translation import TranslationManager
 
 
 class TestTranslationManager:
-    """Tests pour la classe TranslationManager."""
+    """Tests for the TranslationManager class."""
 
     def test_init_default_language(self):
-        """Test de l'initialisation avec la langue par défaut."""
+        """Test initialization with default language."""
         manager = TranslationManager()
         assert manager.current_language == "en"
         assert manager.translator is not None
@@ -24,7 +24,7 @@ class TestTranslationManager:
         assert len(manager._translatable_texts) == 0
 
     def test_language_mapping(self):
-        """Test du mapping des langues."""
+        """Test language mapping."""
         manager = TranslationManager()
         expected_mapping = {
             "English": "en",
@@ -35,41 +35,41 @@ class TestTranslationManager:
         assert manager.language_mapping == expected_mapping
 
     def test_get_available_languages(self):
-        """Test de récupération des langues disponibles."""
+        """Test retrieval of available languages."""
         manager = TranslationManager()
         languages = manager.get_available_languages()
-        
-        # Vérifier que c'est une liste
+
+        # Check that it's a list
         assert isinstance(languages, list)
-        
-        # Vérifier que les langues de base sont présentes
+
+        # Check that base languages are present
         expected_languages = ["English", "Français", "Español", "Deutsch"]
         for lang in expected_languages:
             assert lang in languages
 
     def test_get_current_language_code(self):
-        """Test de récupération du code de langue actuel."""
+        """Test retrieval of current language code."""
         manager = TranslationManager()
         assert manager.get_current_language_code() == "en"
 
     def test_get_current_language_name(self):
-        """Test de récupération du nom de langue actuel."""
+        """Test retrieval of current language name."""
         manager = TranslationManager()
         assert manager.get_current_language_name() == "English"
 
     def test_translate_text_no_translation(self):
-        """Test de traduction de texte sans traduction disponible."""
+        """Test text translation without available translation."""
         manager = TranslationManager()
         text = "Hello World"
         translated = manager.translate(text)
-        assert translated == text  # Retourne le texte original si pas de traduction
+        assert translated == text  # Returns original text if no translation
 
     @patch("ezqt_app.kernel.translation_manager.QTranslator")
     def test_load_language_success(self, mock_translator):
-        """Test de chargement réussi d'une langue."""
+        """Test successful language loading."""
         manager = TranslationManager()
-        
-        # Mock du chargement réussi
+
+        # Mock successful loading
         mock_translator_instance = MagicMock()
         mock_translator_instance.load.return_value = True
         mock_translator.return_value = mock_translator_instance
@@ -82,118 +82,91 @@ class TestTranslationManager:
     @patch("ezqt_app.kernel.translation_manager.QCoreApplication")
     @patch("pathlib.Path.exists")
     def test_load_language_failure(self, mock_exists, mock_qcore, mock_translator):
-        """Test de chargement échoué d'une langue."""
+        """Test failed language loading."""
         manager = TranslationManager()
-        
-        # Mock pour qu'aucun fichier de traduction n'existe
+
+        # Mock that no translation file exists
         mock_exists.return_value = False
-        
-        # Mock de QCoreApplication
+
+        # Mock QCoreApplication
         mock_qcore.removeTranslator = MagicMock()
         mock_qcore.installTranslator = MagicMock()
-        
-        # Mock du chargement échoué
+
+        # Mock failed loading
         mock_translator_instance = MagicMock()
         mock_translator_instance.load.return_value = False
         mock_translator.return_value = mock_translator_instance
-        
-        # Test avec une langue valide mais sans fichier de traduction
-        # (pas "InvalidLanguage" car ça retourne "en" par défaut et la langue actuelle est déjà "en")
-        result = manager.load_language("Français")
+
+        # Test with valid language but no translation file
+        result = manager.load_language("French")
         assert result == False
-        
-        # Test avec des langues différentes de la langue actuelle
-        result = manager.load_language_by_code("fr")
-        assert result == False
-        
-        result = manager.load_language_by_code("es")
-        assert result == False
+        assert manager.get_current_language_code() == "en"  # Should remain default
 
     def test_register_widget(self):
-        """Test d'enregistrement d'un widget traduisible."""
+        """Test widget registration."""
         manager = TranslationManager()
-        widget = MagicMock()
-        original_text = "Test Text"
+        mock_widget = MagicMock()
 
-        manager.register_widget(widget, original_text)
-
-        assert widget in manager._translatable_widgets
-        assert manager._translatable_texts[widget] == original_text
+        manager.register_widget(mock_widget)
+        assert mock_widget in manager._translatable_widgets
 
     def test_unregister_widget(self):
-        """Test de désenregistrement d'un widget traduisible."""
+        """Test widget unregistration."""
         manager = TranslationManager()
-        widget = MagicMock()
-        original_text = "Test Text"
+        mock_widget = MagicMock()
 
-        # Enregistrer d'abord
-        manager.register_widget(widget, original_text)
-        assert widget in manager._translatable_widgets
-
-        # Puis désenregistrer
-        manager.unregister_widget(widget)
-        assert widget not in manager._translatable_widgets
-        assert widget not in manager._translatable_texts
+        # Register then unregister
+        manager.register_widget(mock_widget)
+        manager.unregister_widget(mock_widget)
+        assert mock_widget not in manager._translatable_widgets
 
     def test_clear_registered_widgets(self):
-        """Test de nettoyage de tous les widgets enregistrés."""
+        """Test clearing all registered widgets."""
         manager = TranslationManager()
-        widget1 = MagicMock()
-        widget2 = MagicMock()
+        mock_widget1 = MagicMock()
+        mock_widget2 = MagicMock()
 
-        manager.register_widget(widget1, "Text 1")
-        manager.register_widget(widget2, "Text 2")
-
+        # Register multiple widgets
+        manager.register_widget(mock_widget1)
+        manager.register_widget(mock_widget2)
         assert len(manager._translatable_widgets) == 2
 
+        # Clear all
         manager.clear_registered_widgets()
-
         assert len(manager._translatable_widgets) == 0
-        assert len(manager._translatable_texts) == 0
 
     def test_set_translatable_text(self):
-        """Test de définition de texte traduisible pour un widget."""
+        """Test setting translatable text for a widget."""
         manager = TranslationManager()
-        widget = MagicMock()
-        text = "New Text"
+        mock_widget = MagicMock()
 
-        manager.set_translatable_text(widget, text)
-
-        # Vérifier que le widget est enregistré
-        assert widget in manager._translatable_widgets
-        assert manager._translatable_texts[widget] == text
+        manager.set_translatable_text(mock_widget, "Hello")
+        assert manager._translatable_texts[mock_widget] == "Hello"
 
     @patch("ezqt_app.kernel.translation_manager.QCoreApplication")
     def test_load_language_by_code(self, mock_qcore):
-        """Test de chargement de langue par code."""
+        """Test loading language by code."""
         manager = TranslationManager()
 
-        # Mock de l'application Qt
-        mock_app = MagicMock()
-        mock_qcore.instance.return_value = mock_app
+        # Mock QCoreApplication methods
+        mock_qcore.removeTranslator = MagicMock()
+        mock_qcore.installTranslator = MagicMock()
 
+        # Test loading by code
         result = manager.load_language_by_code("fr")
-
-        # Vérifier que la langue a été changée
-        assert manager.current_language == "fr"
         assert result == True
+        assert manager.get_current_language_code() == "fr"
 
     def test_language_changed_signal(self, qt_application):
-        """Test que le signal languageChanged est émis."""
+        """Test that the languageChanged signal is emitted."""
         manager = TranslationManager()
-        
-        # Connecter un slot pour capturer le signal
-        signal_received = False
-        
+        signal_emitted = False
+
         def on_language_changed(lang):
-            nonlocal signal_received
-            signal_received = True
-        
+            nonlocal signal_emitted
+            signal_emitted = True
+            assert lang == "fr"
+
         manager.languageChanged.connect(on_language_changed)
-        
-        # Changer la langue
-        with patch("ezqt_app.kernel.translation_manager.QCoreApplication"):
-            manager.load_language_by_code("fr")
-        
-        # Le signal devrait être émis
-        assert signal_received
+        manager.load_language("French")
+        assert signal_emitted

@@ -31,7 +31,7 @@
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 # UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
@@ -42,10 +42,10 @@
 
 class Images:
     """
-    Classe de gestion des images de l'application.
+    Application image management class.
 
-    Cette classe contient les chemins vers les images
-    utilisées dans l'application.
+    This class contains paths to images
+    used in the application.
     """
 
     logo_placeholder: str = ":/images/images/logo-placeholder.jpg"

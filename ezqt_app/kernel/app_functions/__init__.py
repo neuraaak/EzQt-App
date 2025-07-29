@@ -19,7 +19,14 @@
 # ///////////////////////////////////////////////////////////////
 from ..common import APP_PATH
 from .assets_manager import AssetsManager
-from .config_manager import ConfigManager
+from .config_manager import (
+    get_config_manager,
+    load_config,
+    get_config_value,
+    save_config,
+    get_package_resource,
+    get_package_resource_content,
+)
 from .resource_manager import ResourceManager
 from .settings_manager import SettingsManager
 
@@ -48,12 +55,18 @@ from .helpers import (
 # ///////////////////////////////////////////////////////////////
 __all__ = [
     "AssetsManager",
-    "ConfigManager",
     "ResourceManager",
     "SettingsManager",
     "FileMaker",
     "APP_PATH",
     "Kernel",
+    # Config functions
+    "get_config_manager",
+    "load_config",
+    "get_config_value",
+    "save_config",
+    "get_package_resource",
+    "get_package_resource_content",
     # Helpers
     "load_config_section",
     "save_config_section",
@@ -67,4 +80,3 @@ __all__ = [
     "get_app_version",
     "get_app_name",
 ]
- 

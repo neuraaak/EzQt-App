@@ -33,7 +33,7 @@ from PySide6.QtGui import QIcon
 # ///////////////////////////////////////////////////////////////
 from .. import globals
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Any
 
 ## ==> CLASSES
@@ -42,10 +42,10 @@ from typing import Any
 
 class WindowManager:
     """
-    Gestionnaire de l'état de la fenêtre.
+    Window state manager.
 
-    Cette classe gère la maximisation, restauration et l'état
-    de la fenêtre principale de l'application.
+    This class manages the maximization, restoration and state
+    of the main application window.
     """
 
     # WINDOW STATE MANAGEMENT
@@ -54,7 +54,7 @@ class WindowManager:
     @staticmethod
     def maximize_restore(self) -> None:
         """
-        Maximise ou restaure la fenêtre selon son état actuel.
+        Maximize or restore window based on current state.
         """
         status = globals.get_global_state()
         if status == False:
@@ -88,23 +88,23 @@ class WindowManager:
     @staticmethod
     def returnStatus(self) -> Any | bool:
         """
-        Retourne l'état actuel de la fenêtre.
+        Return current window state.
 
         Returns
         -------
         bool
-            True si la fenêtre est maximisée, False sinon.
+            True if window is maximized, False otherwise.
         """
         return globals.get_global_state()
 
     @staticmethod
     def setStatus(self, status) -> None:
         """
-        Définit l'état de la fenêtre.
+        Set window state.
 
         Parameters
         ----------
         status : bool
-            Nouvel état de la fenêtre.
+            New window state.
         """
         globals.set_global_state(status)

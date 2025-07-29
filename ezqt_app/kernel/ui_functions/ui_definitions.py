@@ -52,10 +52,10 @@ from ...widgets.custom_grips.custom_grips import CustomGrip
 
 class UIDefinitions:
     """
-    Définitions de l'interface utilisateur.
+    User interface definitions.
 
-    Cette classe gère la configuration et l'initialisation
-    des éléments UI de l'application.
+    This class manages the configuration and initialization
+    of UI elements in the application.
     """
 
     # UI DEFINITIONS
@@ -64,7 +64,7 @@ class UIDefinitions:
     @staticmethod
     def uiDefinitions(self) -> None:
         """
-        Configure et initialise tous les éléments de l'interface utilisateur.
+        Configure and initialize all user interface elements.
         """
 
         def doubleClickMaximizeRestore(event) -> None:
@@ -147,9 +147,7 @@ class UIDefinitions:
 
     @staticmethod
     def resize_grips(self) -> None:
-        """
-        Redimensionne les grips de redimensionnement de la fenêtre.
-        """
+        """Resize window resize grips."""
         if Settings.App.ENABLE_CUSTOM_TITLE_BAR:
             self.left_grip.setGeometry(0, 10, 10, self.height())
             self.right_grip.setGeometry(self.width() - 10, 10, 10, self.height())

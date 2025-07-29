@@ -12,6 +12,7 @@ import os
 # Configure High DPI using the centralized configuration
 try:
     from ...kernel.qt_config import configure_qt_high_dpi
+
     configure_qt_high_dpi()
 except (ImportError, RuntimeError, Exception):
     # If we can't configure it, continue anyway
@@ -29,7 +30,7 @@ from PySide6.QtGui import QGuiApplication
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Any
 
 # UTILITY FUNCTIONS
@@ -41,31 +42,31 @@ from typing import Any
 
 class EzApplication(QApplication):
     """
-    Application principale étendue avec support des thèmes et encodage UTF-8.
+    Extended main application with theme and UTF-8 encoding support.
 
-    Cette classe hérite de QApplication et ajoute des fonctionnalités
-    pour la gestion des thèmes et l'encodage UTF-8.
+    This class inherits from QApplication and adds functionality
+    for theme management and UTF-8 encoding.
     """
 
     themeChanged = Signal()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """
-        Initialise l'application avec support UTF-8 et haute résolution.
+        Initialize the application with UTF-8 and high resolution support.
 
         Parameters
         ----------
         *args : Any
-            Arguments positionnels passés à QApplication.
+            Positional arguments passed to QApplication.
         **kwargs : Any
-            Arguments nommés passés à QApplication.
+            Keyword arguments passed to QApplication.
         """
         # Configure High DPI JUST BEFORE creating QApplication
         # This is the critical moment when QGuiApplication is created
         try:
             from PySide6.QtCore import Qt
             from PySide6.QtGui import QGuiApplication
-            
+
             # Check if QGuiApplication instance already exists
             if QGuiApplication.instance() is None:
                 # Set High DPI scale factor rounding policy
@@ -77,7 +78,7 @@ class EzApplication(QApplication):
             # If we can't configure it, continue anyway
             pass
 
-        # Vérifier s'il y a déjà une instance QApplication
+        # Check if there's already a QApplication instance
         existing_app = QApplication.instance()
         if existing_app and not isinstance(existing_app, EzApplication):
             raise RuntimeError(
@@ -102,15 +103,15 @@ class EzApplication(QApplication):
     @classmethod
     def create_for_testing(cls, *args: Any, **kwargs: Any) -> "EzApplication":
         """
-        Méthode de classe pour créer une instance EzApplication pour les tests.
-        Cette méthode contourne la vérification de singleton pour les tests.
+        Class method to create an EzApplication instance for testing.
+        This method bypasses singleton checking for tests.
         """
         # Configure High DPI JUST BEFORE creating QApplication
         # This is the critical moment when QGuiApplication is created
         try:
             from PySide6.QtCore import Qt
             from PySide6.QtGui import QGuiApplication
-            
+
             # Check if QGuiApplication instance already exists
             if QGuiApplication.instance() is None:
                 # Set High DPI scale factor rounding policy
@@ -122,34 +123,34 @@ class EzApplication(QApplication):
             # If we can't configure it, continue anyway
             pass
 
-        # Vérifier s'il y a déjà une instance
+        # Check if there's already an instance
         existing_app = QApplication.instance()
         if existing_app:
-            # Si c'est déjà une EzApplication, la retourner
+            # If it's already an EzApplication, return it
             if isinstance(existing_app, cls):
                 return existing_app
-            # Sinon, la détruire proprement
+            # Otherwise, destroy it properly
             existing_app.quit()
             existing_app.deleteLater()
             import time
 
-            time.sleep(0.2)  # Plus de temps pour s'assurer que l'instance est détruite
+            time.sleep(0.2)  # More time to ensure instance is destroyed
 
-            # Vérifier que l'instance a bien été détruite
+            # Check that instance has been properly destroyed
             if QApplication.instance():
-                # Si l'instance existe encore, forcer la destruction
+                # If instance still exists, force destruction
                 QApplication.instance().quit()
                 QApplication.instance().deleteLater()
                 time.sleep(0.2)
 
-        # Créer une nouvelle instance directement avec QApplication
-        # pour éviter les vérifications du constructeur EzApplication
+        # Create new instance directly with QApplication
+        # to avoid EzApplication constructor checks
         try:
             instance = QApplication(*args, **kwargs)
         except RuntimeError as e:
-            # Si on a encore une erreur, essayer de forcer la destruction
+            # If we still have an error, try to force destruction
             if "QApplication singleton" in str(e):
-                # Forcer la destruction de toute instance existante
+                # Force destruction of any existing instance
                 app = QApplication.instance()
                 if app:
                     app.quit()
@@ -158,15 +159,15 @@ class EzApplication(QApplication):
 
                     time.sleep(0.3)
 
-                # Réessayer de créer l'instance
+                # Retry creating instance
                 instance = QApplication(*args, **kwargs)
             else:
                 raise
 
-        # Ajouter les attributs d'EzApplication
+        # Add EzApplication attributes
         instance.themeChanged = Signal()
 
-        # Configurer l'instance comme dans le constructeur EzApplication
+        # Configure instance as in EzApplication constructor
         instance.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 
         try:

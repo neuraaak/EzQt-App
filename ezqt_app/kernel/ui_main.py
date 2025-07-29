@@ -46,7 +46,7 @@ from .app_resources import *
 from ..widgets.core import *
 from ..kernel.app_settings import Settings
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 #  UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
@@ -57,24 +57,24 @@ from ..kernel.app_settings import Settings
 
 class Ui_MainWindow:
     """
-    Interface utilisateur principale de l'application.
+    Main application user interface.
 
-    Cette classe définit la structure de l'interface utilisateur
-    principale avec tous ses composants (header, menu, contenu, etc.).
+    This class defines the structure of the main user interface
+    with all its components (header, menu, content, etc.).
     """
 
     def __init__(self) -> None:
-        """Initialise l'interface utilisateur principale."""
+        """Initialize the main user interface."""
         pass
 
     def setupUi(self, MainWindow: QMainWindow) -> None:
         """
-        Configure l'interface utilisateur principale.
+        Configure the main user interface.
 
         Parameters
         ----------
         MainWindow : QMainWindow
-            La fenêtre principale à configurer.
+            The main window to configure.
         """
         if not MainWindow.objectName():
             MainWindow.setObjectName("MainWindow")

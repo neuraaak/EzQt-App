@@ -34,21 +34,21 @@ from typing import Union
 
 class ThemeIcon(QIcon):
     """
-    Icône avec support automatique des thèmes.
+    Icon with automatic theme support.
 
-    Cette classe étend QIcon pour fournir une icône qui s'adapte
-    automatiquement au thème actuel (clair/sombre). L'icône change
-    de couleur en fonction du thème de l'application.
+    This class extends QIcon to provide an icon that adapts
+    automatically to the current theme (light/dark). The icon changes
+    color based on the application theme.
     """
 
     def __init__(self, original_icon: Union[QIcon, str]) -> None:
         """
-        Initialise l'icône avec support de thème.
+        Initialize icon with theme support.
 
         Parameters
         ----------
         original_icon : QIcon or str
-            L'icône originale ou le chemin vers l'icône.
+            The original icon or path to the icon.
         """
         super().__init__()
         self.original_icon = (
@@ -62,26 +62,26 @@ class ThemeIcon(QIcon):
 
     def _connect_theme_changed(self) -> None:
         """
-        Connecte au signal de changement de thème.
+        Connect to theme change signal.
 
-        Utilise un import lazy pour éviter les imports circulaires.
+        Uses lazy import to avoid circular imports.
         """
         try:
-            # Import lazy pour éviter l'import circulaire
+            # Lazy import to avoid circular import
             from ...widgets.core.ez_app import EzApplication
 
             EzApplication.instance().themeChanged.connect(self.updateIcon)
         except ImportError:
-            # Fallback si l'import échoue
+            # Fallback if import fails
             get_printer().warning("Could not connect to EzApplication theme signal")
 
     def updateIcon(self) -> None:
         """
-        Met à jour l'icône selon le thème actuel.
+        Update icon based on current theme.
 
-        Change la couleur de l'icône en fonction du thème :
-        - Thème sombre : icône claire
-        - Thème clair : icône sombre
+        Changes icon color based on theme:
+        - Dark theme: light icon
+        - Light theme: dark icon
         """
         icon_color = "light" if Settings.Gui.THEME == "dark" else "dark"
 

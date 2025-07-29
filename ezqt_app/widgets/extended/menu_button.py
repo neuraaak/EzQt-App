@@ -43,21 +43,21 @@ def colorize_pixmap(
     pixmap: QPixmap, color: str = "#FFFFFF", opacity: float = 0.5
 ) -> QPixmap:
     """
-    Recolore un QPixmap avec la couleur et l'opacité données.
+    Colorize a QPixmap with the given color and opacity.
 
     Parameters
     ----------
     pixmap : QPixmap
-        Le pixmap à recolorer.
+        The pixmap to colorize.
     color : str, optional
-        La couleur à appliquer (défaut: "#FFFFFF").
+        The color to apply (default: "#FFFFFF").
     opacity : float, optional
-        L'opacité à appliquer (défaut: 0.5).
+        The opacity to apply (default: 0.5).
 
     Returns
     -------
     QPixmap
-        Le pixmap recoloré.
+        The colorized pixmap.
     """
     result = QPixmap(pixmap.size())
     result.fill(Qt.transparent)
@@ -72,17 +72,17 @@ def colorize_pixmap(
 
 def load_icon_from_source(source: Optional[Union[QIcon, str]]) -> Optional[QIcon]:
     """
-    Charge une icône depuis diverses sources (QIcon, chemin, URL, etc.).
+    Load an icon from various sources (QIcon, path, URL, etc.).
 
     Parameters
     ----------
     source : QIcon or str or None
-        Source de l'icône (QIcon, chemin, ressource, URL, ou SVG).
+        The icon source (QIcon, path, resource, URL, or SVG).
 
     Returns
     -------
     QIcon or None
-        Icône chargée ou None si échec.
+        The loaded icon or None if loading failed.
     """
     # ////// HANDLE NONE
     if source is None:
@@ -170,16 +170,16 @@ def load_icon_from_source(source: Optional[Union[QIcon, str]]) -> Optional[QIcon
 
 class MenuButton(QToolButton):
     """
-    Bouton de menu amélioré avec gestion automatique des états réduit/étendu.
+    Enhanced menu button with automatic shrink/extended state management.
 
-    Fonctionnalités :
-        - Gestion automatique des états réduit/étendu
-        - Support d'icônes depuis diverses sources (QIcon, chemin, URL, SVG)
-        - Visibilité du texte basée sur l'état (visible en étendu, caché en réduit)
-        - Taille de réduction et positionnement d'icône personnalisables
-        - Accès par propriétés à l'icône et au texte
-        - Signaux pour les changements d'état et interactions
-        - Effets de survol et de clic
+    Features:
+        - Automatic shrink/extended state management
+        - Icon support from various sources (QIcon, path, URL, SVG)
+        - Text visibility based on state (visible in extended, hidden in shrink)
+        - Customizable shrink size and icon positioning
+        - Property access to icon and text
+        - Signals for state changes and interactions
+        - Hover and click effects
     """
 
     iconChanged = Signal(QIcon)
@@ -200,30 +200,30 @@ class MenuButton(QToolButton):
         **kwargs: Any,
     ) -> None:
         """
-        Initialise le bouton de menu.
+        Initialize the menu button.
 
         Parameters
         ----------
         parent : Any, optional
-            Le widget parent (défaut: None).
+            The parent widget (default: None).
         icon : QIcon or str, optional
-            L'icône à afficher (défaut: None).
+            The icon to display (default: None).
         text : str, optional
-            Le texte du bouton (défaut: "").
+            The button text (default: "").
         icon_size : QSize or tuple, optional
-            Taille de l'icône (défaut: QSize(20, 20)).
+            Icon size (default: QSize(20, 20)).
         shrink_size : int, optional
-            Largeur en état réduit (défaut: 60).
+            Width in shrink state (default: 60).
         spacing : int, optional
-            Espacement entre icône et texte (défaut: 10).
+            Spacing between icon and text (default: 10).
         min_height : int, optional
-            Hauteur minimale du bouton (défaut: None).
+            Minimum button height (default: None).
         duration : int, optional
-            Durée d'animation en millisecondes (défaut: 300).
+            Animation duration in milliseconds (default: 300).
         *args : Any
-            Arguments positionnels supplémentaires.
+            Additional positional arguments.
         **kwargs : Any
-            Arguments nommés supplémentaires.
+            Additional keyword arguments.
         """
         super().__init__(parent, *args, **kwargs)
         self.setProperty("type", "MenuButton")
@@ -293,12 +293,12 @@ class MenuButton(QToolButton):
 
     @property
     def icon(self) -> Optional[QIcon]:
-        """Obtient ou définit l'icône du bouton."""
+        """Get or set the button icon."""
         return self._current_icon
 
     @icon.setter
     def icon(self, value: Optional[Union[QIcon, str]]) -> None:
-        """Définit l'icône du bouton depuis diverses sources."""
+        """Set the button icon from various sources."""
         icon = load_icon_from_source(value)
         if icon:
             self._current_icon = icon
@@ -310,24 +310,24 @@ class MenuButton(QToolButton):
 
     @property
     def text(self) -> str:
-        """Obtient ou définit le texte du bouton."""
+        """Get or set the button text."""
         return self.text_label.text()
 
     @text.setter
     def text(self, value: str) -> None:
-        """Définit le texte du bouton."""
+        """Set the button text."""
         if value != self.text_label.text():
             self.text_label.setText(str(value))
             self.textChanged.emit(str(value))
 
     @property
     def icon_size(self) -> QSize:
-        """Obtient ou définit la taille de l'icône."""
+        """Get or set the icon size."""
         return self._icon_size
 
     @icon_size.setter
     def icon_size(self, value: Union[QSize, Tuple[int, int]]) -> None:
-        """Définit la taille de l'icône."""
+        """Set the icon size."""
         self._icon_size = (
             QSize(*value) if isinstance(value, (tuple, list)) else QSize(value)
         )
@@ -339,12 +339,12 @@ class MenuButton(QToolButton):
 
     @property
     def shrink_size(self) -> int:
-        """Obtient ou définit la largeur de réduction."""
+        """Get or set the shrink width."""
         return self._shrink_size
 
     @shrink_size.setter
     def shrink_size(self, value: int) -> None:
-        """Définit la largeur de réduction."""
+        """Set the shrink width."""
         self._shrink_size = int(value)
         # Recalculate icon position
         self._icon_x_position = (self._shrink_size - self._icon_size.width()) // 2
@@ -352,17 +352,17 @@ class MenuButton(QToolButton):
 
     @property
     def is_extended(self) -> bool:
-        """Obtient l'état actuel (True pour étendu, False pour réduit)."""
+        """Get the current state (True for extended, False for shrink)."""
         return self._is_extended
 
     @property
     def spacing(self) -> int:
-        """Obtient ou définit l'espacement entre icône et texte."""
+        """Get or set the spacing between icon and text."""
         return self._spacing
 
     @spacing.setter
     def spacing(self, value: int) -> None:
-        """Définit l'espacement entre icône et texte."""
+        """Set the spacing between icon and text."""
         self._spacing = int(value)
         layout = self.layout()
         if layout:
@@ -370,50 +370,50 @@ class MenuButton(QToolButton):
 
     @property
     def min_height(self) -> Optional[int]:
-        """Obtient ou définit la hauteur minimale du bouton."""
+        """Get or set the minimum button height."""
         return self._min_height
 
     @min_height.setter
     def min_height(self, value: Optional[int]) -> None:
-        """Définit la hauteur minimale du bouton."""
+        """Set the minimum button height."""
         self._min_height = value
         self.updateGeometry()
 
     @property
     def duration(self) -> int:
-        """Obtient ou définit la durée d'animation en millisecondes."""
+        """Get or set the animation duration in milliseconds."""
         return self._duration
 
     @duration.setter
     def duration(self, value: int) -> None:
-        """Définit la durée d'animation en millisecondes."""
+        """Set the animation duration in milliseconds."""
         self._duration = int(value)
 
     # ////// UTILITY FUNCTIONS
     # ///////////////////////////////////////////////////////////////
 
     def clear_icon(self) -> None:
-        """Supprime l'icône actuelle."""
+        """Remove the current icon."""
         self._current_icon = None
         self.icon_label.clear()
         self.iconChanged.emit(QIcon())
 
     def clear_text(self) -> None:
-        """Efface le texte du bouton."""
+        """Clear the button text."""
         self.text = ""
 
     def toggle_state(self) -> None:
-        """Bascule l'état du bouton."""
+        """Toggle the button state."""
         self.set_state(not self._is_extended)
 
     def set_state(self, extended: bool) -> None:
         """
-        Définit l'état du bouton.
+        Set the button state.
 
         Parameters
         ----------
         extended : bool
-            True pour étendu, False pour réduit.
+            True for extended, False for shrink.
         """
         if extended != self._is_extended:
             self._is_extended = extended
@@ -422,14 +422,14 @@ class MenuButton(QToolButton):
 
     def set_icon_color(self, color: str = "#FFFFFF", opacity: float = 0.5) -> None:
         """
-        Applique une couleur et une opacité à l'icône actuelle.
+        Apply a color and opacity to the current icon.
 
         Parameters
         ----------
         color : str, optional
-            La couleur à appliquer (défaut: "#FFFFFF").
+            The color to apply (default: "#FFFFFF").
         opacity : float, optional
-            L'opacité à appliquer (défaut: 0.5).
+            The opacity to apply (default: 0.5).
         """
         if self._current_icon:
             pixmap = self._current_icon.pixmap(self._icon_size)
@@ -438,24 +438,24 @@ class MenuButton(QToolButton):
 
     def update_theme_icon(self, theme_icon: QIcon) -> None:
         """
-        Met à jour l'icône avec une icône de thème.
+        Update the icon with a theme icon.
 
         Parameters
         ----------
         theme_icon : QIcon
-            La nouvelle icône de thème.
+            The new theme icon.
         """
         if theme_icon:
             self.icon_label.setPixmap(theme_icon.pixmap(self._icon_size))
 
     def _update_state_display(self, animate: bool = True) -> None:
         """
-        Met à jour l'affichage selon l'état actuel.
+        Update the display based on current state.
 
         Parameters
         ----------
         animate : bool, optional
-            Active l'animation (défaut: True).
+            Enable animation (default: True).
         """
         layout = self.layout()
 
@@ -500,7 +500,7 @@ class MenuButton(QToolButton):
 
     def _animate_state_change(self) -> None:
         """
-        Anime le changement d'état.
+        Animate the state change.
         """
         # Stop any ongoing animation
         if (
@@ -541,11 +541,11 @@ class MenuButton(QToolButton):
     # ///////////////////////////////////////////////////////////////
 
     def sizeHint(self) -> QSize:
-        """Obtient la taille recommandée pour le bouton."""
+        """Get the recommended size for the button."""
         return QSize(100, 40)
 
     def minimumSizeHint(self) -> QSize:
-        """Obtient la taille minimale recommandée pour le bouton."""
+        """Get the minimum recommended size for the button."""
         # ////// CALCULATE BASE SIZE
         base_size = super().minimumSizeHint()
 
@@ -577,7 +577,7 @@ class MenuButton(QToolButton):
     # ///////////////////////////////////////////////////////////////
 
     def refresh_style(self) -> None:
-        """Rafraîchit le style du widget (utile après des changements de stylesheet dynamiques)."""
+        """Refresh the widget style (useful after dynamic stylesheet changes)."""
         self.style().unpolish(self)
         self.style().polish(self)
         self.update()

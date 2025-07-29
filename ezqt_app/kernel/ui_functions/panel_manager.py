@@ -36,7 +36,7 @@ from PySide6.QtCore import (
 # ///////////////////////////////////////////////////////////////
 from ..app_settings import Settings
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 ## ==> CLASSES
 # ///////////////////////////////////////////////////////////////
@@ -44,10 +44,10 @@ from ..app_settings import Settings
 
 class PanelManager:
     """
-    Gestionnaire des panneaux de l'interface.
+    Interface panel manager.
 
-    Cette classe gère l'animation et le comportement des panneaux
-    menu et settings de l'application.
+    This class manages the animation and behavior of menu
+    and settings panels in the application.
     """
 
     # PANEL MANAGEMENT
@@ -56,12 +56,12 @@ class PanelManager:
     @staticmethod
     def toggleMenuPanel(self, enable) -> None:
         """
-        Bascule l'affichage du panneau de menu.
+        Toggle menu panel display.
 
         Parameters
         ----------
         enable : bool
-            Active ou désactive le panneau de menu.
+            Enable or disable menu panel.
         """
         if enable:
             # GET WIDTH
@@ -88,12 +88,12 @@ class PanelManager:
     @staticmethod
     def toggleSettingsPanel(self, enable) -> None:
         """
-        Bascule l'affichage du panneau de paramètres.
+        Toggle settings panel display.
 
         Parameters
         ----------
         enable : bool
-            Active ou désactive le panneau de paramètres.
+            Enable or disable settings panel.
         """
         if enable:
             # GET WIDTH
@@ -117,14 +117,14 @@ class PanelManager:
             self.settings_animation.setEasingCurve(QEasingCurve.InOutQuart)
             self.settings_animation.start()
 
-            # Synchronisation du toggle avec le thème courant
+            # Synchronize toggle with current theme
             current_theme = Settings.Gui.THEME
             theme_toggle = self.ui.settingsPanel.get_theme_toggle_button()
             if theme_toggle and hasattr(theme_toggle, "initialize_selector"):
                 try:
-                    # Convertir le thème en ID : 0 = Light, 1 = Dark
+                    # Convert theme to ID: 0 = Light, 1 = Dark
                     theme_id = 0 if current_theme.lower() == "light" else 1
                     theme_toggle.initialize_selector(theme_id)
                 except Exception as e:
-                    # Ignorer les erreurs d'initialisation
+                    # Ignore initialization errors
                     pass

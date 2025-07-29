@@ -23,24 +23,23 @@
 # ///////////////////////////////////////////////////////////////
 
 """
-Helpers pour app_functions
-==========================
+Helper functions for app_functions.
 
-Ce module contient des fonctions utilitaires pour simplifier l'utilisation
-des app_functions dans le code client.
+This module contains utility functions to simplify the use
+of app_functions in client code.
 
-Fonctions disponibles:
-- load_config_section: Charge une section de configuration
-- save_config_section: Sauvegarde une section de configuration
-- get_setting: Récupère un paramètre avec fallback
-- set_setting: Définit un paramètre
-- load_fonts: Charge les polices système
-- verify_assets: Vérifie l'intégrité des assets
-- get_resource_path: Obtient le chemin d'une ressource
-- get_kernel_instance: Obtient une instance du Kernel principal
-- is_development_mode: Vérifie si l'application est en mode développement
-- get_app_version: Obtient la version de l'application
-- get_app_name: Obtient le nom de l'application
+Available functions:
+- load_config_section: Load a configuration section
+- save_config_section: Save a configuration section
+- get_setting: Get a setting with fallback
+- set_setting: Set a setting
+- load_fonts: Load system fonts
+- verify_assets: Verify asset integrity
+- get_resource_path: Get a resource path
+- get_kernel_instance: Get a main Kernel instance
+- is_development_mode: Check if application is in development mode
+- get_app_version: Get application version
+- get_app_name: Get application name
 """
 
 # IMPORT BASE
@@ -53,11 +52,12 @@ Fonctions disponibles:
 # ///////////////////////////////////////////////////////////////
 from ..common import Path
 from .kernel import Kernel
-from .config_manager import ConfigManager
+
+# Import removed - using Kernel methods instead
 from .assets_manager import AssetsManager
 from .resource_manager import ResourceManager
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Any, Dict, Optional
 
 # ///////////////////////////////////////////////////////////////
@@ -67,37 +67,41 @@ from typing import Any, Dict, Optional
 
 def load_config_section(section: str) -> Dict[str, Any]:
     """
-    Charge une section de configuration depuis le YAML.
+    Load a configuration section from YAML.
 
     Args:
-        section: Nom de la section à charger
+        section: Name of the section to load
 
     Returns:
-        Dict contenant la configuration de la section
+        Dict containing the section configuration
 
     Example:
         >>> config = load_config_section("settings_panel")
         >>> theme_config = config.get("theme", {})
     """
-    return ConfigManager.loadKernelConfig(section)
+    from .kernel import Kernel
+
+    return Kernel.loadKernelConfig(section)
 
 
 def save_config_section(section: str, data: Dict[str, Any]) -> bool:
     """
-    Sauvegarde une section de configuration dans le YAML.
+    Save a configuration section to YAML.
 
     Args:
-        section: Nom de la section à sauvegarder
-        data: Données à sauvegarder
+        section: Name of the section to save
+        data: Data to save
 
     Returns:
-        True si la sauvegarde a réussi
+        True if save was successful
 
     Example:
         >>> success = save_config_section("settings_panel", {"theme": {"default": "dark"}})
     """
     try:
-        ConfigManager.writeKernelConfig(section, data)
+        from .kernel import Kernel
+
+        Kernel.saveKernelConfig(section, data)
         return True
     except Exception:
         return False
@@ -105,15 +109,15 @@ def save_config_section(section: str, data: Dict[str, Any]) -> bool:
 
 def get_setting(section: str, key: str, default: Any = None) -> Any:
     """
-    Récupère un paramètre de configuration avec valeur par défaut.
+    Get a configuration setting with default value.
 
     Args:
-        section: Section de configuration
-        key: Clé du paramètre
-        default: Valeur par défaut si non trouvée
+        section: Configuration section
+        key: Setting key
+        default: Default value if not found
 
     Returns:
-        Valeur du paramètre ou valeur par défaut
+        Setting value or default value
 
     Example:
         >>> theme = get_setting("settings_panel", "theme.default", "dark")
@@ -134,22 +138,24 @@ def get_setting(section: str, key: str, default: Any = None) -> Any:
 
 def set_setting(section: str, key: str, value: Any) -> bool:
     """
-    Définit un paramètre de configuration.
+    Set a configuration setting.
 
     Args:
-        section: Section de configuration
-        key: Clé du paramètre (peut utiliser la notation pointée)
-        value: Valeur à définir
+        section: Configuration section
+        key: Setting key (can use dot notation)
+        value: Value to set
 
     Returns:
-        True si la définition a réussi
+        True if setting was successful
 
     Example:
         >>> success = set_setting("settings_panel", "theme.default", "light")
         >>> success = set_setting("ui", "window.width", 1024)
     """
     try:
-        ConfigManager.writeYamlConfig([section] + key.split("."), value)
+        from .kernel import Kernel
+
+        Kernel.writeYamlConfig([section] + key.split("."), value)
         return True
     except Exception:
         return False
@@ -157,10 +163,10 @@ def set_setting(section: str, key: str, value: Any) -> bool:
 
 def load_fonts() -> bool:
     """
-    Charge les polices système.
+    Load system fonts.
 
     Returns:
-        True si le chargement a réussi
+        True if loading was successful
 
     Example:
         >>> success = load_fonts()
@@ -174,15 +180,15 @@ def load_fonts() -> bool:
 
 def verify_assets() -> Dict[str, bool]:
     """
-    Vérifie l'intégrité des assets.
+    Verify asset integrity.
 
     Returns:
-        Dict avec le statut de chaque asset
+        Dict with status of each asset
 
     Example:
         >>> status = verify_assets()
         >>> if status.get("fonts", False):
-        >>>     print("Polices OK")
+        >>>     print("Fonts OK")
     """
     try:
         return AssetsManager.verifyAssets()
@@ -192,14 +198,14 @@ def verify_assets() -> Dict[str, bool]:
 
 def get_resource_path(resource_type: str, name: str) -> Optional[Path]:
     """
-    Obtient le chemin d'une ressource.
+    Get the path of a resource.
 
     Args:
-        resource_type: Type de ressource ("fonts", "icons", "images", "themes")
-        name: Nom de la ressource
+        resource_type: Resource type ("fonts", "icons", "images", "themes")
+        name: Resource name
 
     Returns:
-        Chemin vers la ressource ou None si non trouvée
+        Path to the resource or None if not found
 
     Example:
         >>> font_path = get_resource_path("fonts", "Segoe UI.ttf")
@@ -213,10 +219,10 @@ def get_resource_path(resource_type: str, name: str) -> Optional[Path]:
 
 def get_kernel_instance() -> Kernel:
     """
-    Obtient une instance du Kernel principal.
+    Get a main Kernel instance.
 
     Returns:
-        Instance du Kernel
+        Kernel instance
 
     Example:
         >>> kernel = get_kernel_instance()
@@ -227,14 +233,14 @@ def get_kernel_instance() -> Kernel:
 
 def is_development_mode() -> bool:
     """
-    Vérifie si l'application est en mode développement.
+    Check if application is in development mode.
 
     Returns:
-        True si en mode développement
+        True if in development mode
 
     Example:
         >>> if is_development_mode():
-        >>>     print("Mode debug activé")
+        >>>     print("Debug mode activated")
     """
     try:
         return get_setting("app", "development_mode", False)
@@ -244,10 +250,10 @@ def is_development_mode() -> bool:
 
 def get_app_version() -> str:
     """
-    Obtient la version de l'application.
+    Get application version.
 
     Returns:
-        Version de l'application
+        Application version
 
     Example:
         >>> version = get_app_version()
@@ -261,10 +267,10 @@ def get_app_version() -> str:
 
 def get_app_name() -> str:
     """
-    Obtient le nom de l'application.
+    Get application name.
 
     Returns:
-        Nom de l'application
+        Application name
 
     Example:
         >>> name = get_app_name()

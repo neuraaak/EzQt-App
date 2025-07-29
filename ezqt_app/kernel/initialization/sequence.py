@@ -42,7 +42,7 @@ from enum import Enum
 # ///////////////////////////////////////////////////////////////
 from ..app_functions.printer import get_printer
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import List, Dict, Any, Optional, Callable
 
 ## ==> CLASSES
@@ -108,7 +108,15 @@ class InitializationSequence:
             required=True,
         )
 
-        # Step 3: Check assets requirements (fait tout le travail nécessaire)
+        # Step 3: Copy package configurations to project
+        self.add_step(
+            name="Copy Configurations",
+            description="Copy package configuration files to project bin/config directory",
+            function=lambda: Kernel.copyPackageConfigsToProject(),
+            required=False,  # Not critical, can fail
+        )
+
+        # Step 4: Check assets requirements (does all necessary work)
         self.add_step(
             name="Check Requirements",
             description="Verify that all required assets and dependencies are available",
@@ -116,7 +124,7 @@ class InitializationSequence:
             required=True,
         )
 
-        # Step 4: Generate required files (YAML, QSS, translations)
+        # Step 5: Generate required files (YAML, QSS, translations)
         self.add_step(
             name="Generate Files",
             description="Generate required configuration and resource files",
@@ -187,7 +195,7 @@ class InitializationSequence:
                 step.duration = time.time() - step_start_time
                 successful_steps += 1
 
-                # Suppression de l'affichage de succès des étapes individuelles
+                # Remove individual step success display
 
             except Exception as e:
                 step.status = StepStatus.FAILED
@@ -208,7 +216,7 @@ class InitializationSequence:
                         )
                     break
 
-            # Suppression de la ligne vide entre les étapes
+            # Remove empty line between steps
 
         total_time = time.time() - start_time
 
@@ -230,11 +238,12 @@ class InitializationSequence:
 
     def _print_summary(self, summary: Dict[str, Any]) -> None:
         """Print execution summary."""
-        # Suppression du résumé détaillé - on garde juste le message final
+        # Remove detailed summary - keep only final message
         if summary["success"]:
             self.printer.raw_print("...")
             self.printer.custom_print(
-                "~ [Initializer] Initialization completed successfully!", color="MAGENTA"
+                "~ [Initializer] Initialization completed successfully!",
+                color="MAGENTA",
             )
         else:
             self.printer.raw_print("...")

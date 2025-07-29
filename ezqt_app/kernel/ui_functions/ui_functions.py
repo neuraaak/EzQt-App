@@ -42,10 +42,10 @@ from .ui_definitions import UIDefinitions
 
 class UIFunctions:
     """
-    Classe principale des fonctions UI.
+    Main UI functions class.
 
-    Cette classe combine tous les gestionnaires spécialisés pour fournir
-    une interface unifiée pour la gestion de l'interface utilisateur.
+    This class combines all specialized managers to provide
+    a unified interface for user interface management.
     """
 
     def __init__(self) -> None:
@@ -58,29 +58,29 @@ class UIFunctions:
 
     def maximize_restore(self) -> None:
         """
-        Maximise ou restaure la fenêtre selon son état actuel.
+        Maximize or restore window based on current state.
         """
         WindowManager.maximize_restore(self)
 
     def returnStatus(self):
         """
-        Retourne l'état actuel de la fenêtre.
+        Return current window state.
 
         Returns
         -------
         bool
-            True si la fenêtre est maximisée, False sinon.
+            True if window is maximized, False otherwise.
         """
         return WindowManager.returnStatus(self)
 
     def setStatus(self, status) -> None:
         """
-        Définit l'état de la fenêtre.
+        Set window state.
 
         Parameters
         ----------
         status : bool
-            Nouvel état de la fenêtre.
+            New window state.
         """
         WindowManager.setStatus(self, status)
 
@@ -89,23 +89,23 @@ class UIFunctions:
 
     def toggleMenuPanel(self, enable) -> None:
         """
-        Bascule l'affichage du panneau de menu.
+        Toggle menu panel display.
 
         Parameters
         ----------
         enable : bool
-            Active ou désactive le panneau de menu.
+            Enable or disable menu panel.
         """
         PanelManager.toggleMenuPanel(self, enable)
 
     def toggleSettingsPanel(self, enable) -> None:
         """
-        Bascule l'affichage du panneau de paramètres.
+        Toggle settings panel display.
 
         Parameters
         ----------
         enable : bool
-            Active ou désactive le panneau de paramètres.
+            Enable or disable settings panel.
         """
         PanelManager.toggleSettingsPanel(self, enable)
 
@@ -114,34 +114,34 @@ class UIFunctions:
 
     def selectMenu(self, widget) -> None:
         """
-        Sélectionne un élément de menu.
+        Select a menu item.
 
         Parameters
         ----------
         widget : str
-            Nom de l'élément de menu à sélectionner.
+            Name of menu item to select.
         """
         MenuManager.selectMenu(self, widget)
 
     def deselectMenu(self, widget) -> None:
         """
-        Désélectionne un élément de menu.
+        Deselect a menu item.
 
         Parameters
         ----------
         widget : str
-            Nom de l'élément de menu à désélectionner.
+            Name of menu item to deselect.
         """
         MenuManager.deselectMenu(self, widget)
 
     def refreshStyle(self, w):
         """
-        Rafraîchit le style d'un widget.
+        Refresh widget style.
 
         Parameters
         ----------
         w : QWidget
-            Widget dont le style doit être rafraîchi.
+            Widget whose style should be refreshed.
         """
         MenuManager.refreshStyle(w)
 
@@ -150,12 +150,12 @@ class UIFunctions:
 
     def theme(self, customThemeFile: str = None) -> None:
         """
-        Charge et applique un thème à l'interface.
+        Load and apply theme to interface.
 
         Parameters
         ----------
         customThemeFile : str, optional
-            Fichier de thème personnalisé à utiliser.
+            Custom theme file to use.
         """
         ThemeManager.theme(self, customThemeFile)
 
@@ -164,12 +164,12 @@ class UIFunctions:
 
     def uiDefinitions(self) -> None:
         """
-        Configure et initialise tous les éléments de l'interface utilisateur.
+        Configure and initialize all user interface elements.
         """
         UIDefinitions.uiDefinitions(self)
 
     def resize_grips(self) -> None:
         """
-        Redimensionne les grips de redimensionnement de la fenêtre.
+        Resize window resize grips.
         """
         UIDefinitions.resize_grips(self)

@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 from typing import Optional
 
 # UTILITY FUNCTIONS
@@ -28,10 +28,10 @@ from typing import Optional
 
 class Fonts:
     """
-    Classe de gestion des polices de caractères.
+    Font management class.
 
-    Cette classe fournit des polices Segoe UI prédéfinies
-    avec différentes tailles et styles (Regular, Semibold).
+    This class provides predefined Segoe UI fonts
+    with different sizes and styles (Regular, Semibold).
     """
 
     # ////// REGULAR FONTS
@@ -45,16 +45,16 @@ class Fonts:
     SEGOE_UI_12_SB: Optional[QFont] = None
 
     def __init__(self) -> None:
-        """Initialise la classe Fonts."""
+        """Initialize the Fonts class."""
         pass
 
     @classmethod
     def initFonts(cls) -> None:
         """
-        Initialise toutes les polices de caractères.
+        Initialize all fonts.
 
-        Cette méthode doit être appelée au démarrage de l'application
-        pour configurer toutes les polices Segoe UI.
+        This method must be called at application startup
+        to configure all Segoe UI fonts.
         """
         # ////// SEGOE UI REGULAR - 8
         cls.SEGOE_UI_8_REG = QFont()
@@ -101,10 +101,10 @@ class Fonts:
 
 class SizePolicy:
     """
-    Classe de gestion des politiques de taille.
+    Size policy management class.
 
-    Cette classe fournit des politiques de taille prédéfinies
-    pour différents types de widgets Qt.
+    This class provides predefined size policies
+    for different types of Qt widgets.
     """
 
     # ////// HORIZONTAL PRIORITY
@@ -118,19 +118,21 @@ class SizePolicy:
     H_EXPANDING_V_EXPANDING: Optional[QSizePolicy] = None
 
     def __init__(self) -> None:
-        """Initialise la classe SizePolicy."""
+        """Initialize the SizePolicy class."""
         pass
 
     @classmethod
     def initSizePolicy(cls) -> None:
         """
-        Initialise toutes les politiques de taille.
+        Initialize all size policies.
 
-        Cette méthode doit être appelée au démarrage de l'application
-        pour configurer toutes les politiques de taille prédéfinies.
+        This method must be called at application startup
+        to configure all predefined size policies.
         """
         # ////// HORIZONTAL EXPANDING - VERTICAL FIXED
-        cls.H_EXPANDING_V_FIXED = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        cls.H_EXPANDING_V_FIXED = QSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
         cls.H_EXPANDING_V_FIXED.setHorizontalStretch(0)
         cls.H_EXPANDING_V_FIXED.setVerticalStretch(0)
 

@@ -31,7 +31,7 @@
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 # UTILITY FUNCTIONS
 # ///////////////////////////////////////////////////////////////
@@ -42,10 +42,10 @@
 
 class Icons:
     """
-    Classe de gestion des icônes de l'application.
+    Application icon management class.
 
-    Cette classe contient les chemins vers toutes les icônes
-    utilisées dans l'application, organisées par catégorie.
+    This class contains paths to all icons
+    used in the application, organized by category.
     """
 
     # ////// CORE ICONS

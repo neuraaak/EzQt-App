@@ -39,12 +39,11 @@ from typing import Dict, List, Optional, Union
 
 class Menu(QFrame):
     """
-    Conteneur de menu avec support d'expansion/réduction.
+    Menu container with expansion/reduction support.
 
-    Cette classe fournit un conteneur de menu avec un bouton de basculement
-    pour étendre ou réduire la largeur du menu. Le menu contient une section
-    supérieure pour les éléments de menu et une section inférieure pour le
-    bouton de basculement.
+    This class provides a menu container with a toggle button
+    to expand or reduce the menu width. The menu contains an upper
+    section for menu items and a lower section for the toggle button.
     """
 
     # ////// CLASS VARIABLES
@@ -59,16 +58,16 @@ class Menu(QFrame):
         extended_width: int = 240,
     ) -> None:
         """
-        Initialise le conteneur de menu.
+        Initialize the menu container.
 
         Parameters
         ----------
         parent : QWidget, optional
-            Le widget parent (défaut: None).
+            The parent widget (default: None).
         shrink_width : int, optional
-            Largeur du menu réduit (défaut: 60).
+            Width when menu is shrunk (default: 60).
         extended_width : int, optional
-            Largeur du menu étendu (défaut: 240).
+            Width when menu is extended (default: 240).
         """
         super().__init__(parent)
 
@@ -126,7 +125,7 @@ class Menu(QFrame):
             icon=Icons.icon_menu,
             text="Hide",
             shrink_size=self._shrink_width,
-            spacing=15,  # Réduit de 35 à 15 pour un meilleur alignement
+            spacing=15,  # Reduced from 35 to 15 for better alignment
             duration=Settings.Gui.TIME_ANIMATION,
         )
         self.toggleButton.setObjectName("toggleButton")
@@ -170,10 +169,10 @@ class Menu(QFrame):
 
     def _sync_initial_state(self) -> None:
         """
-        Synchronise l'état initial de tous les boutons avec l'état du conteneur.
+        Sync the initial state of all buttons with the container state.
 
-        Le conteneur de menu démarre réduit, donc tous les boutons
-        doivent démarrer dans l'état réduit.
+        The menu container starts shrunk, so all buttons
+        must start in the shrunk state.
         """
         if hasattr(self, "toggleButton"):
             # Force toggle button to shrink state
@@ -183,19 +182,19 @@ class Menu(QFrame):
 
     def add_menu(self, name: str, icon: Optional[Union[str, QPixmap]] = None):
         """
-        Ajoute un élément de menu au conteneur.
+        Add a menu item to the container.
 
         Parameters
         ----------
         name : str
-            Nom de l'élément de menu.
+            The name of the menu item.
         icon : str or Icons, optional
-            Icône de l'élément de menu (défaut: None).
+            The icon for the menu item (default: None).
 
         Returns
         -------
         MenuButton
-            Le bouton de menu créé.
+            The created menu button.
         """
         # Lazy import to avoid circular imports
         from ...widgets.extended.menu_button import MenuButton
@@ -206,7 +205,7 @@ class Menu(QFrame):
             icon=icon,
             text=name,
             shrink_size=self._shrink_width,
-            spacing=15,  # Réduit de 35 à 15 pour un meilleur alignement
+            spacing=15,  # Reduced from 35 to 15 for better alignment
             duration=Settings.Gui.TIME_ANIMATION,
         )
         menu.setObjectName(f"menu_{name}")
@@ -234,19 +233,19 @@ class Menu(QFrame):
         return menu
 
     def update_all_theme_icons(self) -> None:
-        """Met à jour les icônes de thème pour tous les boutons."""
+        """Update theme icons for all buttons."""
         for i, btn in enumerate(self._buttons):
             if hasattr(btn, "update_theme_icon") and self._icons[i]:
                 btn.update_theme_icon(self._icons[i])
 
     def sync_all_menu_states(self, extended: bool) -> None:
         """
-        Synchronise tous les boutons de menu avec l'état donné.
+        Sync all menu buttons to the given state.
 
         Parameters
         ----------
         extended : bool
-            True pour étendu, False pour réduit.
+            True for extended, False for shrunk.
         """
         for btn in self._buttons:
             if btn != self.toggleButton:  # Don't sync the toggle button itself
@@ -254,12 +253,12 @@ class Menu(QFrame):
 
     def get_menu_state(self) -> bool:
         """
-        Obtient l'état actuel du menu.
+        Get the current menu state.
 
         Returns
         -------
         bool
-            True si étendu, False si réduit.
+            True if extended, False if shrunk.
         """
         if hasattr(self, "toggleButton"):
             return self.toggleButton.is_extended
@@ -267,22 +266,22 @@ class Menu(QFrame):
 
     def get_shrink_width(self) -> int:
         """
-        Obtient la largeur de réduction configurée.
+        Get the configured shrink width.
 
         Returns
         -------
         int
-            La largeur de réduction.
+            The shrink width.
         """
         return self._shrink_width
 
     def get_extended_width(self) -> int:
         """
-        Obtient la largeur d'extension configurée.
+        Get the configured extended width.
 
         Returns
         -------
         int
-            La largeur d'extension.
+            The extended width.
         """
         return self._extended_width

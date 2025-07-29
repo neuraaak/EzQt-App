@@ -5,6 +5,88 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.3] - 2025-01-27
+
+### 🌐 **Automatic Translation System**
+
+| Feature | Description | Impact |
+|---------|-------------|---------|
+| **Auto-Translator Module** | New `auto_translator.py` module with multi-provider support | Advanced automatic translation |
+| **String Collector** | New `string_collector.py` module for automatic string collection | Automatic translation management |
+| **Translation Providers** | Support for LibreTranslate, MyMemory and Google Translate | Translation service flexibility |
+| **Configuration Languages** | New `languages.yaml` file for language configuration | Centralized language management |
+| **Translation Manager** | Enhanced translation manager with auto-translation | Seamless integration |
+
+### 🔧 **Technical Improvements**
+
+| Component | Change | Impact |
+|-----------|--------|---------|
+| **App Structure** | Complete reorganization of application structure | Better architecture |
+| **Resource Management** | Enhanced resource and asset management | Optimized performance |
+| **UI Functions** | Complete refactoring of UI functions with new features | More modern interface |
+| **Configuration System** | New configuration system with YAML files | More flexible configuration |
+| **CLI Tools** | Enhanced CLI tools for project creation | Better developer experience |
+
+### 🧹 **Cleanup and Reorganization**
+
+| Change | Description | Impact |
+|--------|-------------|---------|
+| **File Structure** | Reorganization of configuration files in `resources/config/` | Clearer structure |
+| **Widgets Module** | Removal of `widgets.py` and reorganization into specialized modules | More modular code |
+| **TODO Management** | Moving TODO files to `todo/` directory | Better organization |
+| **Test Structure** | Updated test structure for new features | More comprehensive tests |
+
+### 📝 **Documentation and Configuration**
+
+| Documentation | Update | Impact |
+|---------------|--------|---------|
+| **Translation System** | Complete documentation of automatic translation system | User guide |
+| **Configuration Files** | New configuration files for languages and palette | Advanced configuration |
+| **Project Structure** | Updated project structure documentation | Up-to-date documentation |
+
+### ⚠️ **Important Note**
+
+The automatic translation system has been **temporarily disabled** to simplify development.
+See `todo/TODO_TRANSLATION_DISABLED.md` for reactivation details.
+
+---
+
+## [4.0.2] - 2025-01-27
+
+### 🔄 **Major Project Reorganization and Qt Configuration**
+
+| Feature | Description | Impact |
+|---------|-------------|---------|
+| **Qt Configuration Module** | Added qt_config.py with comprehensive High DPI support and cross-platform configuration | Enhanced Qt compatibility |
+| **Project Structure Cleanup** | Reorganized project structure by removing obsolete files from bin/ directory | Cleaner codebase |
+| **Resource Management** | Removed modules/app_resources.py and consolidated resource management | Better resource handling |
+| **Enhanced Configuration** | Significantly improved globals.py with enhanced configuration management (+245 lines) | More robust configuration |
+| **File Management** | Enhanced file_maker.py with better file handling capabilities (+221 lines) | Improved file operations |
+
+### 🧹 **Code Cleanup**
+
+| Component | Change | Impact |
+|-----------|--------|---------|
+| **Test Files** | Removed deprecated test files (test_libretranslate.py, test_translation_apis.py) | Reduced test complexity |
+| **Initialization** | Updated initialization sequence and startup configuration | Better startup process |
+| **Translation System** | Improved translation manager and UI functions | Enhanced i18n support |
+| **Project Configuration** | Cleaned up project configuration in pyproject.toml | Better packaging |
+
+### 📝 **Documentation**
+
+| Documentation | Update | Impact |
+|---------------|--------|---------|
+| **CHANGELOG.md** | Updated with latest changes | Better change tracking |
+
+### 🧹 **Repository Management**
+
+| Component | Change | Impact |
+|-----------|--------|---------|
+| **Git Exclusions** | Added exclusion of bin/ and modules/ directories in .gitignore | Cleaner repository |
+| **Repository Cleanup** | Enhanced .gitignore configuration to exclude unnecessary directories | Reduced repository size |
+
+---
+
 ## [4.0.1] - 2025-07-28
 
 ### 🔧 **Development Status Update**

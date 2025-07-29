@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "EzQt_App"
-version = "4.0.2"
+version = "4.0.3"
 description = "Lightweight framework based on PySide6 to quickly build modern desktop applications, with integrated resource, theme, and reusable component management."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
@@ -29,6 +29,7 @@ dependencies = [
     "requests==2.32.3",
     "click>=8.0.0",
     "ezqt-widgets>=2.0.0",
+    "langdetect"
 ]
 
 [project.optional-dependencies]
@@ -40,8 +41,7 @@ dev = [
     "pytest-xdist>=3.0.0",   # Pour les tests parallèles
     "flake8>=5.0.0",
     "black>=22.0.0",
-    "mypy>=1.0.0",
-    "click>=8.0.0"
+    "mypy>=1.0.0"
 ]
 
 [project.scripts]

@@ -23,7 +23,7 @@ from ...kernel.app_components import *
 from ...kernel.app_settings import Settings
 from ezqt_widgets import ToggleSwitch
 
-# ////// TYPE HINTS IMPROVEMENTS FOR PYSIDE6 6.9.1
+# TYPE HINTS IMPROVEMENTS
 
 ## ==> GLOBALS
 # ///////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ from ezqt_widgets import ToggleSwitch
 
 
 class BaseSettingWidget(QWidget):
-    """Classe de base pour tous les widgets de paramètres."""
+    """Base class for all setting widgets."""
 
     def __init__(self, label: str, description: str = ""):
         super().__init__()
@@ -46,12 +46,12 @@ class BaseSettingWidget(QWidget):
         self.setObjectName("BaseSettingWidget")
 
     def set_key(self, key: str):
-        """Définit la clé du paramètre."""
+        """Set the setting key."""
         self._key = key
 
 
 class SettingToggle(BaseSettingWidget):
-    """Widget pour les paramètres toggle (on/off)."""
+    """Widget for toggle settings (on/off)."""
 
     def __init__(self, label: str, description: str = "", default: bool = False):
         super().__init__(label, description)
@@ -61,24 +61,24 @@ class SettingToggle(BaseSettingWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        """Configure l'interface utilisateur."""
-        # Layout principal
+        """Configure the user interface."""
+        # Main layout
         layout = QVBoxLayout(self)
         layout.setSpacing(4)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        # Container pour le label et le toggle
+        # Container for label and toggle
         control_layout = QHBoxLayout()
         control_layout.setSpacing(8)
         control_layout.setContentsMargins(0, 0, 0, 0)
 
-        # Label principal
+        # Main label
         self.label = QLabel(self._label)
         self.label.setObjectName("settingLabel")
         self.label.setWordWrap(True)
         control_layout.addWidget(self.label, 1)  # Stretch
 
-        # Toggle (ToggleSwitch moderne)
+        # Toggle (modern ToggleSwitch)
         # Get animation setting from app settings
         animation_enabled = getattr(Settings.Gui, "TIME_ANIMATION", 400) > 0
 
@@ -90,7 +90,7 @@ class SettingToggle(BaseSettingWidget):
 
         layout.addLayout(control_layout)
 
-        # Description (si présente)
+        # Description (if present)
         if self._description:
             self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
@@ -98,27 +98,27 @@ class SettingToggle(BaseSettingWidget):
             layout.addWidget(self.description_label)
 
     def _on_toggled(self, checked: bool):
-        """Appelé quand le toggle change."""
+        """Called when toggle changes."""
         self._value = checked
         self.valueChanged.emit(self._key, checked)
 
     @property
     def value(self) -> bool:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     @value.setter
     def value(self, val: bool):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.toggle.checked = val
 
     def get_value(self) -> bool:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     def set_value(self, val: bool):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.toggle.checked = val
 
@@ -126,7 +126,7 @@ class SettingToggle(BaseSettingWidget):
 
 
 class SettingSelect(BaseSettingWidget):
-    """Widget pour les paramètres de sélection."""
+    """Widget for selection settings."""
 
     def __init__(
         self,
@@ -143,13 +143,13 @@ class SettingSelect(BaseSettingWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        """Configure l'interface utilisateur."""
-        # Layout principal
+        """Configure the user interface."""
+        # Main layout
         layout = QVBoxLayout(self)
         layout.setSpacing(4)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        # Label principal
+        # Main label
         self.label = QLabel(self._label)
         self.label.setObjectName("settingLabel")
         self.label.setWordWrap(True)
@@ -164,7 +164,7 @@ class SettingSelect(BaseSettingWidget):
         self.combo.currentTextChanged.connect(self._on_text_changed)
         layout.addWidget(self.combo)
 
-        # Description (si présente)
+        # Description (if present)
         if self._description:
             self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
@@ -172,28 +172,28 @@ class SettingSelect(BaseSettingWidget):
             layout.addWidget(self.description_label)
 
     def _on_text_changed(self, text: str):
-        """Appelé quand la sélection change."""
+        """Called when selection changes."""
         self._value = text
         self.valueChanged.emit(self._key, text)
 
     @property
     def value(self) -> str:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     @value.setter
     def value(self, val: str):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         if val in self._options:
             self.combo.setCurrentText(val)
 
     def get_value(self) -> str:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     def set_value(self, val: str):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         if val in self._options:
             self.combo.setCurrentText(val)
@@ -202,7 +202,7 @@ class SettingSelect(BaseSettingWidget):
 
 
 class SettingSlider(BaseSettingWidget):
-    """Widget pour les paramètres numériques avec slider."""
+    """Widget for numeric settings with slider."""
 
     def __init__(
         self,
@@ -223,24 +223,24 @@ class SettingSlider(BaseSettingWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        """Configure l'interface utilisateur."""
-        # Layout principal
+        """Configure the user interface."""
+        # Main layout
         layout = QVBoxLayout(self)
         layout.setSpacing(4)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        # Container pour le label et la valeur
+        # Container for label and value
         header_layout = QHBoxLayout()
         header_layout.setSpacing(8)
         header_layout.setContentsMargins(0, 0, 0, 0)
 
-        # Label principal
+        # Main label
         self.label = QLabel(self._label)
         self.label.setObjectName("settingLabel")
         self.label.setWordWrap(True)
         header_layout.addWidget(self.label, 1)  # Stretch
 
-        # Label de valeur
+        # Value label
         self.value_label = QLabel(f"{self._value}{self._unit}")
         self.value_label.setObjectName("settingValueLabel")
         header_layout.addWidget(self.value_label, 0)  # No stretch
@@ -256,7 +256,7 @@ class SettingSlider(BaseSettingWidget):
         self.slider.valueChanged.connect(self._on_value_changed)
         layout.addWidget(self.slider)
 
-        # Description (si présente)
+        # Description (if present)
         if self._description:
             self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
@@ -264,29 +264,29 @@ class SettingSlider(BaseSettingWidget):
             layout.addWidget(self.description_label)
 
     def _on_value_changed(self, value: int):
-        """Appelé quand la valeur du slider change."""
+        """Called when slider value changes."""
         self._value = value
         self.value_label.setText(f"{value}{self._unit}")
         self.valueChanged.emit(self._key, value)
 
     @property
     def value(self) -> int:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     @value.setter
     def value(self, val: int):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.slider.setValue(val)
         self.value_label.setText(f"{val}{self._unit}")
 
     def get_value(self) -> int:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     def set_value(self, val: int):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.slider.setValue(val)
         self.value_label.setText(f"{val}{self._unit}")
@@ -295,7 +295,7 @@ class SettingSlider(BaseSettingWidget):
 
 
 class SettingText(BaseSettingWidget):
-    """Widget pour les paramètres texte."""
+    """Widget for text settings."""
 
     def __init__(self, label: str, description: str = "", default: str = ""):
         super().__init__(label, description)
@@ -305,26 +305,26 @@ class SettingText(BaseSettingWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        """Configure l'interface utilisateur."""
-        # Layout principal
+        """Configure the user interface."""
+        # Main layout
         layout = QVBoxLayout(self)
         layout.setSpacing(4)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        # Label principal
+        # Main label
         self.label = QLabel(self._label)
         self.label.setObjectName("settingLabel")
         self.label.setWordWrap(True)
         layout.addWidget(self.label)
 
-        # Champ texte
+        # Text field
         self.text_edit = QLineEdit()
         self.text_edit.setObjectName("settingTextEdit")
         self.text_edit.setText(self._value)
         self.text_edit.textChanged.connect(self._on_text_changed)
         layout.addWidget(self.text_edit)
 
-        # Description (si présente)
+        # Description (if present)
         if self._description:
             self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
@@ -332,27 +332,27 @@ class SettingText(BaseSettingWidget):
             layout.addWidget(self.description_label)
 
     def _on_text_changed(self, text: str):
-        """Appelé quand le texte change."""
+        """Called when text changes."""
         self._value = text
         self.valueChanged.emit(self._key, text)
 
     @property
     def value(self) -> str:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     @value.setter
     def value(self, val: str):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.text_edit.setText(val)
 
     def get_value(self) -> str:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     def set_value(self, val: str):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.text_edit.setText(val)
 
@@ -360,7 +360,7 @@ class SettingText(BaseSettingWidget):
 
 
 class SettingCheckbox(BaseSettingWidget):
-    """Widget pour les paramètres checkbox (on/off)."""
+    """Widget for checkbox settings (on/off)."""
 
     def __init__(self, label: str, description: str = "", default: bool = False):
         super().__init__(label, description)
@@ -370,24 +370,24 @@ class SettingCheckbox(BaseSettingWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        """Configure l'interface utilisateur."""
-        # Layout principal
+        """Configure the user interface."""
+        # Main layout
         layout = QVBoxLayout(self)
         layout.setSpacing(4)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        # Container pour le label et la checkbox
+        # Container for label and checkbox
         control_layout = QHBoxLayout()
         control_layout.setSpacing(8)
         control_layout.setContentsMargins(0, 0, 0, 0)
 
-        # Label principal
+        # Main label
         self.label = QLabel(self._label)
         self.label.setObjectName("settingLabel")
         self.label.setWordWrap(True)
         control_layout.addWidget(self.label, 1)  # Stretch
 
-        # Checkbox (ToggleSwitch moderne)
+        # Checkbox (modern ToggleSwitch)
         # Get animation setting from app settings
         animation_enabled = getattr(Settings.Gui, "TIME_ANIMATION", 400) > 0
 
@@ -399,7 +399,7 @@ class SettingCheckbox(BaseSettingWidget):
 
         layout.addLayout(control_layout)
 
-        # Description (si présente)
+        # Description (if present)
         if self._description:
             self.description_label = QLabel(self.tr(self._description))
             self.description_label.setObjectName("settingDescription")
@@ -407,27 +407,27 @@ class SettingCheckbox(BaseSettingWidget):
             layout.addWidget(self.description_label)
 
     def _on_toggled(self, checked: bool):
-        """Appelé quand la checkbox change."""
+        """Called when checkbox changes."""
         self._value = checked
         self.valueChanged.emit(self._key, checked)
 
     @property
     def value(self) -> bool:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     @value.setter
     def value(self, val: bool):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.checkbox.checked = val
 
     def get_value(self) -> bool:
-        """Récupère la valeur actuelle."""
+        """Get current value."""
         return self._value
 
     def set_value(self, val: bool):
-        """Définit la valeur."""
+        """Set value."""
         self._value = val
         self.checkbox.checked = val
 
